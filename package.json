@@ -1,0 +1,50 @@
+{
+  "name": "generator-npm-package",
+  "version": "0.1.0",
+  "description": "",
+  "author": {
+    "name": "Spencer Brower",
+    "email": "brower.spencer@gmail.com"
+  },
+  "license": "GPL-3.0",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "files": [
+    "generators"
+  ],
+  "main": "generators/app/index.js",
+  "engines": {
+    "npm": ">= 4.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "npm run build -- -w",
+    "clean": "shx rm -rf generators/*",
+    "clean-build": "npm run clean && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^11.13.7",
+    "@types/yeoman-generator": "^3.1.1",
+    "coveralls": "^3.0.2",
+    "eslint": "^5.9.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-xo": "^0.25.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "husky": "^1.2.0",
+    "jest": "^23.5.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.15.2",
+    "shx": "^0.3.2",
+    "typescript": "^3.4.5",
+    "yeoman-assert": "^3.1.0",
+    "yeoman-test": "^1.7.0"
+  },
+  "dependencies": {
+    "chalk": "^2.1.0",
+    "generator-npm-init": "^1.5.0",
+    "shelljs": "^0.8.3",
+    "yeoman-generator": "^2.0.1",
+    "yosay": "^2.0.1"
+  }
+}
