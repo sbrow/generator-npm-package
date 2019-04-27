@@ -17,17 +17,37 @@ module.exports = class extends Generator {
     }
 
     prompting() {
+        const getUser = (): string => {
+            const sources = [
+                this.user.git.name().split(" ")[0],
+                process.env.USER,
+            ]
+            for (let source of sources) {
+                source.trim();
+                if (source !== "") {
+                    return source
+                }
+            }
+            return "user"
+        };
+
+        const user = getUser();
+        const packageName = packageInfo.name.replace(/(generator)?\-/g, " ").trim();
         const author = (typeof packageInfo.author === "object") ? packageInfo.author.name : packageInfo.author;
 
         // Have Yeoman greet the user.
-        this.log(
-            yosay(`Welcome to the ${chalk.red('npm project')} generator!\nBy ${chalk.red(`${author}`)}`)
-        );
+        this.log(yosay(`'Allo, ${user}!
+Welcome to the ${chalk.red(packageName)} generator.
+Brought to you by ${chalk.yellow(author)}.`));
 
         const prompts = [];
 
         return this.prompt(prompts).then(props => {
             this.props = props;
         });
+    }
+
+    end() {
+        this.log(yosay(`You're all set. Good luck with your project!`))
     }
 };

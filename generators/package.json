@@ -2,7 +2,10 @@
     "name": "generator-npm-package",
     "version": "0.1.0",
     "description": "",
-    "author": "Spencer Brower",
+    "author": {
+        "name": "Spencer Brower",
+        "email": "brower.spencer@gmail.com"
+    },
     "license": "GPL-3.0",
     "keywords": [
         "yeoman-generator"

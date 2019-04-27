@@ -17,12 +17,32 @@ module.exports = class extends yeoman_generator_1.default {
         this.composeWith(require.resolve('./selector'), {});
     }
     prompting() {
+        const getUser = () => {
+            const sources = [
+                this.user.git.name().split(" ")[0],
+                process.env.USER,
+            ];
+            for (let source of sources) {
+                source.trim();
+                if (source !== "") {
+                    return source;
+                }
+            }
+            return "user";
+        };
+        const user = getUser();
+        const packageName = package_json_1.default.name.replace(/(generator)?\-/g, " ").trim();
         const author = (typeof package_json_1.default.author === "object") ? package_json_1.default.author.name : package_json_1.default.author;
         // Have Yeoman greet the user.
-        this.log(yosay_1.default(`Welcome to the ${chalk_1.default.red('npm project')} generator!\nBy ${chalk_1.default.red(`${author}`)}`));
+        this.log(yosay_1.default(`'Allo, ${user}!
+Welcome to the ${chalk_1.default.red(packageName)} generator.
+Brought to you by ${chalk_1.default.yellow(author)}.`));
         const prompts = [];
         return this.prompt(prompts).then(props => {
             this.props = props;
         });
+    }
+    end() {
+        this.log(yosay_1.default(`You're all set. Good luck with your project!`));
     }
 };
