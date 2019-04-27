@@ -3,6 +3,7 @@ import chalk from "chalk";
 import yosay from "yosay";
 import packageInfo from "../package.json";
 import inquirer = require('inquirer');
+import shelljs from "shelljs";
 
 module.exports = class extends Generator {
     public props: inquirer.Answers;
@@ -16,7 +17,7 @@ module.exports = class extends Generator {
         this.composeWith(require.resolve('./selector'), {});
     }
 
-    prompting() {
+    initializing() {
         const getUser = (): string => {
             const sources = [
                 this.user.git.name().split(" ")[0],
@@ -39,15 +40,12 @@ module.exports = class extends Generator {
         this.log(yosay(`'Allo, ${user}!
 Welcome to the ${chalk.red(packageName)} generator.
 Brought to you by ${chalk.yellow(author)}.`));
-
-        const prompts = [];
-
-        return this.prompt(prompts).then(props => {
-            this.props = props;
-        });
     }
 
     end() {
-        this.log(yosay(`You're all set. Good luck with your project!`))
+        const projectName = require(this.destinationPath("package.json")).name || "your project";
+        shelljs.rm(this.destinationPath(".yo-rc.json"));
+
+        this.log(yosay(`You're all set.\nGood luck with ${chalk.blue(projectName)}!`))
     }
 };

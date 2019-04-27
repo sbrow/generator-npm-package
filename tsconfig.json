@@ -2,6 +2,7 @@
     "compilerOptions": {
         "resolveJsonModule": true,
         "esModuleInterop": true,
+        "inlineSourceMap": true,
         "target": "es6",
         "module": "commonjs",
         "outDir": "generators",

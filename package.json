@@ -6,6 +6,13 @@
     "name": "Spencer Brower",
     "email": "brower.spencer@gmail.com"
   },
+  "todos": {
+    "features": [
+      "option to install additional packages",
+      "clean dir before running",
+      "option to make new dir"
+    ]
+  },
   "license": "GPL-3.0",
   "keywords": [
     "yeoman-generator"
@@ -20,6 +27,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "npm run build -- -w",
+    "watch": "npm run build:watch",
     "clean": "shx rm -rf generators/*",
     "clean-build": "npm run clean && npm run build"
   },
