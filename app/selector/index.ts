@@ -4,7 +4,7 @@ import inquirer = require('inquirer');
 
 const packages = {
     "jest": "jest",
-    "React": ["react", "react-dom"]
+    "react": ["react", "react-dom"]
 }
 
 interface SelectorProps extends inquirer.Answers {
@@ -43,7 +43,7 @@ module.exports = class extends Generator {
             this.props.useTypescript = props.useTypescript;
 
             for (const packageName of props.packages) {
-                const pkgs = packages[packageName];
+                const pkgs = packages[packageName.toLowerCase()];
                 switch (typeof pkgs) {
                     case "string":
                         this.props.packages.push(pkgs)
