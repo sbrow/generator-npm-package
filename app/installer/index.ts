@@ -39,17 +39,17 @@ module.exports = class extends Generator {
         const dependencies = new Set(this.config.get('dependencies'));
         const devDependencies = (this.config.get('devDependencies') === {})
             ? new Set(this.config.get('devDependencies'))
-            : [];
+            : new Set();
 
         for (const name of this.props.packages) {
             const pkgs = packages[name];
             switch (typeof pkgs) {
                 case "string":
-                    dependencies.add(pkgs)
+                    devDependencies.add(pkgs)
                     break;
                 default:
                     for (const pkg of pkgs) {
-                        dependencies.add(pkg);
+                        devDependencies.add(pkg);
                     }
             }
         }

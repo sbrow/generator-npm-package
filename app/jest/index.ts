@@ -6,7 +6,7 @@ export class Jest extends Generator {
 
     writing() {
         this.fs.extendJSON(this.destinationPath('package.json'), { scripts: { test: "jest" } });
-        // this.fs.copy(this.templatePath(config), this.destinationRoot(config.replace(".template", "")));
+        this.fs.copy(this.templatePath(config), this.destinationRoot(config.replace(".template", "")));
     }
 };
 

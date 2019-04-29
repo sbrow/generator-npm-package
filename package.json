@@ -27,13 +27,15 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "npm run build -- -w",
-    "watch": "npm run build:watch",
+    "watch": "yarn run build:watch",
     "clean": "shx rm -rf generators/*",
-    "clean-build": "npm run clean && npm run build",
+    "clean-build": "yarn run clean && npm run build",
+    "make": "yarn run make:templates",
     "make:templates": "cp -r app/jest/templates generators/app/jest/templates"
   },
   "devDependencies": {
     "@types/node": "^11.13.7",
+    "@types/shelljs": "^0.8.5",
     "@types/yeoman-generator": "^3.1.1",
     "coveralls": "^3.0.2",
     "eslint": "^5.9.0",

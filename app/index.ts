@@ -1,9 +1,10 @@
 import Generator from 'yeoman-generator';
 import chalk from "chalk";
-import yosay from "yosay";
-import packageInfo from "../package.json";
 import inquirer = require('inquirer');
-import shelljs from "shelljs";
+import path from "path";
+import packageInfo from "../package.json";
+import yosay from "yosay";
+import shelljs, { exit } from "shelljs";
 
 module.exports = class extends Generator {
     public props: inquirer.Answers;
@@ -40,6 +41,64 @@ module.exports = class extends Generator {
         this.log(yosay(`'Allo, ${user}!
 Welcome to the ${chalk.red(packageName)} generator.
 Brought to you by ${chalk.yellow(author)}.`));
+    }
+    prompting() {
+        const dirs = shelljs.ls(this.destinationRoot());
+
+        if (dirs.length > 0) {
+            enum choices {
+                Yes = "y",
+                No = "n",
+                Create = "c",
+                Delete = "d",
+            }
+
+            const prompts = {
+                type: "expand",
+                message: "Your current directory is not clean, proceed?",
+                name: "action",
+                // choices: ["Yes- Proceed with a dirty directory", "No- exit without any further action", "Clean first, and then proceed"],
+                choices: [{
+                    key: choices.Yes,
+                    name: `Yes, continue installing in a dirty directory`,
+                    value: choices.Yes,
+                },
+                {
+                    key: choices.No,
+                    name: `No, exit immediately.`,
+                    value: choices.No,
+                },
+                {
+                    key: choices.Create,
+                    name: `Create the project in a subdirectory.`,
+                    value: choices.Create,
+                },
+                {
+                    key: choices.Delete,
+                    name: `Delete this directory's contents before proceeding.`,
+                    value: choices.Delete,
+                },
+                ],
+                default: [1]
+            }
+
+            return this.prompt(prompts).then((props: any) => {
+                switch (props.action) {
+                    case choices.No:
+                        this.log(yosay("Come back soon!"));
+                        exit(0);
+                        break;
+                    case choices.Create:
+                        // @todo Choices.create
+                        break;
+                    case choices.Delete:
+                        shelljs.rm("-rf", path.join(this.destinationRoot(), ("*")));
+                    case choices.Yes:
+                    default:
+                }
+                this.props = props;
+            });
+        }
     }
 
     end() {
