@@ -8,5 +8,8 @@
         "typescript",
         "@types/node",
         "tslint"
+    ],
+    "Webpack": [
+        "webpack"
     ]
 }

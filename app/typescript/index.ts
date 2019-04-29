@@ -1,8 +1,9 @@
 import Generator from "yeoman-generator";
 import shelljs from "shelljs";
 
+import blacklist from "./blacklist.json";
+
 module.exports = class extends Generator {
-    public devDependencies: string[] = ["typescript", "@types/node", "tslint"];
     public tslint = {
         extends: "tslint:recommended",
         rules: {},
@@ -10,32 +11,25 @@ module.exports = class extends Generator {
     public props: any;
 
     prompting() {
-        const packages = [];
-        const toInstall = [
-            ...this.config.get('devDependencies'),
-            ...this.config.get('dependencies'),
-            ...this.devDependencies,
-        ];
-        this.log(JSON.stringify({
-            dev: this.config.get('devDependencies'),
-            deps: this.config.get('dependencies'),
-        }))
-        for (const pkg of toInstall) {
-            if (pkg !== null && !pkg.match(/^@types/)) {
+        const dependencies: Set<string> = new Set(this.config.get('dependencies'));
+        const devDependencies: Set<string> = new Set(this.config.get('devDependencies'));
+        const deps: string[] = [...Array.from(dependencies), ...Array.from(devDependencies)];
+        const choices = new Set<string>();
+        for (const pkg of deps) {
+            if (pkg !== null && !blacklist.includes(pkg) && !pkg.match(/^@types/)) {
                 const name = `@types/${pkg}`
-                if (!packages.includes(name)) {
-                    packages.push(name)
+                if (!choices.has(name)) {
+                    choices.add(name)
                 }
             }
         }
-        this.log(`packages: ${JSON.stringify(packages)}`);
 
         const prompts: Generator.Questions = [
             {
                 type: "checkbox",
                 name: "typeDefs",
                 message: "Select packages to install type definitions (.d.ts) files for",
-                choices: packages
+                choices: Array.from(choices),
             },
             {
                 type: "input",
@@ -55,12 +49,24 @@ module.exports = class extends Generator {
         });
     }
 
+    configuring() {
+        const devDependencies = (this.config.get("devDependencies") !== {})
+            ? new Set(this.config.get('devDependencies'))
+            : new Set();
+        for (const name of this.props.typeDefs) {
+            devDependencies.add(name);
+        }
+        this.config.set('devDependencies', Array.from(devDependencies));
+    }
+
     writing() {
         // Setup directories
         shelljs.mkdir(this.destinationPath('src'));
         shelljs.mkdir(this.destinationPath(this.props.outDir));
 
-        const jsx = (this.config.get("dependencies").includes("react"))
+        const dependencies = new Set(this.config.get("dependencies"));
+
+        const jsx = (dependencies.has("react"))
             ? "react"
             : undefined;
 
@@ -82,11 +88,5 @@ module.exports = class extends Generator {
                     build: "tsc"
                 }
             });
-    }
-
-    install() {
-        const packages = [...this.devDependencies, ...this.props.typeDefs]
-        this.log(`Installing ${packages.join(" ")}`);
-        this.npmInstall(packages, { "save-dev": true });
     }
 }
