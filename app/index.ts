@@ -14,7 +14,7 @@ module.exports = class extends Generator {
             version: "0.0.0",
             author: this.user.git.name(),
         });
-        this.composeWith(require.resolve('./selector'), {});
+        this.composeWith(require.resolve('./installer'), {});
     }
 
     initializing() {

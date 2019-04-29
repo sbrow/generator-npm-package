@@ -29,7 +29,8 @@
     "build:watch": "npm run build -- -w",
     "watch": "npm run build:watch",
     "clean": "shx rm -rf generators/*",
-    "clean-build": "npm run clean && npm run build"
+    "clean-build": "npm run clean && npm run build",
+    "make:templates": "cp -r app/jest/templates generators/app/jest/templates"
   },
   "devDependencies": {
     "@types/node": "^11.13.7",

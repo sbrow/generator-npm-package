@@ -1,7 +1,7 @@
 import Generator from "yeoman-generator";
 import shelljs from "shelljs";
 
-class Typescript extends Generator {
+module.exports = class extends Generator {
     public devDependencies: string[] = ["typescript", "@types/node", "tslint"];
     public tslint = {
         extends: "tslint:recommended",
@@ -90,7 +90,3 @@ class Typescript extends Generator {
         this.npmInstall(packages, { "save-dev": true });
     }
 }
-
-module.exports = Typescript;
-
-export default Typescript;
