@@ -89,14 +89,23 @@ Brought to you by ${chalk.yellow(author)}.`));
                         exit(0);
                         break;
                     case choices.Create:
-                        // @todo Choices.create
-                        break;
+                        return this.prompt([{
+                            type: "input",
+                            name: "dirName",
+                            message: "What directory should be created?"
+                        }]).then((props: any) => {
+                            if (props.dirName === "") {
+                                this.log("No name was entered");
+                                return this.prompting();
+                            }
+                            shelljs.mkdir(props.dirName);
+                            this.destinationRoot(this.destinationPath(props.dirName));
+                        });
                     case choices.Delete:
                         shelljs.rm("-rf", path.join(this.destinationRoot(), ("*")));
                     case choices.Yes:
                     default:
                 }
-                this.props = props;
             });
         }
     }
@@ -104,7 +113,6 @@ Brought to you by ${chalk.yellow(author)}.`));
     end() {
         const projectName = require(this.destinationPath("package.json")).name || "your project";
         shelljs.rm(this.destinationPath(".yo-rc.json"));
-
         this.log(yosay(`You're all set.\nGood luck with ${chalk.blue(projectName)}!`))
     }
 };

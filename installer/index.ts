@@ -32,7 +32,7 @@ module.exports = class extends Generator {
         if (this.props.packages.includes("Typescript")) {
             this.composeWith(require.resolve('../typescript'), {});
         }
-        if (this.props.packages.includes("jest")) {
+        if (this.props.packages.includes("Jest")) {
             this.composeWith(require.resolve('../jest'), {});
         }
 
@@ -66,7 +66,10 @@ module.exports = class extends Generator {
         dependencies.push(...devDependencies);
         if (dependencies.length > 0) {
             this.log(`Installing node packages: ${dependencies.join(" ")}`)
-            this.npmInstall(dependencies);
+            this.installDependencies({
+                npm: true,
+                bower: false
+            });
         } else {
             this.log("No additional packages will be installed.");
         }
