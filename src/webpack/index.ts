@@ -1,7 +1,7 @@
-import Generator from 'yeoman-generator';
+import Generator from "yeoman-generator";
 
 export class Webpack extends Generator {
-    prompting() {
+    public prompting() {
 
     }
 }

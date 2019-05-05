@@ -1,25 +1,27 @@
-import Generator from 'yeoman-generator';
+import Generator from "yeoman-generator";
 
+import inquirer = require("inquirer");
 import packages from "./packages.json";
 
-
 module.exports = class extends Generator {
-    props: any;
+    public props: any;
     constructor(args, opts) {
-        super(args, opts)
+        super(args, opts);
     }
 
-    prompting() {
+    public prompting() {
         const choices = [];
         for (const choice in packages) {
-            choices.push(choice);
+            if (packages.hasOwnProperty(choice)) {
+                choices.push(choice);
+            }
         }
-        const prompts = [
+        const prompts: Generator.Questions = [
             {
                 type: "checkbox",
                 name: "packages",
                 message: "Select packages to install",
-                choices
+                choices,
             },
         ];
 
@@ -28,24 +30,24 @@ module.exports = class extends Generator {
         });
     }
 
-    configuring() {
+    public configuring() {
         if (this.props.packages.includes("Typescript")) {
-            this.composeWith(require.resolve('../typescript'), {});
+            this.composeWith(require.resolve("../typescript"), {});
         }
         if (this.props.packages.includes("Jest")) {
-            this.composeWith(require.resolve('../jest'), {});
+            this.composeWith(require.resolve("../jest"), {});
         }
 
-        const dependencies = new Set(this.config.get('dependencies'));
-        const devDependencies = (this.config.get('devDependencies') === {})
-            ? new Set(this.config.get('devDependencies'))
+        const dependencies = new Set(this.config.get("dependencies"));
+        const devDependencies = (this.config.get("devDependencies") === {})
+            ? new Set(this.config.get("devDependencies"))
             : new Set();
 
         for (const name of this.props.packages) {
             const pkgs = packages[name];
             switch (typeof pkgs) {
                 case "string":
-                    devDependencies.add(pkgs)
+                    devDependencies.add(pkgs);
                     break;
                 default:
                     for (const pkg of pkgs) {
@@ -53,22 +55,22 @@ module.exports = class extends Generator {
                     }
             }
         }
-        this.config.set('dependencies', Array.from(dependencies));
-        this.config.set('devDependencies', Array.from(devDependencies));
+        this.config.set("dependencies", Array.from(dependencies));
+        this.config.set("devDependencies", Array.from(devDependencies));
     }
 
-    writing() {
-        this.fs.extendJSON(this.destinationPath('package.json'), { scripts: { start: "node $npm_package_main" } });
+    public writing() {
+        this.fs.extendJSON(this.destinationPath("package.json"), { scripts: { start: "node $npm_package_main" } });
     }
-    installing() {
-        const dependencies = this.config.get('dependencies');
-        const devDependencies = this.config.get('devDependencies');
+    public installing() {
+        const dependencies = this.config.get("dependencies");
+        const devDependencies = this.config.get("devDependencies");
         dependencies.push(...devDependencies);
         if (dependencies.length > 0) {
-            this.log(`Installing node packages: ${dependencies.join(" ")}`)
+            this.log(`Installing node packages: ${dependencies.join(" ")}`);
             this.installDependencies({
                 npm: true,
-                bower: false
+                bower: false,
             });
         } else {
             this.log("No additional packages will be installed.");

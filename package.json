@@ -1,18 +1,22 @@
 {
   "name": "generator-npm-package",
   "version": "0.3.0",
-  "description": "",
+  "description": "Generates boilerplate for npm packages",
   "author": {
     "name": "Spencer Brower",
     "email": "brower.spencer@gmail.com"
   },
+  "license": "GPL-3.0",
   "todos": {
     "features": [
       "option to install additional packages",
-      "ask if user wants to use yarn."
+      "ask if user wants to use yarn.",
+      {
+        "description": "read from package.json as well as config",
+        "reason": "Allows install into pre-assembled projects."
+      }
     ]
   },
-  "license": "GPL-3.0",
   "keywords": [
     "yeoman-generator"
   ],
@@ -26,6 +30,7 @@
   "scripts": {
     "test": "jest",
     "cover": "jest --coverage",
+    "lint": "tslint --project .",
     "build": "tsc",
     "build:watch": "yarn run build -w",
     "watch": "yarn run build:watch",
@@ -36,6 +41,7 @@
     "make:templates": "cp -r app/jest/templates generators/app/jest/templates"
   },
   "devDependencies": {
+    "@types/inquirer": "^6.0.1",
     "@types/jest": "^24.0.12",
     "@types/node": "^11.13.8",
     "@types/shelljs": "^0.8.5",
@@ -52,6 +58,8 @@
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.2",
     "shx": "^0.3.2",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.16.0",
     "typescript": "^3.4.5",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"
@@ -60,7 +68,6 @@
     "chalk": "^2.1.0",
     "generator-npm-init": "^1.5.0",
     "shelljs": "^0.8.3",
-    "ts-jest": "^24.0.2",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
   }

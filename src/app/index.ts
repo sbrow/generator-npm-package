@@ -1,37 +1,37 @@
-import Generator from 'yeoman-generator';
 import chalk from "chalk";
-import inquirer = require('inquirer');
+import inquirer from "inquirer";
 import path from "path";
-import yosay from "yosay";
 import shelljs, { exit } from "shelljs";
+import Generator from "yeoman-generator";
+import yosay from "yosay";
 
-const packageInfo = require('../../package.json');
+const packageInfo = require("../../package.json");
 
 module.exports = class extends Generator {
     public props: inquirer.Answers;
 
     constructor(args, opts) {
         super(args, opts);
-        this.composeWith(require.resolve('generator-npm-init/app'), {
-            version: "0.0.0",
+        this.composeWith(require.resolve("generator-npm-init/app"), {
             author: this.user.git.name(),
+            version: "0.0.0",
         });
-        this.composeWith(require.resolve('../installer'), {});
+        this.composeWith(require.resolve("../installer"), {});
     }
 
-    initializing() {
+    public initializing() {
         const getUser = (): string => {
             const sources = [
                 this.user.git.name().split(" ")[0],
                 process.env.USER,
-            ]
-            for (let source of sources) {
+            ];
+            for (const source of sources) {
                 source.trim();
                 if (source !== "") {
-                    return source
+                    return source;
                 }
             }
-            return "user"
+            return "user";
         };
 
         const user = getUser();
@@ -43,7 +43,7 @@ module.exports = class extends Generator {
 Welcome to the ${chalk.red(packageName)} generator.
 Brought to you by ${chalk.yellow(author)}.`));
     }
-    prompting() {
+    public prompting() {
         const dirs = shelljs.ls(this.destinationRoot());
 
         if (dirs.length > 0) {
@@ -54,11 +54,11 @@ Brought to you by ${chalk.yellow(author)}.`));
                 Delete = "d",
             }
 
-            const prompts = {
+            const prompts: Generator.Questions = [{
                 type: "expand",
-                message: "Your current directory is not clean, proceed?",
                 name: "action",
-                // choices: ["Yes- Proceed with a dirty directory", "No- exit without any further action", "Clean first, and then proceed"],
+                message: "Your current directory is not clean, proceed?",
+                default: [1],
                 choices: [{
                     key: choices.Yes,
                     name: `Yes, continue installing in a dirty directory`,
@@ -80,8 +80,7 @@ Brought to you by ${chalk.yellow(author)}.`));
                     value: choices.Delete,
                 },
                 ],
-                default: [1]
-            }
+            }];
 
             return this.prompt(prompts).then((props: any) => {
                 switch (props.action) {
@@ -91,16 +90,15 @@ Brought to you by ${chalk.yellow(author)}.`));
                         break;
                     case choices.Create:
                         return this.prompt([{
-                            type: "input",
                             name: "dirName",
-                            message: "What directory should be created?"
-                        }]).then((props: any) => {
-                            if (props.dirName === "") {
+                            message: "What directory should be created?",
+                        }]).then((props2: any) => {
+                            if (props2.dirName === "") {
                                 this.log("No name was entered");
                                 return this.prompting();
                             }
-                            shelljs.mkdir(props.dirName);
-                            this.destinationRoot(this.destinationPath(props.dirName));
+                            shelljs.mkdir(props2.dirName);
+                            this.destinationRoot(this.destinationPath(props2.dirName));
                         });
                     case choices.Delete:
                         shelljs.rm("-rf", path.join(this.destinationRoot(), ("*")));
@@ -111,9 +109,9 @@ Brought to you by ${chalk.yellow(author)}.`));
         }
     }
 
-    end() {
+    public end() {
         const projectName = require(this.destinationPath("package.json")).name || "your project";
         shelljs.rm(this.destinationPath(".yo-rc.json"));
-        this.log(yosay(`You're all set.\nGood luck with ${chalk.blue(projectName)}!`))
+        this.log(yosay(`You're all set.\nGood luck with ${chalk.blue(projectName)}!`));
     }
 };
