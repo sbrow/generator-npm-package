@@ -11,47 +11,82 @@ const opts = {
 describe("generator-jest", () => {
     describe("#writing", () => {
         const file = "jest.config.js";
-        it("creates file", async () => {
+
+        it(`Creates "${file}"`, async () => {
             const tmpDir = await helpers.run(Jest, opts);
             assert.file(file);
         });
-        it(`extensions = [".js"]`, async () => {
+        it(`Adds "test" script`, async () => {
             const tmpDir = await helpers.run(Jest, opts);
-            const got = fs.readFileSync(path.join(tmpDir, file)).toString();
-            expect(got).toMatchSnapshot();
+            const packageJSON = JSON.parse(fs.readFileSync(path.join(tmpDir, "package.json")).toString());
+            const { test, coveralls } = Jest.prototype.scripts;
+            expect.objectContaining({
+                scripts: {
+                    test: expect.stringMatching(test),
+                }
+            });
+            expect.not.objectContaining({
+                scripts: {
+                    coveralls: expect.stringMatching(coveralls),
+                }
+            })
         });
-        it(`extensions = [".js", ".jsx"]`, async () => {
+        it(`Does not add "coveralls" script`, async () => {
+            const tmpDir = await helpers.run(Jest, opts);
+            const { test, coveralls } = Jest.prototype.scripts;
+            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, "package.json")).toString());
+            expect.not.objectContaining({
+                scripts: {
+                    coveralls: expect.stringMatching(coveralls),
+                }
+            });
+        });
+        it(`Adds "coveralls" as a devDependency`, async () => {
             const tmpDir = await helpers.run(Jest, opts)
-                .withLocalConfig({ devDependencies: ["react"] });
-            const got = fs.readFileSync(path.join(tmpDir, file)).toString();
-            expect(got).toMatchSnapshot();
+                .withPrompts([{ enableCoveralls: true }]);
+            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, "package.json")).toString());
+            expect.objectContaining({
+                "generator-npm-package": {
+                    devDependencies: expect.arrayContaining(["coveralls"]),
+                }
+            });
         });
-        it(`extensions = [".ts", ".js"]`, async () => {
+        it(`Adds "coveralls" script`, async () => {
             const tmpDir = await helpers.run(Jest, opts)
-                .withLocalConfig({
-                    devDependencies: ["typescript"],
-                    tsconfig: { resolveJsonModule: false },
-                })
-            const got = fs.readFileSync(path.join(tmpDir, file)).toString();
-            expect(got).toMatchSnapshot();
+                .withPrompts([{ enableCoveralls: true }]);
+            const { test, coveralls } = Jest.prototype.scripts;
+            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, "package.json")).toString());
+            expect.objectContaining({
+                scripts: {
+                    coveralls: expect.stringMatching(coveralls),
+                }
+            });
         });
-        it(`extensions = [".ts", ".js", ".json"]`, async () => {
-            const tmpDir = await helpers.run(Jest, opts)
-                .withLocalConfig({
-                    devDependencies: ["typescript"],
-                    tsconfig: { resolveJsonModule: true },
-                })
-            const got = fs.readFileSync(path.join(tmpDir, file)).toString();
-            expect(got).toMatchSnapshot();
-        });
-        it(`extensions = [".ts", ".tsx", ".js", ".jsx"]`, async () => {
-            const tmpDir = await helpers.run(Jest, opts)
-                .withLocalConfig({
-                    devDependencies: ["react", "typescript"],
-                    tsconfig: { resolveJsonModule: false },
-                })
-            const got = fs.readFileSync(path.join(tmpDir, file)).toString();
-            expect(got).toMatchSnapshot();
-        });
+
+        test.each`
+        config | want
+        ${{}}  | ${"js"}
+        ${{ devDependencies: ["react"] }
+            }  | ${'"js","jsx"'}
+        ${{
+                devDependencies: ["typescript"],
+                tsconfig: { resolveJsonModule: false }
+            }} | ${'"ts","js"'}
+        ${{
+                devDependencies: ["typescript"],
+                tsconfig: { resolveJsonModule: true }
+            }} | ${'"ts","js","json"'}
+        ${{
+                devDependencies: [
+                    "react",
+                    "typescript"
+                ],
+                tsconfig: { resolveJsonModule: true }
+            }} | ${'"ts","tsx","js","jsx","json"'}
+        `(`Has extensions '[$want]'`, async ({ config, want }) => {
+                const tmpDir = await helpers.run(Jest, opts)
+                    .withLocalConfig(config);
+                expect.stringContaining(`const moduleFileExtensions = [${want}]`)
+            });
     });
 });

@@ -1,11 +1,11 @@
 import Generator from "yeoman-generator";
 
-//@todo option: Allow resolve JSON.
 export class Jest extends Generator {
 
     public props: {
         moduleFileExtensions: string[]
         resolveJsonModule: boolean,
+        enableCoveralls: boolean
     };
 
     constructor(args, opts) {
@@ -13,7 +13,30 @@ export class Jest extends Generator {
         this.props = {
             moduleFileExtensions: ["js"],
             resolveJsonModule: false,
+            enableCoveralls: false,
         };
+    }
+
+    public get scripts() {
+        return {
+            test: "jest",
+            cover: "jest --coverage",
+            coveralls: "jest --coverage --coverageReporters=text-lcov | coveralls"
+        };
+    }
+
+    prompting() {
+        const prompts = [{
+            message: "Enable coveralls integration?",
+            name: "enableCoveralls",
+            type: "confirm",
+            default: false,
+        }]
+
+        return this.prompt(prompts).then(props => {
+            this.props.enableCoveralls = props.enableCoveralls;
+            return this.props;
+        })
     }
 
     configuring() {
@@ -25,14 +48,6 @@ export class Jest extends Generator {
             if (tsconfig.hasOwnProperty("resolveJsonModule")) {
                 this.props.resolveJsonModule = tsconfig.resolveJsonModule;
             }
-        } else {
-            this.prompt([{
-                type: "confirm",
-                name: "resolveJsonModule",
-                message: "Allow import of JSON files in tests?",
-            }]).then(props => {
-                this.props.resolveJsonModule = props.resolveJsonModule;
-            });
         }
         if (devDependencies.has("react")) {
             const temp = [];
@@ -44,10 +59,20 @@ export class Jest extends Generator {
         if (this.props.resolveJsonModule) {
             this.props.moduleFileExtensions.push('json');
         }
+        if (this.props.enableCoveralls) {
+            devDependencies.add("coveralls");
+            this.config.set('devDependencies', Array.from(devDependencies));
+        }
     }
 
     writing() {
-        this.fs.extendJSON(this.destinationPath('package.json'), { scripts: { test: "jest" } });
+        const scripts: { test: string; coveralls?: string } = {
+            test: this.scripts.test,
+        };
+        if (this.props.enableCoveralls) {
+            scripts.coveralls = this.scripts.coveralls;
+        }
+        this.fs.extendJSON(this.destinationPath('package.json'), { scripts });
         this.fs.write(this.destinationPath('jest.config.js'), `const moduleFileExtensions = ${JSON.stringify(this.props.moduleFileExtensions)}
 
 module.exports = {

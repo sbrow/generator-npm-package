@@ -7,5 +7,8 @@
         "module": "commonjs",
         "outDir": "generators",
         "rootDir": "src"
-    }
+    },
+    "exclude": [
+        "__tests__"
+    ]
 }
