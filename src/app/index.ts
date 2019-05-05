@@ -2,9 +2,10 @@ import Generator from 'yeoman-generator';
 import chalk from "chalk";
 import inquirer = require('inquirer');
 import path from "path";
-import packageInfo from "../package.json";
 import yosay from "yosay";
 import shelljs, { exit } from "shelljs";
+
+const packageInfo = require('../../package.json');
 
 module.exports = class extends Generator {
     public props: inquirer.Answers;
