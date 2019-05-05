@@ -18,6 +18,15 @@ module.exports = {
 "
 `;
 
+exports[`generator-jest #writing extensions = [".ts", ".js", ".json"] 1`] = `
+"const moduleFileExtensions = [\\"ts\\",\\"js\\",\\"json\\"]
+
+module.exports = {
+    collectCoverageFrom: [\`src/**/*.\${moduleFileExtensions}\`]
+}
+"
+`;
+
 exports[`generator-jest #writing extensions = [".ts", ".js"] 1`] = `
 "const moduleFileExtensions = [\\"ts\\",\\"js\\"]
 

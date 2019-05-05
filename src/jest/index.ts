@@ -1,12 +1,19 @@
 import Generator from "yeoman-generator";
 
+//@todo option: Allow resolve JSON.
 export class Jest extends Generator {
 
-    public props: { moduleFileExtensions: string[] };
+    public props: {
+        moduleFileExtensions: string[]
+        resolveJsonModule: boolean,
+    };
 
     constructor(args, opts) {
         super(args, opts);
-        this.props = { moduleFileExtensions: ["js"] };
+        this.props = {
+            moduleFileExtensions: ["js"],
+            resolveJsonModule: false,
+        };
     }
 
     configuring() {
@@ -14,6 +21,18 @@ export class Jest extends Generator {
 
         if (devDependencies.has("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
+            const tsconfig = this.config.get('tsconfig');
+            if (tsconfig.hasOwnProperty("resolveJsonModule")) {
+                this.props.resolveJsonModule = tsconfig.resolveJsonModule;
+            }
+        } else {
+            this.prompt([{
+                type: "confirm",
+                name: "resolveJsonModule",
+                message: "Allow import of JSON files in tests?",
+            }]).then(props => {
+                this.props.resolveJsonModule = props.resolveJsonModule;
+            });
         }
         if (devDependencies.has("react")) {
             const temp = [];
@@ -21,6 +40,9 @@ export class Jest extends Generator {
                 temp.push(extension, `${extension}x`)
             }
             this.props.moduleFileExtensions = temp;
+        }
+        if (this.props.resolveJsonModule) {
+            this.props.moduleFileExtensions.push('json');
         }
     }
 

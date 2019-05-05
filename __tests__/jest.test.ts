@@ -2,10 +2,10 @@ import assert from "yeoman-assert";
 import fs from "fs";
 import helpers from "yeoman-test";
 import path from "path";
-import Jest from "./index";
+import Jest from "../src/jest/index";
 
 const opts = {
-    resolved: require.resolve("./index"),
+    resolved: require.resolve("../src/jest/index"),
     namespace: "npm-package:jest",
 };
 describe("generator-jest", () => {
@@ -28,13 +28,28 @@ describe("generator-jest", () => {
         });
         it(`extensions = [".ts", ".js"]`, async () => {
             const tmpDir = await helpers.run(Jest, opts)
-                .withLocalConfig({ devDependencies: ["typescript"] })
+                .withLocalConfig({
+                    devDependencies: ["typescript"],
+                    tsconfig: { resolveJsonModule: false },
+                })
+            const got = fs.readFileSync(path.join(tmpDir, file)).toString();
+            expect(got).toMatchSnapshot();
+        });
+        it(`extensions = [".ts", ".js", ".json"]`, async () => {
+            const tmpDir = await helpers.run(Jest, opts)
+                .withLocalConfig({
+                    devDependencies: ["typescript"],
+                    tsconfig: { resolveJsonModule: true },
+                })
             const got = fs.readFileSync(path.join(tmpDir, file)).toString();
             expect(got).toMatchSnapshot();
         });
         it(`extensions = [".ts", ".tsx", ".js", ".jsx"]`, async () => {
             const tmpDir = await helpers.run(Jest, opts)
-                .withLocalConfig({ devDependencies: ["react", "typescript"] });
+                .withLocalConfig({
+                    devDependencies: ["react", "typescript"],
+                    tsconfig: { resolveJsonModule: false },
+                })
             const got = fs.readFileSync(path.join(tmpDir, file)).toString();
             expect(got).toMatchSnapshot();
         });

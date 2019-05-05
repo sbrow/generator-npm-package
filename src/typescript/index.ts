@@ -34,13 +34,20 @@ module.exports = class extends Generator {
             {
                 type: "input",
                 name: "outDir",
-                message: "What directory should tsc compile to?",
+                message: "Where should source files be transpiled to?",
                 default: "dist"
             },
             {
                 type: "confirm",
                 name: "esModuleInterop",
+                message: "Allow ES module imports? (Import foo from \"bar\")",
                 default: true
+            },
+            {
+                type: "confirm",
+                name: "resoveJsonModule",
+                message: "Allow import of JSON modules?",
+                default: false
             }
         ];
 
@@ -56,7 +63,11 @@ module.exports = class extends Generator {
         for (const name of this.props.typeDefs) {
             devDependencies.add(name);
         }
+
         this.config.set('devDependencies', Array.from(devDependencies));
+        const tsconfig = { ...this.props }
+        delete tsconfig.typeDefs;
+        this.config.set('tsconfig', tsconfig);
     }
 
     writing() {
@@ -70,13 +81,14 @@ module.exports = class extends Generator {
             ? "react"
             : undefined;
 
-        const { esModuleInterop, outDir } = this.props;
+        const { esModuleInterop, outDir, resoveJsonModule } = this.props;
         this.fs.extendJSON(this.destinationPath('tsconfig.json'),
             {
                 compilerOptions: {
                     esModuleInterop,
                     jsx,
-                    outDir
+                    outDir,
+                    resoveJsonModule
                 }
             });
         this.fs.extendJSON(this.destinationPath('tslint.json'), this.tslint);
