@@ -5,7 +5,7 @@ import shelljs, { exit } from "shelljs";
 import Generator from "yeoman-generator";
 import yosay from "yosay";
 
-const packageInfo = require("../../package.json");
+const packageJson = require("../../package.json");
 
 module.exports = class extends Generator {
     public props: inquirer.Answers;
@@ -35,8 +35,8 @@ module.exports = class extends Generator {
         };
 
         const user = getUser();
-        const packageName = packageInfo.name.replace(/(generator)?\-/g, " ").trim();
-        const author = (typeof packageInfo.author === "object") ? packageInfo.author.name : packageInfo.author;
+        const packageName = packageJson.name.replace(/(generator)?\-/g, " ").trim();
+        const author = (typeof packageJson.author === "object") ? packageJson.author.name : packageJson.author;
 
         // Have Yeoman greet the user.
         this.log(yosay(`'Allo, ${user}!
@@ -54,7 +54,7 @@ Brought to you by ${chalk.yellow(author)}.`));
                 Delete = "d",
             }
 
-            const prompts: Generator.Questions = [{
+            const prompts: inquirer.Questions = [{
                 type: "expand",
                 name: "action",
                 message: "Your current directory is not clean, proceed?",

@@ -5,5 +5,3 @@ export class Webpack extends Generator {
 
     }
 }
-
-export default Webpack;

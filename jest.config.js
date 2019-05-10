@@ -8,6 +8,5 @@ module.exports = {
         "\.tsx?": "ts-jest",
     },
     moduleFileExtensions: extensions,
-    testPathIgnorePatterns: ["node_modules", "generators"]
+    testPathIgnorePatterns: ["node_modules", "generators"],
 };
-

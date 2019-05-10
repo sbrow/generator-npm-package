@@ -14,7 +14,8 @@
       {
         "description": "read from package.json as well as config",
         "reason": "Allows install into pre-assembled projects."
-      }
+      },
+      "object-literal-sort-keys for tslint"
     ]
   },
   "keywords": [
@@ -60,6 +61,7 @@
     "shx": "^0.3.2",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
+    "tslint-microsoft-contrib": "^6.1.1",
     "typescript": "^3.4.5",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"

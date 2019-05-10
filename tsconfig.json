@@ -6,7 +6,8 @@
         "target": "es6",
         "module": "commonjs",
         "outDir": "generators",
-        "rootDir": "src"
+        "rootDir": "src",
+        "baseUrl": "src"
     },
     "exclude": [
         "__tests__"

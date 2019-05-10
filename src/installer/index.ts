@@ -1,7 +1,6 @@
 import Generator from "yeoman-generator";
 
-import inquirer = require("inquirer");
-import packages from "./packages.json";
+import packagesJson from "installer/packages.json";
 
 module.exports = class extends Generator {
     public props: any;
@@ -11,8 +10,8 @@ module.exports = class extends Generator {
 
     public prompting() {
         const choices = [];
-        for (const choice in packages) {
-            if (packages.hasOwnProperty(choice)) {
+        for (const choice in packagesJson) {
+            if (packagesJson.hasOwnProperty(choice)) {
                 choices.push(choice);
             }
         }
@@ -44,7 +43,7 @@ module.exports = class extends Generator {
             : new Set();
 
         for (const name of this.props.packages) {
-            const pkgs = packages[name];
+            const pkgs = packagesJson[name];
             switch (typeof pkgs) {
                 case "string":
                     devDependencies.add(pkgs);

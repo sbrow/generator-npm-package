@@ -1,6 +1,8 @@
 import Generator from "yeoman-generator";
 
-export class Jest extends Generator {
+import { BaseGenerator } from "../BaseGenerator";
+
+export class Jest extends BaseGenerator {
 
     public props: {
         moduleFileExtensions: string[]
@@ -26,11 +28,11 @@ export class Jest extends Generator {
     }
 
     public prompting() {
-        const prompts = [{
-            default: false,
-            message: "Enable coveralls integration?",
-            name: "enableCoveralls",
+        const prompts: Generator.Questions = [{
             type: "confirm",
+            name: "enableCoveralls",
+            message: "Enable coveralls integration?",
+            default: false,
         }];
 
         return this.prompt(prompts).then((props) => {
@@ -40,12 +42,12 @@ export class Jest extends Generator {
     }
 
     public configuring() {
-        const devDependencies = new Set(this.config.get("devDependencies"));
+        const devDependencies = this.getDevDependencies();
 
         if (devDependencies.has("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
             const tsconfig = this.config.get("tsconfig");
-            if (tsconfig.hasOwnProperty("resolveJsonModule")) {
+            if (tsconfig !== undefined && tsconfig.hasOwnProperty("resolveJsonModule")) {
                 this.props.resolveJsonModule = tsconfig.resolveJsonModule;
             }
         }
@@ -61,7 +63,7 @@ export class Jest extends Generator {
         }
         if (this.props.enableCoveralls) {
             devDependencies.add("coveralls");
-            this.config.set("devDependencies", Array.from(devDependencies));
+            this.setDevDependencies(devDependencies);
         }
     }
 
@@ -75,11 +77,22 @@ export class Jest extends Generator {
         this.fs.extendJSON(this.destinationPath("package.json"), { scripts });
         this.fs.write(this.destinationPath("jest.config.js"),
             `const moduleFileExtensions = ${JSON.stringify(this.props.moduleFileExtensions)};
-
+${this.transforms()}
 module.exports = {
     collectCoverageFrom: [\`src/**/*.\${moduleFileExtensions}\`]
 };
 `);
+    }
+
+    private transforms(): string {
+        if (this.getDevDependencies().has("typescript")) {
+            return `
+    transform: {
+        "\.tsx?": "ts-jest",
+    },
+`;
+        }
+        return "";
     }
 }
 

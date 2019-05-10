@@ -1,8 +1,9 @@
-import assert from "yeoman-assert";
 import fs from "fs";
-import helpers from "yeoman-test";
 import path from "path";
-import Jest from "../src/jest/index";
+import assert from "yeoman-assert";
+import helpers from "yeoman-test";
+
+import Jest from "../src/jest";
 
 const opts = {
     resolved: require.resolve("../src/jest/index"),
@@ -23,13 +24,13 @@ describe("generator-jest", () => {
             expect.objectContaining({
                 scripts: {
                     test: expect.stringMatching(test),
-                }
+                },
             });
             expect.not.objectContaining({
                 scripts: {
                     coveralls: expect.stringMatching(coveralls),
-                }
-            })
+                },
+            });
         });
         it(`Does not add "coveralls" script`, async () => {
             const tmpDir = await helpers.run(Jest, opts);
@@ -38,7 +39,7 @@ describe("generator-jest", () => {
             expect.not.objectContaining({
                 scripts: {
                     coveralls: expect.stringMatching(coveralls),
-                }
+                },
             });
         });
         it(`Adds "coveralls" as a devDependency`, async () => {
@@ -48,7 +49,7 @@ describe("generator-jest", () => {
             expect.objectContaining({
                 "generator-npm-package": {
                     devDependencies: expect.arrayContaining(["coveralls"]),
-                }
+                },
             });
         });
         it(`Adds "coveralls" script`, async () => {
@@ -59,10 +60,23 @@ describe("generator-jest", () => {
             expect.objectContaining({
                 scripts: {
                     coveralls: expect.stringMatching(coveralls),
-                }
+                },
             });
         });
 
+        it(`Emits transforms`, async () => {
+            const tmpDir = await helpers.run(Jest, opts)
+                .withLocalConfig({ devDependencies: ["typescript"] });
+            expect.stringContaining(`transforms: {
+        "\.tsx?": "ts-jest",
+    }`);
+        });
+        it(`Does not emit transforms`, async () => {
+            const tmpDir = await helpers.run(Jest, opts);
+            expect.not.stringContaining(`transforms: {
+        "\.tsx?": "ts-jest",
+    }`);
+        });
         test.each`
         config | want
         ${{}}  | ${"js"}
@@ -70,23 +84,23 @@ describe("generator-jest", () => {
             }  | ${'"js","jsx"'}
         ${{
                 devDependencies: ["typescript"],
-                tsconfig: { resolveJsonModule: false }
+                tsconfig: { resolveJsonModule: false },
             }} | ${'"ts","js"'}
         ${{
                 devDependencies: ["typescript"],
-                tsconfig: { resolveJsonModule: true }
+                tsconfig: { resolveJsonModule: true },
             }} | ${'"ts","js","json"'}
         ${{
                 devDependencies: [
                     "react",
-                    "typescript"
+                    "typescript",
                 ],
-                tsconfig: { resolveJsonModule: true }
+                tsconfig: { resolveJsonModule: true },
             }} | ${'"ts","tsx","js","jsx","json"'}
         `(`Has extensions '[$want]'`, async ({ config, want }) => {
                 const tmpDir = await helpers.run(Jest, opts)
                     .withLocalConfig(config);
-                expect.stringContaining(`const moduleFileExtensions = [${want}]`)
+                expect.stringContaining(`const moduleFileExtensions = [${want}]`);
             });
     });
 });

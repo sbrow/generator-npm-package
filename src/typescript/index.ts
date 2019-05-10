@@ -1,10 +1,10 @@
 import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
-import inquirer = require("inquirer");
-import blacklist from "./blacklist.json";
+import { BaseGenerator } from "baseGenerator";
+import blacklistJson from "typescript/blacklist.json";
 
-module.exports = class extends Generator {
+module.exports = class extends BaseGenerator {
     public tslint = {
         extends: "tslint:recommended",
         rules: {},
@@ -17,7 +17,7 @@ module.exports = class extends Generator {
         const deps: string[] = [...Array.from(dependencies), ...Array.from(devDependencies)];
         const choices = new Set<string>();
         for (const pkg of deps) {
-            if (pkg !== null && !blacklist.includes(pkg) && !pkg.match(/^@types/)) {
+            if (pkg !== null && !blacklistJson.includes(pkg) && !pkg.match(/^@types/)) {
                 const name = `@types/${pkg}`;
                 if (!choices.has(name)) {
                     choices.add(name);
@@ -46,7 +46,7 @@ module.exports = class extends Generator {
             },
             {
                 type: "confirm",
-                name: "resoveJsonModule",
+                name: "resolveJsonModule",
                 message: "Allow import of JSON modules?",
                 default: false,
             },
@@ -58,14 +58,12 @@ module.exports = class extends Generator {
     }
 
     public configuring() {
-        const devDependencies = (this.config.get("devDependencies") !== {})
-            ? new Set(this.config.get("devDependencies"))
-            : new Set();
+        const devDependencies = this.getDevDependencies();
         for (const name of this.props.typeDefs) {
             devDependencies.add(name);
         }
 
-        this.config.set("devDependencies", Array.from(devDependencies));
+        this.setDevDependencies(devDependencies);
         const tsconfig = { ...this.props };
         delete tsconfig.typeDefs;
         this.config.set("tsconfig", tsconfig);
@@ -76,20 +74,22 @@ module.exports = class extends Generator {
         shelljs.mkdir(this.destinationPath("src"));
         shelljs.mkdir(this.destinationPath(this.props.outDir));
 
-        const dependencies = new Set(this.config.get("dependencies"));
+        // const dependencies = new Set(this.config.get("dependencies"));
+        const deps = "dependencies";
+        const dependencies = new Set(this.config.get(deps));
 
         const jsx = (dependencies.has("react"))
             ? "react"
             : undefined;
 
-        const { esModuleInterop, outDir, resoveJsonModule } = this.props;
+        const { esModuleInterop, outDir, resolveJsonModule } = this.props;
         this.fs.extendJSON(this.destinationPath("tsconfig.json"),
             {
                 compilerOptions: {
                     esModuleInterop,
                     jsx,
                     outDir,
-                    resoveJsonModule,
+                    resolveJsonModule,
                 },
             });
         this.fs.extendJSON(this.destinationPath("tslint.json"), this.tslint);
