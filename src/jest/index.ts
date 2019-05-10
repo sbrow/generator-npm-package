@@ -3,6 +3,11 @@ import Generator from "yeoman-generator";
 import { BaseGenerator } from "../BaseGenerator";
 
 export class Jest extends BaseGenerator {
+    public static readonly scripts = {
+        cover: "jest --coverage",
+        coveralls: "jest --coverage --coverageReporters=text-lcov | coveralls",
+        test: "jest",
+    };
 
     public props: {
         moduleFileExtensions: string[]
@@ -19,14 +24,6 @@ export class Jest extends BaseGenerator {
         };
     }
 
-    public get scripts() {
-        return {
-            cover: "jest --coverage",
-            coveralls: "jest --coverage --coverageReporters=text-lcov | coveralls",
-            test: "jest",
-        };
-    }
-
     public prompting() {
         const prompts: Generator.Questions = [{
             type: "confirm",
@@ -37,12 +34,13 @@ export class Jest extends BaseGenerator {
 
         return this.prompt(prompts).then((props) => {
             this.props.enableCoveralls = props.enableCoveralls;
-            return this.props;
         });
     }
 
     public configuring() {
         const devDependencies = this.getDevDependencies();
+        devDependencies.add("jest");
+        this.setDevDependencies(devDependencies);
 
         if (devDependencies.has("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
@@ -69,10 +67,11 @@ export class Jest extends BaseGenerator {
 
     public writing() {
         const scripts: { test: string; coveralls?: string } = {
-            test: this.scripts.test,
+            test: Jest.scripts.test,
         };
+
         if (this.props.enableCoveralls) {
-            scripts.coveralls = this.scripts.coveralls;
+            scripts.coveralls = Jest.scripts.coveralls;
         }
         this.fs.extendJSON(this.destinationPath("package.json"), { scripts });
         this.fs.write(this.destinationPath("jest.config.js"),
@@ -84,13 +83,13 @@ module.exports = {
 `);
     }
 
+    public installing() {
+        this.npmInstall(Array.from(this.getDevDependencies()));
+    }
+
     private transforms(): string {
         if (this.getDevDependencies().has("typescript")) {
-            return `
-    transform: {
-        "\.tsx?": "ts-jest",
-    },
-`;
+            return `\r\ntransform: {\r\n"\.tsx?": "ts-jest",\r\n},\r\n`;
         }
         return "";
     }

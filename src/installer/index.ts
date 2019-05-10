@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import packagesJson from "installer/packages.json";
+import packagesJson from "./packages.json";
 
 module.exports = class extends Generator {
     public props: any;
@@ -10,10 +10,8 @@ module.exports = class extends Generator {
 
     public prompting() {
         const choices = [];
-        for (const choice in packagesJson) {
-            if (packagesJson.hasOwnProperty(choice)) {
-                choices.push(choice);
-            }
+        for (const choice of Object.keys(packagesJson)) {
+            choices.push(choice);
         }
         const prompts: Generator.Questions = [
             {

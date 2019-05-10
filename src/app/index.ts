@@ -54,7 +54,7 @@ Brought to you by ${chalk.yellow(author)}.`));
                 Delete = "d",
             }
 
-            const prompts: inquirer.Questions = [{
+            const prompts: Generator.Questions = [{
                 type: "expand",
                 name: "action",
                 message: "Your current directory is not clean, proceed?",
@@ -111,7 +111,7 @@ Brought to you by ${chalk.yellow(author)}.`));
 
     public end() {
         const projectName = require(this.destinationPath("package.json")).name || "your project";
-        shelljs.rm(this.destinationPath(".yo-rc.json"));
+        // shelljs.rm(this.destinationPath(".yo-rc.json"));
         this.log(yosay(`You're all set.\nGood luck with ${chalk.blue(projectName)}!`));
     }
 };

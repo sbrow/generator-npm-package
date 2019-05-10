@@ -3,6 +3,7 @@ import Generator from "yeoman-generator";
 export class BaseGenerator extends Generator {
     constructor(args, opts) {
         super(args, opts);
+        this.config.save();
     }
 
     protected getDependencies(): Set<string> {
