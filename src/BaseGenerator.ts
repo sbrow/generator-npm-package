@@ -6,6 +6,20 @@ export class BaseGenerator extends Generator {
         this.config.save();
     }
 
+
+    protected addDependencies(deps: string | string[] | Set<string>) {
+        const dependencies = this.getDependencies();
+        if (typeof deps === "string") {
+            deps = [deps];
+        } else if (!(deps instanceof Array)) {
+            deps = Array.from(deps);
+        }
+        for (const dep of deps) {
+            dependencies.add(dep);
+        }
+        this.setDependencies(dependencies);
+    }
+
     protected getDependencies(): Set<string> {
         return new Set(this.config.get("dependencies"));
     }

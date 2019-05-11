@@ -1,10 +1,10 @@
 import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
-import { BaseGenerator } from "baseGenerator";
-import blacklistJson from "typescript/blacklist.json";
+import { BaseGenerator } from "../BaseGenerator";
+import blacklistJson from "./blacklist.json";
 
-module.exports = class extends BaseGenerator {
+export class Typescript extends BaseGenerator {
     public tslint = {
         extends: "tslint:recommended",
         rules: {},
@@ -12,8 +12,8 @@ module.exports = class extends BaseGenerator {
     public props: any;
 
     public prompting() {
-        const dependencies: Set<string> = new Set(this.config.get("dependencies"));
-        const devDependencies: Set<string> = new Set(this.config.get("devDependencies"));
+        const dependencies = this.getDependencies();
+        const devDependencies = this.getDevDependencies();
         const deps: string[] = [...Array.from(dependencies), ...Array.from(devDependencies)];
         const choices = new Set<string>();
         for (const pkg of deps) {

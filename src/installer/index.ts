@@ -1,8 +1,9 @@
 import Generator from "yeoman-generator";
 
 import packagesJson from "./packages.json";
+import { BaseGenerator } from "../BaseGenerator";
 
-module.exports = class extends Generator {
+export class Installer extends BaseGenerator {
     public props: any;
     constructor(args, opts) {
         super(args, opts);
@@ -34,43 +35,30 @@ module.exports = class extends Generator {
         if (this.props.packages.includes("Jest")) {
             this.composeWith(require.resolve("../jest"), {});
         }
-
-        const dependencies = new Set(this.config.get("dependencies"));
-        const devDependencies = (this.config.get("devDependencies") === {})
-            ? new Set(this.config.get("devDependencies"))
-            : new Set();
-
-        for (const name of this.props.packages) {
-            const pkgs = packagesJson[name];
-            switch (typeof pkgs) {
-                case "string":
-                    devDependencies.add(pkgs);
-                    break;
-                default:
-                    for (const pkg of pkgs) {
-                        devDependencies.add(pkg);
-                    }
-            }
+        if (this.props.packages.includes("Webpack")) {
+            this.composeWith(require.resolve("../webpack"), {});
         }
-        this.config.set("dependencies", Array.from(dependencies));
-        this.config.set("devDependencies", Array.from(devDependencies));
     }
 
     public writing() {
         this.fs.extendJSON(this.destinationPath("package.json"), { scripts: { start: "node $npm_package_main" } });
     }
-    public installing() {
-        const dependencies = this.config.get("dependencies");
-        const devDependencies = this.config.get("devDependencies");
-        dependencies.push(...devDependencies);
-        if (dependencies.length > 0) {
-            this.log(`Installing node packages: ${dependencies.join(" ")}`);
-            this.installDependencies({
-                npm: true,
-                bower: false,
-            });
+    public default() {
+        const dependencies = this.getDependencies();
+        const devDependencies = this.getDependencies();
+        for (const dep of devDependencies) {
+            dependencies.add(dep);
+        }
+        const deps = Array.from(dependencies);
+        if (deps.length > 0) {
+            this.log(`Installing node packages: ${deps.join(" ")}`);
+            this.npmInstall(deps, { "save-dev": true });
         } else {
             this.log("No additional packages will be installed.");
         }
     }
 };
+
+module.exports = Installer;
+
+export default Installer;

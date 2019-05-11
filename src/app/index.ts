@@ -40,8 +40,8 @@ module.exports = class extends Generator {
 
         // Have Yeoman greet the user.
         this.log(yosay(`'Allo, ${user}!
-Welcome to the ${chalk.red(packageName)} generator.
-Brought to you by ${chalk.yellow(author)}.`));
+        Welcome to the ${chalk.red(packageName)} generator.
+        Brought to you by ${chalk.yellow(author)}.`));
     }
     public prompting() {
         const dirs = shelljs.ls(this.destinationRoot());

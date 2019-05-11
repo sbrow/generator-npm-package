@@ -5,13 +5,14 @@ import assert from "yeoman-assert";
 import helpers from "yeoman-test";
 
 import Jest from "../src/jest";
+import { loadJSON } from "../__setup__/loadJSON";
 
 let opts: helpers.RunContextSettings;
 beforeEach(() => {
     opts = {
+        tmpdir: true,
         resolved: require.resolve("../src/jest/index"),
         namespace: "npm-package:jest",
-        tmpdir: true,
     };
 });
 
@@ -44,16 +45,17 @@ describe("generator-jest", () => {
             });
         });
         it("installs jest", async () => {
-            const context = helpers.run(Jest, opts);
+            const context = helpers.run(Jest, opts).withOptions({ "skip-install": false });
             const tmpDir = await context;
-            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, ".yo-rc.json")).toString());
+            const got = loadJSON(tmpDir, "package.json");
+
             const want = {
-                "generator-npm-package":
-                    { devDependencies: ["jest"] },
+                devDependencies: { jest: expect.any(String) },
             };
-            expect(ls("-A", tmpDir)).toHaveLength(3);
+            expect(ls("-A", tmpDir)).toHaveLength(5);
             expect(got).toMatchObject(want);
-        });
+        }, 30000);
+
         it(`Adds "coveralls" as a devDependency`, async () => {
             const tmpDir = await helpers.run(Jest, opts)
                 .withPrompts({ enableCoveralls: true });

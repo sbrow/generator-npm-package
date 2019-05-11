@@ -13,14 +13,17 @@ export class Jest extends BaseGenerator {
         moduleFileExtensions: string[]
         resolveJsonModule: boolean,
         enableCoveralls: boolean,
+        scripts: { [key: string]: string },
     };
 
     constructor(args, opts) {
         super(args, opts);
+        const { test } = Jest.scripts;
         this.props = {
             moduleFileExtensions: ["js"],
             resolveJsonModule: false,
             enableCoveralls: false,
+            scripts: { test },
         };
     }
 
@@ -66,13 +69,10 @@ export class Jest extends BaseGenerator {
     }
 
     public writing() {
-        const scripts: { test: string; coveralls?: string } = {
-            test: Jest.scripts.test,
-        };
-
         if (this.props.enableCoveralls) {
-            scripts.coveralls = Jest.scripts.coveralls;
+            this.props.scripts.coveralls = Jest.scripts.coveralls;
         }
+        const { scripts } = this.props;
         this.fs.extendJSON(this.destinationPath("package.json"), { scripts });
         this.fs.write(this.destinationPath("jest.config.js"),
             `const moduleFileExtensions = ${JSON.stringify(this.props.moduleFileExtensions)};
@@ -83,8 +83,8 @@ module.exports = {
 `);
     }
 
-    public installing() {
-        this.npmInstall(Array.from(this.getDevDependencies()));
+    public default() {
+        this.npmInstall(Array.from(this.getDevDependencies()), { "save-dev": true });
     }
 
     private transforms(): string {
