@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import packagesJson from "./packages.json";
+import packagesJson from "installer/packages.json";
 import { BaseGenerator } from "../BaseGenerator";
 
 export class Installer extends BaseGenerator {
@@ -45,19 +45,18 @@ export class Installer extends BaseGenerator {
     }
     public default() {
         const dependencies = this.getDependencies();
-        const devDependencies = this.getDependencies();
+        const devDependencies = this.getDevDependencies();
         for (const dep of devDependencies) {
             dependencies.add(dep);
         }
         const deps = Array.from(dependencies);
         if (deps.length > 0) {
             this.log(`Installing node packages: ${deps.join(" ")}`);
-            this.npmInstall(deps, { "save-dev": true });
         } else {
             this.log("No additional packages will be installed.");
         }
     }
-};
+}
 
 module.exports = Installer;
 

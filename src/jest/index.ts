@@ -41,9 +41,8 @@ export class Jest extends BaseGenerator {
     }
 
     public configuring() {
+        this.addDevDependencies("jest");
         const devDependencies = this.getDevDependencies();
-        devDependencies.add("jest");
-        this.setDevDependencies(devDependencies);
 
         if (devDependencies.has("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
@@ -63,8 +62,7 @@ export class Jest extends BaseGenerator {
             this.props.moduleFileExtensions.push("json");
         }
         if (this.props.enableCoveralls) {
-            devDependencies.add("coveralls");
-            this.setDevDependencies(devDependencies);
+            this.addDevDependencies("coveralls");
         }
     }
 

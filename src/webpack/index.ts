@@ -39,7 +39,7 @@ export class Webpack extends BaseGenerator {
     }
 
     public default() {
-        this.npmInstall(Webpack.dependencies, { "save-dev": true });
+        this.scheduleInstall();
     }
 }
 

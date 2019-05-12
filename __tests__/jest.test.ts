@@ -1,11 +1,11 @@
-import fs from "fs";
+import { readFileSync } from "fs";
 import path from "path";
 import { ls } from "shelljs";
 import assert from "yeoman-assert";
 import helpers from "yeoman-test";
 
-import Jest from "../src/jest";
 import { loadJSON } from "../__setup__/loadJSON";
+import jest from "../src/jest";
 
 let opts: helpers.RunContextSettings;
 beforeEach(() => {
@@ -16,18 +16,27 @@ beforeEach(() => {
     };
 });
 
-describe("generator-jest", () => {
-    describe("#writing", () => {
-        const file = "jest.config.js";
+async function itReadsFileExtensions(exts: string[], config: any) {
+    it(`Reads file extensions: [${exts}]`, async () => {
+        const tmpDir = await helpers.run(jest, opts)
+            .withLocalConfig(config);
+        const got = readFileSync(path.join(tmpDir, "jest.config.js")).toString();
+        expect(got).toEqual(
+            expect.stringContaining(`const moduleFileExtensions = [${exts.join(",")}]`),
+        );
+    });
+}
 
-        it(`Creates "${file}"`, async () => {
-            const tmpDir = await helpers.run(Jest, opts);
-            assert.file(file);
+describe("generator-jest", () => {
+    describe("With default options", () => {
+        it(`Creates "jest.config.js"`, async () => {
+            const tmpDir = await helpers.run(jest, opts);
+            assert.file("jest.config.js");
         });
         it(`Adds "test" script`, async () => {
-            const tmpDir = await helpers.run(Jest, opts);
-            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, "package.json")).toString());
-            const { test, coveralls } = Jest.scripts;
+            const tmpDir = await helpers.run(jest, opts);
+            const got = loadJSON(tmpDir, "package.json");
+            const { test, coveralls } = jest.scripts;
             expect(got).toMatchObject({
                 scripts: {
                     test: expect.stringMatching(test),
@@ -35,17 +44,24 @@ describe("generator-jest", () => {
             });
         });
         it(`Does not add "coveralls" script`, async () => {
-            const tmpDir = await helpers.run(Jest, opts);
-            const { test, coveralls } = Jest.scripts;
-            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, "package.json")).toString());
+            const tmpDir = await helpers.run(jest, opts);
+            const { test, coveralls } = jest.scripts;
+            const got = JSON.parse(readFileSync(path.join(tmpDir, "package.json")).toString());
             expect(got).not.toMatchObject({
                 scripts: {
                     coveralls: expect.stringMatching(coveralls),
                 },
             });
         });
+        it(`Does not emit transforms`, async () => {
+            const tmpDir = await helpers.run(jest, opts);
+            const got = readFileSync(path.join(tmpDir, "jest.config.js")).toString();
+            expect(got).toEqual(
+                expect.not.stringContaining(`transforms`), // : { \r\n"\.tsx?": "ts-jest", \r\n }`),
+            );
+        });
         it("installs jest", async () => {
-            const context = helpers.run(Jest, opts).withOptions({ "skip-install": false });
+            const context = helpers.run(jest, opts).withOptions({ "skip-install": false });
             const tmpDir = await context;
             const got = loadJSON(tmpDir, "package.json");
 
@@ -53,71 +69,55 @@ describe("generator-jest", () => {
                 devDependencies: { jest: expect.any(String) },
             };
             expect(ls("-A", tmpDir)).toHaveLength(5);
-            expect(got).toMatchObject(want);
-        }, 30000);
 
+            expect(got).toMatchObject(want);
+        }, 35000);
+        itReadsFileExtensions(['"js"'], {});
+    });
+    describe("When installed with coveralls", () => {
         it(`Adds "coveralls" as a devDependency`, async () => {
-            const tmpDir = await helpers.run(Jest, opts)
+            const tmpDir = await helpers.run(jest, opts)
                 .withPrompts({ enableCoveralls: true });
             const want = {
                 "generator-npm-package": {
                     devDependencies: expect.arrayContaining(["coveralls"]),
                 },
             };
-            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, ".yo-rc.json")).toString());
+            const got = JSON.parse(readFileSync(path.join(tmpDir, ".yo-rc.json")).toString());
             expect(got).toMatchObject(want);
         });
         it(`Adds "coveralls" script`, async () => {
-            const context = helpers.run(Jest, opts)
+            const context = helpers.run(jest, opts)
                 .withPrompts({ enableCoveralls: true });
             const tmpDir = await context;
-            const { test, coveralls } = Jest.scripts;
+            const { test, coveralls } = jest.scripts;
             const want = { scripts: { coveralls } };
-            const got = JSON.parse(fs.readFileSync(path.join(tmpDir, "package.json")).toString());
+            const got = JSON.parse(readFileSync(path.join(tmpDir, "package.json")).toString());
             expect(got).toMatchObject(want);
         });
-
+    });
+    describe("When installed beside Typescript", () => {
         it(`Emits transforms`, async () => {
-            const tmpDir = await helpers.run(Jest, opts)
+            const tmpDir = await helpers.run(jest, opts)
                 .withLocalConfig({ devDependencies: ["typescript"] });
             expect.stringContaining(`transforms: {/
         // "\.tsx?": "ts-jest",
     }`);
         });
-        it(`Does not emit transforms`, async () => {
-            const tmpDir = await helpers.run(Jest, opts);
-            const got = fs.readFileSync(path.join(tmpDir, "jest.config.js")).toString();
-            expect(got).toEqual(
-                expect.not.stringContaining(`transforms`), // : { \r\n"\.tsx?": "ts-jest", \r\n }`),
-            );
-        });
-        test.each`
-        config | want
-        ${{}}  | ${'"js"'}
-        ${{ devDependencies: ["react"] }
-            }  | ${'"js","jsx"'}
-        ${{
-                devDependencies: ["typescript"],
-                tsconfig: { resolveJsonModule: false },
-            }} | ${'"ts","js"'}
-        ${{
+        itReadsFileExtensions(['"ts"', '"js"'], { devDependencies: ["typescript"] });
+        describe('When "resolveJsonModule = true"', () => {
+            itReadsFileExtensions(['"ts"', '"js"', '"json"'], {
                 devDependencies: ["typescript"],
                 tsconfig: { resolveJsonModule: true },
-            }} | ${'"ts","js","json"'}
-        ${{
-                devDependencies: [
-                    "react",
-                    "typescript",
-                ],
-                tsconfig: { resolveJsonModule: true },
-            }} | ${'"ts","tsx","js","jsx","json"'}
-        `(`Has extensions '[$want]'`, async ({ config, want }) => {
-                const tmpDir = await helpers.run(Jest, opts)
-                    .withLocalConfig(config);
-                const got = fs.readFileSync(path.join(tmpDir, "jest.config.js")).toString();
-                expect(got).toEqual(
-                    expect.stringContaining(`const moduleFileExtensions = [${want}]`),
-                );
             });
+        });
+        describe("When also installed beside React", () => {
+            itReadsFileExtensions(['"ts"', '"tsx"', '"js"', '"jsx"'], {
+                devDependencies: ["react", "typescript"],
+            });
+        });
+    });
+    describe("When installed beside React", () => {
+        itReadsFileExtensions(['"js"', '"jsx"'], { devDependencies: ["react"] });
     });
 });

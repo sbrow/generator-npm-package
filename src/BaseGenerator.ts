@@ -1,11 +1,35 @@
 import Generator from "yeoman-generator";
 
 export class BaseGenerator extends Generator {
+    public useYarn: boolean = false;
+
     constructor(args, opts) {
         super(args, opts);
-        this.config.save();
+        if (opts.useYarn || this.config.get("useYarn")) {
+            this.useYarn = true;
+        }
+        this.config.set("useYarn", this.useYarn);
     }
 
+    public scheduleInstall() {
+        const dev = (t: boolean) => {
+            if (this.useYarn) {
+                return { dev: t };
+            }
+            return { "save-dev": t };
+        };
+        const args = [
+            { pkgs: this.getDependencies(), opts: dev(false) },
+            { pkgs: this.getDevDependencies(), opts: dev(true) },
+        ];
+        for (const arg of args) {
+            if (this.useYarn) {
+                this.yarnInstall(Array.from(arg.pkgs), { ...arg.opts, silent: true });
+            } else {
+                this.npmInstall(Array.from(arg.pkgs), arg.opts);
+            }
+        }
+    }
 
     protected addDependencies(deps: string | string[] | Set<string>) {
         const dependencies = this.getDependencies();
@@ -18,6 +42,19 @@ export class BaseGenerator extends Generator {
             dependencies.add(dep);
         }
         this.setDependencies(dependencies);
+    }
+
+    protected addDevDependencies(deps: string | string[] | Set<string>) {
+        const dependencies = this.getDevDependencies();
+        if (typeof deps === "string") {
+            deps = [deps];
+        } else if (!(deps instanceof Array)) {
+            deps = Array.from(deps);
+        }
+        for (const dep of deps) {
+            dependencies.add(dep);
+        }
+        this.setDevDependencies(dependencies);
     }
 
     protected getDependencies(): Set<string> {

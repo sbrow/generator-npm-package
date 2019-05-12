@@ -7,8 +7,17 @@ import yosay from "yosay";
 
 const packageJson = require("../../package.json");
 
+enum choices {
+    Yes = "y",
+    No = "n",
+    Create = "c",
+    Delete = "d",
+}
+
 module.exports = class extends Generator {
     public props: inquirer.Answers;
+
+    public prompts: Generator.Questions = [];
 
     constructor(args, opts) {
         super(args, opts);
@@ -42,22 +51,21 @@ module.exports = class extends Generator {
         this.log(yosay(`'Allo, ${user}!
         Welcome to the ${chalk.red(packageName)} generator.
         Brought to you by ${chalk.yellow(author)}.`));
+        this.log("You will be guided through the scaffolding of a new npm package.");
     }
+
     public prompting() {
         const dirs = shelljs.ls(this.destinationRoot());
 
-        if (dirs.length > 0) {
-            enum choices {
-                Yes = "y",
-                No = "n",
-                Create = "c",
-                Delete = "d",
+        const checkDirClean = () => {
+            if (dirs.length === 0) {
+                return [];
             }
 
-            const prompts: Generator.Questions = [{
+            return [{
                 type: "expand",
                 name: "action",
-                message: "Your current directory is not clean, proceed?",
+                message: `"${this.destinationRoot()}" is not clean, proceed?`,
                 default: [1],
                 choices: [{
                     key: choices.Yes,
@@ -76,37 +84,47 @@ module.exports = class extends Generator {
                 },
                 {
                     key: choices.Delete,
-                    name: `Delete this directory's contents before proceeding.`,
+                    name: `Delete the contents of "${this.destinationRoot()}" before proceeding.`,
                     value: choices.Delete,
                 },
                 ],
             }];
+        };
 
-            return this.prompt(prompts).then((props: any) => {
-                switch (props.action) {
-                    case choices.No:
-                        this.log(yosay("Come back soon!"));
-                        exit(0);
-                        break;
-                    case choices.Create:
-                        return this.prompt([{
-                            name: "dirName",
-                            message: "What directory should be created?",
-                        }]).then((props2: any) => {
-                            if (props2.dirName === "") {
-                                this.log("No name was entered");
-                                return this.prompting();
-                            }
-                            shelljs.mkdir(props2.dirName);
-                            this.destinationRoot(this.destinationPath(props2.dirName));
-                        });
-                    case choices.Delete:
-                        shelljs.rm("-rf", path.join(this.destinationRoot(), ("*")));
-                    case choices.Yes:
-                    default:
-                }
-            });
-        }
+        const prompts: Generator.Questions = [...checkDirClean(), {
+            type: "confirm",
+            name: "useYarn",
+            message: "Would you like to use yarn as your package manager?",
+            default: false,
+            store: true,
+        }];
+
+        return this.prompt(prompts).then((props: any) => {
+            switch (props.action) {
+                case choices.No:
+                    this.log(yosay("Come back soon!"));
+                    exit(0);
+                    break;
+                case choices.Create:
+                    return this.prompt([{
+                        name: "dirName",
+                        message: "What directory should be created?",
+                    }]).then((props2: any) => {
+                        if (props2.dirName === "") {
+                            this.log("No name was entered");
+                            return this.prompting();
+                        }
+                        shelljs.mkdir(props2.dirName);
+                        this.destinationRoot(this.destinationPath(props2.dirName));
+                    });
+                case choices.Delete:
+                    shelljs.rm("-rf", path.join(this.destinationRoot(), ("*")));
+                    shelljs.rm("-rf", path.join(this.destinationRoot(), (".yo-rc.json")));
+                case choices.Yes:
+                default:
+            }
+            this.config.set("useYarn", props.useYarn);
+        });
     }
 
     public end() {
