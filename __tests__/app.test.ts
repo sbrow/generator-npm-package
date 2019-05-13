@@ -4,7 +4,7 @@ import assert from "yeoman-assert";
 import helpers from "yeoman-test";
 
 import { writeFileSync } from "fs";
-import { load } from "../__setup__/loadJSON";
+import { load } from "../__setup__/fs";
 
 let opts: helpers.RunContextSettings;
 let srcDir: string;
