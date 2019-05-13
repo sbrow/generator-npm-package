@@ -1,20 +1,20 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import path from "path";
-import shelljs, { exit } from "shelljs";
+import { cd, ls, mkdir, pwd, rm } from "shelljs";
 import Generator from "yeoman-generator";
 import yosay from "yosay";
 
-const packageJson = require("../../package.json");
+import packageJson from "../../package.json";
 
-enum choices {
+export enum choices {
     Yes = "y",
     No = "n",
     Create = "c",
     Delete = "d",
 }
 
-module.exports = class extends Generator {
+export class App extends Generator {
     public props: inquirer.Answers;
 
     public prompts: Generator.Questions = [];
@@ -30,17 +30,12 @@ module.exports = class extends Generator {
 
     public initializing() {
         const getUser = (): string => {
-            const sources = [
-                this.user.git.name().split(" ")[0],
-                process.env.USER,
-            ];
-            for (const source of sources) {
-                source.trim();
-                if (source !== "") {
-                    return source;
-                }
+            let source = this.user.git.name().split(" ")[0];
+            source = source.trim();
+            if (source !== "") {
+                return source;
             }
-            return "user";
+            return process.env.USER;
         };
 
         const user = getUser();
@@ -55,7 +50,7 @@ module.exports = class extends Generator {
     }
 
     public prompting() {
-        const dirs = shelljs.ls(this.destinationRoot());
+        const dirs = ls(this.destinationRoot());
 
         const checkDirClean = () => {
             if (dirs.length === 0) {
@@ -103,7 +98,7 @@ module.exports = class extends Generator {
             switch (props.action) {
                 case choices.No:
                     this.log(yosay("Come back soon!"));
-                    exit(0);
+                    process.exit(0);
                     break;
                 case choices.Create:
                     return this.prompt([{
@@ -114,12 +109,14 @@ module.exports = class extends Generator {
                             this.log("No name was entered");
                             return this.prompting();
                         }
-                        shelljs.mkdir(props2.dirName);
+                        mkdir(props2.dirName);
                         this.destinationRoot(this.destinationPath(props2.dirName));
                     });
                 case choices.Delete:
-                    shelljs.rm("-rf", path.join(this.destinationRoot(), ("*")));
-                    shelljs.rm("-rf", path.join(this.destinationRoot(), (".yo-rc.json")));
+                    const prevDir = pwd();
+                    cd(this.destinationRoot());
+                    rm("-rf", ".*", "*");
+                    cd(prevDir);
                 case choices.Yes:
                 default:
             }
@@ -127,9 +124,17 @@ module.exports = class extends Generator {
         });
     }
 
+    public writing() {
+        this.fs.copy(this.templatePath(".template.gitignore"), this.destinationPath(".gitignore"));
+    }
+
     public end() {
         const projectName = require(this.destinationPath("package.json")).name || "your project";
         // shelljs.rm(this.destinationPath(".yo-rc.json"));
         this.log(yosay(`You're all set.\nGood luck with ${chalk.blue(projectName)}!`));
     }
-};
+}
+
+module.exports = App;
+
+export default App;

@@ -5,24 +5,27 @@ import assert from "yeoman-assert";
 import helpers from "yeoman-test";
 
 import { loadJSON } from "../__setup__/loadJSON";
-import jest from "../src/jest";
+import Jest from "../src/jest";
 
 let opts: helpers.RunContextSettings;
-beforeEach(() => {
+let srcDir: string;
+
+beforeAll(() => {
     opts = {
         tmpdir: true,
         resolved: require.resolve("../src/jest/index"),
         namespace: "npm-package:jest",
     };
+    srcDir = path.join(__dirname, "../src");
 });
 
-async function itReadsFileExtensions(exts: string[], config: any) {
-    it(`Reads file extensions: [${exts}]`, async () => {
-        const tmpDir = await helpers.run(jest, opts)
+async function itReadsFileExtensions(extensions: string[], config: any) {
+    it(`Reads file extensions: [${extensions}]`, async () => {
+        const tmpDir = await helpers.run(Jest, opts)
             .withLocalConfig(config);
         const got = readFileSync(path.join(tmpDir, "jest.config.js")).toString();
         expect(got).toEqual(
-            expect.stringContaining(`const moduleFileExtensions = [${exts.join(",")}]`),
+            expect.stringContaining(`const moduleFileExtensions = [${extensions.join(",")}]`),
         );
     });
 }
@@ -30,13 +33,13 @@ async function itReadsFileExtensions(exts: string[], config: any) {
 describe("generator-jest", () => {
     describe("With default options", () => {
         it(`Creates "jest.config.js"`, async () => {
-            const tmpDir = await helpers.run(jest, opts);
+            const tmpDir = await helpers.run(Jest, opts);
             assert.file("jest.config.js");
         });
         it(`Adds "test" script`, async () => {
-            const tmpDir = await helpers.run(jest, opts);
+            const tmpDir = await helpers.run(Jest, opts);
             const got = loadJSON(tmpDir, "package.json");
-            const { test, coveralls } = jest.scripts;
+            const { test } = Jest.scripts;
             expect(got).toMatchObject({
                 scripts: {
                     test: expect.stringMatching(test),
@@ -44,8 +47,8 @@ describe("generator-jest", () => {
             });
         });
         it(`Does not add "coveralls" script`, async () => {
-            const tmpDir = await helpers.run(jest, opts);
-            const { test, coveralls } = jest.scripts;
+            const tmpDir = await helpers.run(Jest, opts);
+            const { coveralls } = Jest.scripts;
             const got = JSON.parse(readFileSync(path.join(tmpDir, "package.json")).toString());
             expect(got).not.toMatchObject({
                 scripts: {
@@ -54,14 +57,14 @@ describe("generator-jest", () => {
             });
         });
         it(`Does not emit transforms`, async () => {
-            const tmpDir = await helpers.run(jest, opts);
+            const tmpDir = await helpers.run(Jest, opts);
             const got = readFileSync(path.join(tmpDir, "jest.config.js")).toString();
             expect(got).toEqual(
                 expect.not.stringContaining(`transforms`), // : { \r\n"\.tsx?": "ts-jest", \r\n }`),
             );
         });
         it("installs jest", async () => {
-            const context = helpers.run(jest, opts).withOptions({ "skip-install": false });
+            const context = helpers.run(Jest, opts).withOptions({ "skip-install": false });
             const tmpDir = await context;
             const got = loadJSON(tmpDir, "package.json");
 
@@ -76,7 +79,7 @@ describe("generator-jest", () => {
     });
     describe("When installed with coveralls", () => {
         it(`Adds "coveralls" as a devDependency`, async () => {
-            const tmpDir = await helpers.run(jest, opts)
+            const tmpDir = await helpers.run(Jest, opts)
                 .withPrompts({ enableCoveralls: true });
             const want = {
                 "generator-npm-package": {
@@ -87,10 +90,10 @@ describe("generator-jest", () => {
             expect(got).toMatchObject(want);
         });
         it(`Adds "coveralls" script`, async () => {
-            const context = helpers.run(jest, opts)
+            const context = helpers.run(Jest, opts)
                 .withPrompts({ enableCoveralls: true });
             const tmpDir = await context;
-            const { test, coveralls } = jest.scripts;
+            const { coveralls } = Jest.scripts;
             const want = { scripts: { coveralls } };
             const got = JSON.parse(readFileSync(path.join(tmpDir, "package.json")).toString());
             expect(got).toMatchObject(want);
@@ -98,7 +101,7 @@ describe("generator-jest", () => {
     });
     describe("When installed beside Typescript", () => {
         it(`Emits transforms`, async () => {
-            const tmpDir = await helpers.run(jest, opts)
+            const tmpDir = await helpers.run(Jest, opts)
                 .withLocalConfig({ devDependencies: ["typescript"] });
             expect.stringContaining(`transforms: {/
         // "\.tsx?": "ts-jest",

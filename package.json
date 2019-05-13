@@ -10,7 +10,6 @@
   "todos": {
     "features": [
       "option to install additional packages",
-      "ask if user wants to use yarn.",
       {
         "description": "read from package.json as well as config",
         "reason": "Allows install into pre-assembled projects."
@@ -44,7 +43,7 @@
     "clean-build": "yarn run clean && npm run build",
     "make": "yarn run make:templates",
     "env": "env",
-    "make:templates": "cp -r app/jest/templates generators/app/jest/templates",
+    "make:templates": "shx cp -r src/**/templates generators/**/templates",
     "webpack": "webpack",
     "start": "node $npm_package_main"
   },

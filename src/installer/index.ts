@@ -4,9 +4,12 @@ import packagesJson from "installer/packages.json";
 import { BaseGenerator } from "../BaseGenerator";
 
 export class Installer extends BaseGenerator {
-    public props: any;
+    public props: { packages: string[] };
     constructor(args, opts) {
         super(args, opts);
+        this.props = {
+            packages: [],
+        };
     }
 
     public prompting() {
@@ -23,12 +26,17 @@ export class Installer extends BaseGenerator {
             },
         ];
 
-        return this.prompt(prompts).then((props: { packages: string }) => {
-            this.props = props;
+        return this.prompt(prompts).then((props: { packages: string[] }) => {
+            if (props) {
+                this.props.packages = props.packages;
+            }
         });
     }
 
     public configuring() {
+        if (this.props.packages === undefined) {
+            this.props.packages = [];
+        }
         if (this.props.packages.includes("Typescript")) {
             this.composeWith(require.resolve("../typescript"), {});
         }
