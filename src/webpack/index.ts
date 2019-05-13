@@ -3,14 +3,13 @@ import { BaseGenerator } from "../BaseGenerator";
 export class Webpack extends BaseGenerator {
     public static dependencies = ["webpack", "webpack-cli"];
     public props: {
-        config: { [key: string]: string };
+        config: { [key: string]: any };
     };
 
     constructor(args, opts) {
         super(args, opts);
         this.props = {
-            config: {
-            },
+            config: {},
         };
     }
 
@@ -20,6 +19,7 @@ export class Webpack extends BaseGenerator {
 
     public writing() {
         this.fs.extendJSON(this.destinationPath("package.json"), { scripts: { webpack: "webpack" } });
+
         this.fs.write(this.destinationPath("webpack.config.js"),
             [
                 'const packageJson = require("./package.json")',
@@ -30,6 +30,10 @@ export class Webpack extends BaseGenerator {
                 "const baseConfig = {",
                 "\tentry: packageJson.main,",
                 "\tmode,",
+                "\toutput: {",
+                '\t\tfilename: "main.js",',
+                '\t\tpath: path.resolve(__dirname, "dist"),',
+                "\t},",
                 "}",
                 "",
                 "module.exports = [",

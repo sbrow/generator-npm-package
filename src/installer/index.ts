@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import packagesJson from "installer/packages.json";
+import packagesJson from "./packages.json";
 import { BaseGenerator } from "../BaseGenerator";
 
 export class Installer extends BaseGenerator {

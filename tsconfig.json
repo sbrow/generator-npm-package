@@ -19,6 +19,7 @@
     "exclude": [
         "coverage",
         "__setup__",
-        "__tests__"
+        "__tests__",
+        "generators"
     ]
 }

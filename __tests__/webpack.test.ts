@@ -4,7 +4,7 @@ import assert from "yeoman-assert";
 import helpers from "yeoman-test";
 
 import Webpack from "../src/webpack";
-import { loadJSON } from "../__setup__/loadJSON";
+import { loadJSON } from "../__setup__/fs";
 
 const generator = "webpack";
 let opts: helpers.RunContextSettings;
@@ -45,6 +45,10 @@ describe("generator-webpack", () => {
             "const baseConfig = {",
             "\tentry: packageJson.main,",
             "\tmode,",
+            "\toutput: {",
+            '\t\tfilename: "main.js",',
+            '\t\tpath: path.resolve(__dirname, "dist"),',
+            "\t},",
             "}",
         ].join("\r\n");
         expect(got).toMatch(want);

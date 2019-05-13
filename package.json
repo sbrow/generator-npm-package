@@ -43,7 +43,7 @@
     "clean-build": "yarn run clean && npm run build",
     "make": "yarn run make:templates",
     "env": "env",
-    "make:templates": "shx cp -r src/**/templates generators/**/templates",
+    "make": "node bin/make.js",
     "webpack": "webpack",
     "start": "node $npm_package_main"
   },
