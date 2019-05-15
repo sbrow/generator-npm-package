@@ -1,6 +1,6 @@
 {
   "name": "generator-npm-package",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Generates boilerplate for npm packages",
   "author": {
     "name": "Spencer Brower",
@@ -45,9 +45,8 @@
     "watch": "yarn run build:watch",
     "clean": "shx rm -rf generators/*",
     "clean-build": "yarn run clean && npm run build",
-    "make": "yarn run make:templates",
-    "env": "env",
     "make": "node bin/make.js",
+    "env": "env",
     "webpack": "webpack",
     "start": "node $npm_package_main"
   },
