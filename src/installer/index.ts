@@ -46,6 +46,13 @@ export class Installer extends BaseGenerator {
         if (this.props.packages.includes("Webpack")) {
             this.composeWith(require.resolve("../webpack"), {});
         }
+
+        for (const choice of Object.keys(packagesJson)) {
+            if (this.props.packages.includes(choice)) {
+                const packages: string | string[] = packagesJson[choice];
+                this.addDevDependencies(packages);
+            }
+        }
     }
 
     public writing() {
@@ -54,6 +61,7 @@ export class Installer extends BaseGenerator {
     public default() {
         const dependencies = this.getDependencies();
         const devDependencies = this.getDevDependencies();
+        this.scheduleInstall();
         for (const dep of devDependencies) {
             dependencies.add(dep);
         }

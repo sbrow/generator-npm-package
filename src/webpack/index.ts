@@ -13,7 +13,7 @@ export class Webpack extends BaseGenerator {
         };
     }
 
-    public configuring() {
+    public initializing() {
         this.addDependencies(Webpack.dependencies);
     }
 

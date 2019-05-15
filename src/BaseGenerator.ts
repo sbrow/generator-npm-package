@@ -9,6 +9,9 @@ export class BaseGenerator extends Generator {
             this.useYarn = true;
         }
         this.config.set("useYarn", this.useYarn);
+        const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
+        this.addDependencies(packageJson.dependencies);
+        this.addDevDependencies(packageJson.devDependencies);
     }
 
     public scheduleInstall() {

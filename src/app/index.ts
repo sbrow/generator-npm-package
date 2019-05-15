@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import path from "path";
+import { timer } from "rxjs";
 import { cd, ls, mkdir, pwd, rm } from "shelljs";
 import Generator from "yeoman-generator";
 import yosay from "yosay";
@@ -22,10 +23,12 @@ export class App extends Generator {
 
     constructor(args, opts) {
         super(args, opts);
-        this.composeWith(require.resolve("generator-npm-init/app"), {
-            author: this.user.git.name(),
-            version: "0.0.0",
-        });
+        if (!ls(this.destinationRoot()).includes("package.json")) {
+            this.composeWith(require.resolve("generator-npm-init/app"), {
+                author: this.user.git.name(),
+                version: "0.0.0",
+            });
+        }
         this.composeWith(require.resolve("../installer"), {});
     }
 
