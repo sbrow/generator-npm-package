@@ -1,17 +1,23 @@
 import Generator from "yeoman-generator";
 
+type dependencies = string | string[] | Set<string> | { [name: string]: string } | undefined;
+
 export class BaseGenerator extends Generator {
     public useYarn: boolean = false;
 
-    constructor(args, opts) {
+    constructor(args, opts: any) {
         super(args, opts);
-        if (opts.useYarn || this.config.get("useYarn")) {
-            this.useYarn = true;
+        if (typeof opts !== "undefined") {
+            if (opts.useYarn || this.config.get("useYarn")) {
+                this.useYarn = true;
+            }
         }
         this.config.set("useYarn", this.useYarn);
         const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
-        this.addDependencies(packageJson.dependencies);
-        this.addDevDependencies(packageJson.devDependencies);
+        if (typeof packageJson !== "undefined") {
+            this.addDependencies(packageJson.dependencies);
+            this.addDevDependencies(packageJson.devDependencies);
+        }
     }
 
     public scheduleInstall() {
@@ -34,45 +40,73 @@ export class BaseGenerator extends Generator {
         }
     }
 
-    protected addDependencies(deps: string | string[] | Set<string>) {
-        const dependencies = this.getDependencies();
-        if (typeof deps === "string") {
-            deps = [deps];
-        } else if (!(deps instanceof Array)) {
-            deps = Array.from(deps);
+    protected addDependencies(deps: dependencies, dev: boolean = false) {
+        const dependencies = this.getDependencies(dev);
+        switch (typeof deps) {
+            case "undefined":
+                deps = [];
+                break;
+            case "string":
+                deps = [deps];
+                break;
+            case "object":
+                if (deps instanceof Set) {
+                    deps = Array.from(deps);
+                    break;
+                }
+            default:
+                deps = Object.keys(deps);
         }
         for (const dep of deps) {
             dependencies.add(dep);
         }
-        this.setDependencies(dependencies);
+        this.setDependencies(dependencies, dev);
     }
 
-    protected addDevDependencies(deps: string | string[] | Set<string>) {
-        const dependencies = this.getDevDependencies();
-        if (typeof deps === "string") {
-            deps = [deps];
-        } else if (!(deps instanceof Array)) {
-            deps = Array.from(deps);
+    protected addDevDependencies(deps: dependencies) {
+        this.addDependencies(deps, true);
+    }
+
+    protected getDependencies(dev: boolean = false): Set<string> {
+        const t = (dev) ? "devDependencies" : "dependencies";
+        return new Set(this.config.get(t));
+    }
+
+    /**
+     * @param items The packages tosearch for.
+     * @param dev Whether or not to match devDependencies.
+     * @returns true if all items are included in the dependencies.
+     */
+    protected hasDependency(items: string | string[], dev: boolean = false): boolean {
+        const deps = this.getDependencies(dev);
+        if (typeof items === "string") {
+            items = [items];
         }
-        for (const dep of deps) {
-            dependencies.add(dep);
+        for (const item of items) {
+            if (!deps.has(item)) {
+                return false;
+            }
         }
-        this.setDevDependencies(dependencies);
+        return true;
     }
 
-    protected getDependencies(): Set<string> {
-        return new Set(this.config.get("dependencies"));
+    protected hasDevDependency(items: string | string[]): boolean {
+        return this.hasDependency(items, true);
+    }
+    protected hasAnyDependency(items: string | string[]): boolean {
+        return this.hasDependency(items) || this.hasDevDependency(items);
     }
 
-    protected setDependencies(set: Set<string>) {
-        this.config.set("dependencies", Array.from(set));
+    protected setDependencies(set: Set<string>, dev: boolean = false) {
+        const t = (dev) ? "devDependencies" : "dependencies";
+        this.config.set(t, Array.from(set));
     }
 
     protected getDevDependencies(): Set<string> {
-        return new Set(this.config.get("devDependencies"));
+        return this.getDependencies(true);
     }
 
     protected setDevDependencies(set: Set<string>) {
-        this.config.set("devDependencies", Array.from(set));
+        this.setDependencies(set, true);
     }
 }

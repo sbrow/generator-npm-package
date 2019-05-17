@@ -64,13 +64,15 @@ describe("generator-jest", () => {
             );
         });
         it("installs jest", async () => {
-            const context = helpers.run(Jest, opts).withOptions({ "skip-install": false });
+            const context = helpers.run(Jest, opts)
+                .withOptions({ "skip-install": false });
             const tmpDir = await context;
             const got = loadJSON(tmpDir, "package.json");
 
             const want = {
                 devDependencies: { jest: expect.any(String) },
             };
+            //  [".yo-rc.json", "jest.config.js", "node_modules", "package-lock.json", "package.json"]
             expect(ls("-A", tmpDir)).toHaveLength(5);
 
             expect(got).toMatchObject(want);

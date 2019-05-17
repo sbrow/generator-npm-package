@@ -1,7 +1,8 @@
 import Generator from "yeoman-generator";
 
-import packagesJson from "./packages.json";
+import { tsImportEqualsDeclaration } from "@babel/types";
 import { BaseGenerator } from "../BaseGenerator";
+import packagesJson from "./packages.json";
 
 export class Installer extends BaseGenerator {
     public props: { packages: string[] };
@@ -13,10 +14,36 @@ export class Installer extends BaseGenerator {
     }
 
     public prompting() {
-        const choices = [];
+        let choices = [];
+        const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
+
+        const inject = (obj: any, prop: string): any[] => {
+            if (typeof obj !== "undefined" && prop in obj) {
+                const value = obj[prop];
+                if (value instanceof Array) {
+                    return value;
+                }
+            }
+            return [];
+        };
+        const installed = [
+            ...inject(packageJson, "dependencies"),
+            ...inject(packageJson, "devDependencies"),
+        ];
+
+        const filter = (value: string): boolean => {
+            const packages = packagesJson[value];
+            for (const pkg of packages) {
+                if (!installed.includes(pkg)) {
+                    return true;
+                }
+            }
+            return false;
+        };
         for (const choice of Object.keys(packagesJson)) {
             choices.push(choice);
         }
+        choices = choices.filter(filter);
         const prompts: Generator.Questions = [
             {
                 type: "checkbox",

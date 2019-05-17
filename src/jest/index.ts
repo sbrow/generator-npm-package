@@ -33,6 +33,7 @@ export class Jest extends BaseGenerator {
             name: "enableCoveralls",
             message: "Enable coveralls integration?",
             default: false,
+            // store: true,
         }];
 
         return this.prompt(prompts).then((props) => {
@@ -42,16 +43,14 @@ export class Jest extends BaseGenerator {
 
     public configuring() {
         this.addDevDependencies("jest");
-        const devDependencies = this.getDevDependencies();
-
-        if (devDependencies.has("typescript")) {
+        if (this.hasAnyDependency("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
             const tsconfig = this.config.get("tsconfig");
             if (tsconfig !== undefined && tsconfig.hasOwnProperty("resolveJsonModule")) {
                 this.props.resolveJsonModule = tsconfig.resolveJsonModule;
             }
         }
-        if (devDependencies.has("react")) {
+        if (this.hasAnyDependency("react")) {
             const temp = [];
             for (const extension of this.props.moduleFileExtensions) {
                 temp.push(extension, `${extension}x`);
@@ -82,7 +81,7 @@ module.exports = {
     }
 
     public default() {
-        this.npmInstall(Array.from(this.getDevDependencies()), { "save-dev": true });
+        this.scheduleInstall();
     }
 
     private transforms(): string {

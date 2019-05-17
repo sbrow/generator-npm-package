@@ -32,7 +32,7 @@ describe("generator-app", () => {
     describe('With prompt "delete"', () => {
         it("Removes all files from target.", async () => {
             const context = helpers.run(app, opts)
-                .inTmpDir(function(dir) {
+                .inTmpDir((dir) => {
                     writeFileSync(path.join(dir, "testfile.json"), "{}");
                     writeFileSync(path.join(dir, ".testfile.json"), "{}");
                     expect(ls("-A", dir)).toHaveLength(2);
