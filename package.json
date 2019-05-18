@@ -10,19 +10,11 @@
   "todos": {
     "features": [
       "option to install additional packages",
-      {
-        "description": "read from package.json as well as config",
-        "reason": "Allows install into pre-assembled projects."
-      },
       "object-literal-sort-keys for tslint",
       {
         "description": "add 'moduleDirectories: [\"node_modules\", \"source\"]' to config",
         "reason": "allows interop with typescript's 'baseurl' option.",
         "for": "jest"
-      },
-      {
-        "when": "installing Typescript + Webpack",
-        "description": "install and configure 'ts-loader'"
       }
     ]
   },
