@@ -5,21 +5,20 @@
         "esModuleInterop": true,
         "inlineSourceMap": true,
         "target": "es6",
+        "forceConsistentCasingInFileNames": true,
         "module": "commonjs",
         "moduleResolution": "node",
         "outDir": "generators",
         "rootDir": "src",
-        "baseUrl": "src",
-        "paths": {
-            "package.json": [
-                "../package.json"
-            ],
-        }
+        "baseUrl": ".",
     },
     "exclude": [
         "coverage",
         "__setup__",
         "__tests__",
-        "generators"
-    ]
+        "generators",
+    ],
+    "typeAcquisition": {
+        "enable": true
+    }
 }

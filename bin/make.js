@@ -12,3 +12,13 @@ for (const dir of dirs) {
         shelljs.cp("-r", src, dest);
     }
 }
+
+/**
+ * Create `${dist}/node_modules`
+ */
+const base = path.dirname(__dirname);
+const dist = path.join(base, "generators");
+const node_modules = path.join(dist, "node_modules");
+shelljs.mkdir("-p", node_modules);
+shelljs.cd(node_modules);
+shelljs.ln("-s", path.resolve(dist), "./src");
