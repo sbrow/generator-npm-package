@@ -49,7 +49,8 @@
     "make": "node bin/make.js",
     "env": "env",
     "webpack": "webpack",
-    "start": "node $npm_package_main"
+    "start": "node $npm_package_main",
+    "version": "standard-version"
   },
   "devDependencies": {
     "@types/inquirer": "^6.0.1",
@@ -69,6 +70,7 @@
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.2",
     "shx": "^0.3.2",
+    "standard-version": "^6.0.1",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
     "tslint-microsoft-contrib": "^6.1.1",
