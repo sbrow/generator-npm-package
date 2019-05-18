@@ -1,18 +1,26 @@
 import Generator from "yeoman-generator";
 
-type dependencies = string | string[] | Set<string> | { [name: string]: string } | undefined;
+type Dependencies = string | string[] | Set<string> | { [name: string]: string } | undefined;
+
+interface BaseGeneratorOptions {
+    dependencies?: Dependencies;
+    useYarn?: boolean;
+}
 
 export class BaseGenerator extends Generator {
     public useYarn: boolean = false;
 
-    constructor(args, opts: any) {
+    constructor(args: string | any[], opts: BaseGeneratorOptions) {
         super(args, opts);
-        if (typeof opts !== "undefined") {
-            if (opts.useYarn || this.config.get("useYarn")) {
-                this.useYarn = true;
-            }
+        if ("useYarn" in opts) {
+            this.useYarn = opts.useYarn;
+        } else if (this.config.get("useYarn")) {
+            this.useYarn = true;
         }
         this.config.set("useYarn", this.useYarn);
+        if ("dependencies" in opts) {
+            this.addDependencies(opts.dependencies);
+        }
         const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
         if (typeof packageJson !== "undefined") {
             this.addDependencies(packageJson.dependencies);
@@ -40,8 +48,7 @@ export class BaseGenerator extends Generator {
         }
     }
 
-    protected addDependencies(deps: dependencies, dev: boolean = false) {
-        const dependencies = this.getDependencies(dev);
+    protected addDependencies(deps: Dependencies, dev: boolean = false) {
         switch (typeof deps) {
             case "undefined":
                 deps = [];
@@ -52,28 +59,33 @@ export class BaseGenerator extends Generator {
             case "object":
                 if (deps instanceof Set) {
                     deps = Array.from(deps);
-                    break;
                 }
-            default:
-                deps = Object.keys(deps);
+                if (!(deps instanceof Array)) {
+                    deps = Object.keys(deps);
+                }
         }
+        const dependencies = this.getDependencies(dev);
         for (const dep of deps) {
             dependencies.add(dep);
         }
         this.setDependencies(dependencies, dev);
     }
 
-    protected addDevDependencies(deps: dependencies) {
+    protected addDevDependencies(deps: Dependencies) {
         this.addDependencies(deps, true);
     }
 
     protected getDependencies(dev: boolean = false): Set<string> {
         const t = (dev) ? "devDependencies" : "dependencies";
-        return new Set(this.config.get(t));
+        const deps = this.config.get(t);
+        if (deps instanceof Array) {
+            return new Set<string>(deps);
+        }
+        return new Set();
     }
 
     /**
-     * @param items The packages tosearch for.
+     * @param items The packages to search for.
      * @param dev Whether or not to match devDependencies.
      * @returns true if all items are included in the dependencies.
      */
