@@ -1,6 +1,5 @@
 import Generator from "yeoman-generator";
 
-import { tsImportEqualsDeclaration } from "@babel/types";
 import { BaseGenerator } from "../BaseGenerator";
 import packagesJson from "./packages.json";
 
@@ -18,10 +17,12 @@ export class Installer extends BaseGenerator {
         const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
 
         const inject = (obj: any, prop: string): any[] => {
-            if (typeof obj !== "undefined" && prop in obj) {
-                const value = obj[prop];
-                if (value instanceof Array) {
-                    return value;
+            if (typeof obj === "object") {
+                if (prop in obj) {
+                    const value = obj[prop];
+                    if (value instanceof Array) {
+                        return value;
+                    }
                 }
             }
             return [];
@@ -30,6 +31,7 @@ export class Installer extends BaseGenerator {
             ...inject(packageJson, "dependencies"),
             ...inject(packageJson, "devDependencies"),
         ];
+        this.config.set("installed", installed);
 
         const filter = (value: string): boolean => {
             const packages = packagesJson[value];
@@ -89,10 +91,11 @@ export class Installer extends BaseGenerator {
         const dependencies = this.getDependencies();
         const devDependencies = this.getDevDependencies();
         this.scheduleInstall();
-        for (const dep of devDependencies) {
+        const deps = Array.from(dependencies);
+        const devDeps = Array.from(devDependencies);
+        for (const dep of devDeps) {
             dependencies.add(dep);
         }
-        const deps = Array.from(dependencies);
         if (deps.length > 0) {
             this.log(`Installing node packages: ${deps.join(" ")}`);
         } else {

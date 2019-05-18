@@ -69,6 +69,32 @@ describe("generator-webpack", () => {
     });
 
     describe("When installed beside 'Typescript'", () => {
-        it.todo("Adds 'tsloader' to modules.");
+        it("Adds 'ts-loader' to config.modules.", async () => {
+            const tmpDir = await helpers.run(Webpack, opts)
+                .withLocalConfig({
+                    devDependencies: ["typescript"],
+                });
+            const got = require(require.resolve(path.join(tmpDir, "webpack.config.js")))[0];
+            const want = {
+                module: {
+                    rules: [
+                        {
+                            test: /\.tsx?$/,
+                            use: "ts-loader",
+                        },
+                    ],
+                },
+            };
+            expect(got).toMatchObject(want);
+        });
+        it("Adds ts-loader as a DevDependency", async () => {
+            const tmpDir = await helpers.run(Webpack, opts)
+                .withLocalConfig({
+                    devDependencies: ["typescript"],
+                });
+            const got = loadJSON(tmpDir, ".yo-rc.json")["generator-npm-package"].devDependencies;
+            const want = "ts-loader";
+            expect(got).toContain(want);
+        });
     });
 });
