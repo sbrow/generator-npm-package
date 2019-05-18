@@ -1,19 +1,23 @@
 {
   "name": "generator-npm-package",
-  "version": "0.2.0",
-  "description": "",
+  "version": "0.8.0",
+  "description": "Generates boilerplate for npm packages",
   "author": {
     "name": "Spencer Brower",
     "email": "brower.spencer@gmail.com"
   },
+  "license": "GPL-3.0",
   "todos": {
     "features": [
       "option to install additional packages",
-      "clean dir before running",
-      "option to make new dir"
+      "object-literal-sort-keys for tslint",
+      {
+        "description": "add 'moduleDirectories: [\"node_modules\", \"source\"]' to config",
+        "reason": "allows interop with typescript's 'baseurl' option.",
+        "for": "jest"
+      }
     ]
   },
-  "license": "GPL-3.0",
   "keywords": [
     "yeoman-generator"
   ],
@@ -25,25 +29,43 @@
     "npm": ">= 4.0.0"
   },
   "scripts": {
+    "test": "jest",
+    "test:w": "jest --watch",
+    "cover": "jest --coverage",
+    "lint": "tslint --project .",
     "build": "tsc",
-    "build:watch": "npm run build -- -w",
-    "watch": "npm run build:watch",
+    "build:watch": "yarn run build -w",
+    "watch": "yarn run build:watch",
     "clean": "shx rm -rf generators/*",
-    "clean-build": "npm run clean && npm run build"
+    "clean-build": "yarn run clean && npm run build",
+    "make": "node bin/make.js",
+    "env": "env",
+    "webpack": "webpack",
+    "start": "node $npm_package_main",
+    "version": "standard-version"
   },
   "devDependencies": {
-    "@types/node": "^11.13.7",
+    "@types/inquirer": "^6.0.1",
+    "@types/jest": "^24.0.12",
+    "@types/node": "^11.13.8",
+    "@types/shelljs": "^0.8.5",
+    "@types/yeoman-assert": "^3.1.1",
     "@types/yeoman-generator": "^3.1.1",
+    "@types/yeoman-test": "^2.0.2",
     "coveralls": "^3.0.2",
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-config-xo": "^0.25.0",
     "eslint-plugin-prettier": "^3.0.0",
     "husky": "^1.2.0",
-    "jest": "^23.5.0",
+    "jest": "^24.7.1",
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.2",
     "shx": "^0.3.2",
+    "standard-version": "^6.0.1",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.16.0",
+    "tslint-microsoft-contrib": "^6.1.1",
     "typescript": "^3.4.5",
     "yeoman-assert": "^3.1.0",
     "yeoman-test": "^1.7.0"
