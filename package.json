@@ -1,6 +1,6 @@
 {
   "name": "generator-npm-package",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Generates boilerplate for npm packages",
   "author": {
     "name": "Spencer Brower",
