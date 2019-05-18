@@ -23,6 +23,10 @@
       {
         "for": "Webpack",
         "description": "Ask if user wants to move dependencies to devDependencies"
+      },
+      {
+        "for": "Typescript",
+        "description": "enable 'Type Acquisition'. If enabled, don't ask to install @types."
       }
     ]
   },
