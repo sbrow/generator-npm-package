@@ -1,4 +1,6 @@
+import { join } from "path";
 import helpers from "yeoman-test";
+
 import { Typescript } from "../src/typescript";
 
 let opts;
@@ -10,7 +12,7 @@ beforeAll(() => {
         resolved: require.resolve("../src/typescript/index"),
         namespace: "npm-package:typescript",
     };
-    srcDir = path.join(__dirname, "../src");
+    srcDir = join(__dirname, "../src");
 });
 describe("generator-typescript", () => {
     describe("With default options", () => {

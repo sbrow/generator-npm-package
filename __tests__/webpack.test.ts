@@ -1,13 +1,13 @@
 import { readFileSync } from "fs";
-import path from "path";
+import { join } from "path";
 import assert from "yeoman-assert";
-import helpers from "yeoman-test";
+import { run, RunContextSettings } from "yeoman-test";
 
 import { load, loadJSON } from "../__setup__/fs";
 import Webpack from "../src/webpack";
 
 const generator = "webpack";
-let opts: helpers.RunContextSettings;
+let opts: RunContextSettings;
 beforeEach(() => {
     opts = {
         tmpdir: true,
@@ -21,26 +21,26 @@ describe("generator-webpack", () => {
 
     describe("Default", () => {
         it(`Creates "${file}"`, async () => {
-            const tmpDir = await helpers.run(Webpack, opts);
+            const tmpDir = await run(Webpack, opts);
             assert.file(file);
         });
         it(`Sets $NODE_ENV`, async () => {
-            const tmpDir = await helpers.run(Webpack, opts);
+            const tmpDir = await run(Webpack, opts);
             const want = [
                 'process.env.NODE_ENV = process.env.NODE_ENV || "development";',
                 "const mode = process.env.NODE_ENV;",
             ].join("\r\n");
-            const got = readFileSync(path.join(tmpDir, file)).toString();
+            const got = readFileSync(join(tmpDir, file)).toString();
             expect(got).toMatch(want);
         });
         it("Populates config", async () => {
-            const tmpDir = await helpers.run(Webpack, opts);
+            const tmpDir = await run(Webpack, opts);
             let want = [
                 "module.exports = [",
                 "\tbaseConfig,",
                 "]",
             ].join("\r\n");
-            const got = readFileSync(path.join(tmpDir, file)).toString();
+            const got = readFileSync(join(tmpDir, file)).toString();
             expect(got).toMatch(want);
             want = [
                 "const baseConfig = {",
@@ -48,20 +48,20 @@ describe("generator-webpack", () => {
                 "\tmode,",
                 "\toutput: {",
                 '\t\tfilename: "main.js",',
-                '\t\tpath: path.resolve(__dirname, "dist"),',
+                '\t\tpath: resolve(__dirname, "dist"),',
                 "\t},",
                 "}",
             ].join("\r\n");
             expect(got).toMatch(want);
         });
         it("Adds 'webpack' script", async () => {
-            const tmpDir = await helpers.run(Webpack, opts);
+            const tmpDir = await run(Webpack, opts);
             const got = loadJSON(tmpDir, "package.json");
             const want = { scripts: { webpack: "webpack" } };
             expect(got).toMatchObject(want);
         });
         it("Does not add 'modules'", async () => {
-            const tmpDir = await helpers.run(Webpack, opts);
+            const tmpDir = await run(Webpack, opts);
             const got = load(tmpDir, "webpack.config.js");
             const want = /^\tmodule: {.*$/;
             expect(got).not.toMatch(want);
@@ -70,11 +70,11 @@ describe("generator-webpack", () => {
 
     describe("When installed beside 'Typescript'", () => {
         it("Adds 'ts-loader' to config.modules.", async () => {
-            const tmpDir = await helpers.run(Webpack, opts)
+            const tmpDir = await run(Webpack, opts)
                 .withLocalConfig({
                     devDependencies: ["typescript"],
                 });
-            const got = require(require.resolve(path.join(tmpDir, "webpack.config.js")))[0];
+            const got = require(require.resolve(join(tmpDir, "webpack.config.js")))[0];
             const want = {
                 module: {
                     rules: [
@@ -88,7 +88,7 @@ describe("generator-webpack", () => {
             expect(got).toMatchObject(want);
         });
         it("Adds ts-loader as a DevDependency", async () => {
-            const tmpDir = await helpers.run(Webpack, opts)
+            const tmpDir = await run(Webpack, opts)
                 .withLocalConfig({
                     devDependencies: ["typescript"],
                 });

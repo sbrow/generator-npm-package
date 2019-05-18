@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import path from "path";
+import { join } from "path";
 
 /**
  * Returns the contents of file with name `file` from the directory
@@ -15,5 +15,5 @@ export function loadJSON(dir: string, file: string): any {
 }
 
 export function load(dir: string, file: string): string {
-    return readFileSync(path.join(dir, file)).toString();
+    return readFileSync(join(dir, file)).toString();
 }

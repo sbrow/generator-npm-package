@@ -122,3 +122,5 @@ export class BaseGenerator extends Generator {
         this.setDependencies(set, true);
     }
 }
+
+export default BaseGenerator;
