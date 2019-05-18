@@ -1,12 +1,9 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import path from "path";
-import { timer } from "rxjs";
 import { cd, ls, mkdir, pwd, rm } from "shelljs";
 import Generator from "yeoman-generator";
 import yosay from "yosay";
 
-// import packageJson from "../../package.json";
 const packageJson = require("../../package.json");
 
 export enum choices {
