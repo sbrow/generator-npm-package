@@ -23,12 +23,6 @@ export class App extends Generator {
 
     constructor(args, opts) {
         super(args, opts);
-        if (!ls(this.destinationRoot()).includes("package.json")) {
-            this.composeWith(require.resolve("generator-npm-init/app"), {
-                author: this.user.git.name(),
-                version: "0.0.0",
-            });
-        }
         this.composeWith(require.resolve("../installer"), {});
     }
 
@@ -125,6 +119,12 @@ export class App extends Generator {
                 default:
             }
             this.config.set("useYarn", props.useYarn);
+            if (!ls(this.destinationRoot()).includes("package.json")) {
+                this.composeWith(require.resolve("generator-npm-init/app"), {
+                    author: this.user.git.name(),
+                    version: "0.0.0",
+                });
+            }
         });
     }
 
