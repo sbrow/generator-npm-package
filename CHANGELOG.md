@@ -19,13 +19,3 @@ All notable changes to this project will be documented in this file. See [standa
 ### Tests
 
 * Skipping broken tests. ([3309b26](https://github.com/sbrow/generator-npm-package/commit/3309b26))
-
-
-
-## [0.8.0](https://github.com/sbrow/generator-npm-package/compare/v0.7.0...v0.8.0) (2019-05-18)
-
-
-### Features
-
-* **BaseGenerator:** Improved ([be9e593](https://github.com/sbrow/generator-npm-package/commit/be9e593))
-* **Webpack:** Installs and configures `ts-loader` when appropriate. ([a8edc0e](https://github.com/sbrow/generator-npm-package/commit/a8edc0e))
