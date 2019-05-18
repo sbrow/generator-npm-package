@@ -30,10 +30,14 @@ export class BaseGenerator extends Generator {
 
     public scheduleInstall() {
         const dev = (t: boolean) => {
+            const opts = { silent: true };
             if (this.useYarn) {
-                return { dev: t };
+                return { ...opts, dev: t };
             }
-            return { "save-dev": t };
+            return {
+                ...opts,
+                "save-dev": t,
+            };
         };
         const args = [
             { pkgs: this.getDependencies(), opts: dev(false) },
@@ -41,7 +45,7 @@ export class BaseGenerator extends Generator {
         ];
         for (const arg of args) {
             if (this.useYarn) {
-                this.yarnInstall(Array.from(arg.pkgs), { ...arg.opts, silent: true });
+                this.yarnInstall(Array.from(arg.pkgs), arg.opts);
             } else {
                 this.npmInstall(Array.from(arg.pkgs), arg.opts);
             }
