@@ -48,7 +48,7 @@ describe("generator-app", () => {
     });
 
     describe('With prompt "stop"', () => {
-        it("Doesn't create any files", async () => {
+        it.skip("Doesn't create any files", async () => {
             const tmpDir = await helpers.run(app, opts)
                 .withPrompts({
                     action: "n",
