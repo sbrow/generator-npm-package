@@ -4,9 +4,10 @@ import Generator from "yeoman-generator";
 import chalk from "chalk";
 import { BaseGenerator } from "../BaseGenerator";
 import blacklistJson from "./blacklist.json";
+import packagesJson from "../installer/packages.json";
 
 export class Typescript extends BaseGenerator {
-    public static readonly devDependencies = ["typescript", "@types/node"];
+    public static readonly devDependencies = packagesJson.Typescript;
     public tslint = {
         extends: "tslint:recommended",
         rules: {},
@@ -14,33 +15,9 @@ export class Typescript extends BaseGenerator {
     public props: any;
 
     public prompting() {
-        const dependencies = this.getDependencies();
-        const devDependencies = this.getDevDependencies();
-        const deps: string[] = [...Array.from(dependencies), ...Array.from(devDependencies)];
-
-        const installDefs = () => {
-            const choices = new Set<string>();
-            for (const pkg of deps) {
-                if (pkg !== null && !blacklistJson.includes(pkg) && !pkg.match(/^@types/)) {
-                    const name = `@types/${pkg}`;
-                    if (!choices.has(name)) {
-                        choices.add(name);
-                    }
-                }
-            }
-            if (choices.size > 0) {
-                return [{
-                    type: "checkbox",
-                    name: "typeDefs",
-                    message: "Select Type definitions (.d.ts files) to install",
-                    choices: Array.from(choices),
-                }];
-            }
-            return [];
-        };
 
         const prompts: Generator.Questions = [
-            ...installDefs(),
+            ...this.installDefs(),
             {
                 type: "input",
                 name: "outDir",
@@ -113,6 +90,30 @@ export class Typescript extends BaseGenerator {
 
     public default() {
         this.scheduleInstall();
+    }
+
+    private installDefs(): Generator.Question[] {
+        const dependencies = this.getDependencies();
+        const devDependencies = this.getDevDependencies();
+        const deps: string[] = [...Array.from(dependencies), ...Array.from(devDependencies)];
+        const choices = new Set<string>();
+        for (const pkg of deps) {
+            if (pkg !== null && !blacklistJson.includes(pkg) && !pkg.match(/^@types/)) {
+                const name = `@types/${pkg}`;
+                if (!choices.has(name)) {
+                    choices.add(name);
+                }
+            }
+        }
+        if (choices.size > 0) {
+            return [{
+                type: "checkbox",
+                name: "typeDefs",
+                message: "Select Type definitions (.d.ts files) to install",
+                choices: Array.from(choices),
+            }];
+        }
+        return [];
     }
 }
 
