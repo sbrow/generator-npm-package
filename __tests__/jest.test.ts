@@ -69,12 +69,12 @@ describe("generator-jest", () => {
             const tmpDir = await context;
             const got = loadJSON(tmpDir, "package.json");
 
-            const want = {
-                devDependencies: { jest: expect.any(String) },
-            };
             //  [".yo-rc.json", "jest.config.js", "node_modules", "package-lock.json", "package.json"]
             expect(ls("-A", tmpDir)).toHaveLength(5);
 
+            const want = {
+                devDependencies: { jest: expect.any(String) },
+            };
             expect(got).toMatchObject(want);
         }, 35000);
         itReadsFileExtensions(['"js"'], {});

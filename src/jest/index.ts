@@ -85,7 +85,7 @@ module.exports = {
     }
 
     private transforms(): string {
-        if (this.getDevDependencies().has("typescript")) {
+        if (this.hasDevDependency("typescript")) {
             return `\r\ntransform: {\r\n"\.tsx?": "ts-jest",\r\n},\r\n`;
         }
         return "";

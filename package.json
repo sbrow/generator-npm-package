@@ -38,6 +38,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:w": "jest --watch",
     "cover": "jest --coverage",
     "lint": "tslint --project .",
     "build": "tsc",
