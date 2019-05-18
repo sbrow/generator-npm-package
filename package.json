@@ -15,6 +15,14 @@
         "description": "add 'moduleDirectories: [\"node_modules\", \"source\"]' to config",
         "reason": "allows interop with typescript's 'baseurl' option.",
         "for": "jest"
+      },
+      {
+        "for": "React",
+        "description": "ask if user also wants to install React-Bootstrap"
+      },
+      {
+        "for": "Webpack",
+        "description": "Ask if user wants to move dependencies to devDependencies"
       }
     ]
   },
