@@ -34,18 +34,28 @@ export class Installer extends BaseGenerator {
         this.config.set("installed", installed);
 
         const filter = (value: string): boolean => {
-            const packages = packagesJson[value];
-            for (const pkg of packages) {
-                if (!installed.includes(pkg)) {
-                    return true;
+            if (value in packagesJson) {
+                const packages = packagesJson[value];
+                for (const pkg of packages) {
+                    if (!installed.includes(pkg)) {
+                        return true;
+                    }
                 }
+            } else if (!(value in packagesJson.Other)) {
+                return true;
             }
             return false;
         };
         for (const choice of Object.keys(packagesJson)) {
-            choices.push(choice);
+            if (choice !== "Other") {
+                choices.push(choice);
+            } else {
+                for (const simpleChoice of packagesJson[choice]) {
+                    choices.push((simpleChoice));
+                }
+            }
         }
-        choices = choices.filter(filter);
+        choices = choices.filter(filter).sort();
         const prompts: Generator.Questions = [
             {
                 type: "checkbox",

@@ -9,7 +9,8 @@
         "@types/node",
         "tslint"
     ],
-    "Webpack": [
-        "webpack"
+    "Webpack": "webpack",
+    "Other": [
+        "react-bootstrap"
     ]
 }
