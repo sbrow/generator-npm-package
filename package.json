@@ -25,6 +25,10 @@
         "description": "Ask if user wants to move dependencies to devDependencies"
       },
       {
+        "for": "Webpack",
+        "description": "Option to add css/style loaders"
+      },
+      {
         "for": "Typescript",
         "description": "enable 'Type Acquisition'. If enabled, don't ask to install @types."
       }
