@@ -6,6 +6,10 @@
     "name": "Spencer Brower",
     "email": "brower.spencer@gmail.com"
   },
+  "directories": {
+    "lib": "generators",
+    "test": "__tests__"
+  },
   "license": "GPL-3.0",
   "todos": {
     "features": [
