@@ -35,6 +35,11 @@
       {
         "for": "Typescript",
         "description": "enable 'Type Acquisition'. If enabled, don't ask to install @types."
+      },
+      {
+        "for": "App",
+        "description": "Add 'prepare' script",
+        "contents": "npm lint --fix && npm build"
       }
     ]
   },
