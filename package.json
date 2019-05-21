@@ -59,7 +59,6 @@
     "clean": "shx rm -rf generators/*",
     "clean-build": "yarn run clean && npm run build",
     "make": "node bin/make.js",
-    "env": "env",
     "webpack": "webpack",
     "start": "node $npm_package_main",
     "version": "standard-version"
