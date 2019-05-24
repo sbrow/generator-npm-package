@@ -64,10 +64,9 @@ export class Typescript extends BaseGenerator {
         const deps = "dependencies";
         const dependencies = this.getDependencies();
 
-        const jsx = (dependencies.has("react"))
+        const jsx = (this.hasAnyDependency("react"))
             ? "react"
             : undefined;
-
         const { esModuleInterop, outDir, resolveJsonModule } = this.props;
         this.fs.extendJSON(this.destinationPath("tsconfig.json"),
             {
