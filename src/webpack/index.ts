@@ -1,4 +1,4 @@
-import { BaseGenerator } from "src/BaseGenerator";
+import { BaseGenerator } from "../BaseGenerator";
 
 export class Webpack extends BaseGenerator {
     public static dependencies = ["webpack", "webpack-cli"];
