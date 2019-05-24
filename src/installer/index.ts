@@ -101,17 +101,17 @@ export class Installer extends BaseGenerator {
     public default() {
         const dependencies = this.getDependencies();
         const devDependencies = this.getDevDependencies();
-        this.scheduleInstall();
-        const deps = Array.from(dependencies);
         const devDeps = Array.from(devDependencies);
         for (const dep of devDeps) {
             dependencies.add(dep);
         }
+        const deps = Array.from(dependencies);
         if (deps.length > 0) {
             this.log(`Installing node packages: ${deps.join(" ")}`);
         } else {
             this.log("No additional packages will be installed.");
         }
+        this.scheduleInstall();
     }
 }
 
