@@ -20,7 +20,6 @@ export class App extends Generator {
 
     constructor(args, opts) {
         super(args, opts);
-        this.composeWith(require.resolve("../installer"), {});
     }
 
     public initializing() {
@@ -123,6 +122,10 @@ export class App extends Generator {
                 });
             }
         });
+    }
+    public configuring() {
+        const useYarn = this.config.get("useYarn");
+        this.composeWith(require.resolve("../installer"), { useYarn });
     }
 
     public writing() {

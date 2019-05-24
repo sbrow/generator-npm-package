@@ -8,16 +8,14 @@ interface BaseGeneratorOptions {
 }
 
 export class BaseGenerator extends Generator {
-    public useYarn: boolean = false;
-
     constructor(args: string | any[], opts: BaseGeneratorOptions) {
         super(args, opts);
-        if ("useYarn" in opts) {
-            this.useYarn = opts.useYarn;
-        } else if (this.config.get("useYarn")) {
-            this.useYarn = true;
-        }
-        this.config.set("useYarn", this.useYarn);
+
+        this.option("useYarn", {
+            default: false,
+            description: "Whether or not to use Yarn as the package manager.",
+            type: Boolean,
+        });
         if ("dependencies" in opts) {
             this.addDependencies(opts.dependencies);
         }
@@ -31,7 +29,7 @@ export class BaseGenerator extends Generator {
     public scheduleInstall() {
         const dev = (t: boolean) => {
             const opts = { silent: true };
-            if (this.useYarn) {
+            if (this.useYarn()) {
                 return { ...opts, dev: t };
             }
             return {
@@ -44,7 +42,7 @@ export class BaseGenerator extends Generator {
             { pkgs: this.getDevDependencies(), opts: dev(true) },
         ];
         for (const arg of args) {
-            if (this.useYarn) {
+            if (this.useYarn()) {
                 this.yarnInstall(Array.from(arg.pkgs), arg.opts);
             } else {
                 this.npmInstall(Array.from(arg.pkgs), arg.opts);
@@ -124,6 +122,10 @@ export class BaseGenerator extends Generator {
 
     protected setDevDependencies(set: Set<string>) {
         this.setDependencies(set, true);
+    }
+
+    public useYarn(): boolean {
+        return this.options.useYarn;
     }
 }
 

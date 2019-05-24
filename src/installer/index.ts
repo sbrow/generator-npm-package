@@ -73,17 +73,18 @@ export class Installer extends BaseGenerator {
     }
 
     public configuring() {
+        const useYarn = this.config.get("useYarn");
         if (this.props.packages === undefined) {
             this.props.packages = [];
         }
         if (this.props.packages.includes("Typescript")) {
-            this.composeWith(require.resolve("../typescript"), {});
+            this.composeWith(require.resolve("../typescript"), { useYarn });
         }
         if (this.props.packages.includes("Jest")) {
-            this.composeWith(require.resolve("../jest"), {});
+            this.composeWith(require.resolve("../jest"), { useYarn });
         }
         if (this.props.packages.includes("Webpack")) {
-            this.composeWith(require.resolve("../webpack"), {});
+            this.composeWith(require.resolve("../webpack"), { useYarn });
         }
 
         for (const choice of Object.keys(packagesJson)) {
