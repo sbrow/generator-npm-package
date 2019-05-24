@@ -40,6 +40,15 @@
         "for": "App",
         "description": "Add 'prepare' script",
         "contents": "npm lint --fix && npm build"
+      },
+      {
+        "for": "React",
+        "description": "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)"
+      },
+      {
+        "for": "Typescript",
+        "if": "React installed",
+        "description": "enable 'jsx': 'react'"
       }
     ]
   },
