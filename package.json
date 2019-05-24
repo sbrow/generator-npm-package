@@ -66,7 +66,7 @@
     "test": "jest",
     "test:w": "jest --watch",
     "coveralls": "yarn test --coverageReporters=text-lcov | coveralls",
-    "prepare": "yarn build && yarn make && yarn coveralls",
+    "prepare": "yarn build && yarn make",
     "lint": "tslint --project .",
     "build": "tsc",
     "build:watch": "yarn run build -w",
