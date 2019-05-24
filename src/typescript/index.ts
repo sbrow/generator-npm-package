@@ -2,9 +2,10 @@ import chalk from "chalk";
 import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
-import { BaseGenerator } from "src/BaseGenerator";
-import packagesJson from "src/installer/packages.json";
-import blacklistJson from "src/Typescript/blacklist.json";
+// import { BaseGenerator } from "src/BaseGenerator";
+import { BaseGenerator } from "../BaseGenerator";
+import packagesJson from "../installer/packages.json";
+import blacklistJson from "../typescript/blacklist.json";
 
 export class Typescript extends BaseGenerator {
     public static readonly devDependencies = packagesJson.Typescript;
