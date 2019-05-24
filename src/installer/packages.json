@@ -1,0 +1,19 @@
+{
+    "Jest": "jest",
+    "React": [
+        "react",
+        "react-dom"
+    ],
+    "Typescript": [
+        "typescript",
+        "@types/node",
+        "tslint"
+    ],
+    "Webpack": [
+        "webpack",
+        "webpack-cli"
+    ],
+    "Other": [
+        "react-bootstrap"
+    ]
+}
