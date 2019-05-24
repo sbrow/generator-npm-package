@@ -48,7 +48,7 @@ describe("generator-webpack", () => {
                 "\tmode,",
                 "\toutput: {",
                 '\t\tfilename: "main.js",',
-                '\t\tpath: resolve(__dirname, "dist"),',
+                "\t\tpath: outDir,",
                 "\t},",
                 "}",
             ].join("\r\n");
