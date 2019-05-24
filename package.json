@@ -60,7 +60,7 @@
   ],
   "main": "generators/app/index.js",
   "engines": {
-    "npm": ">= 4.0.0"
+    "npm": ">= 8.11.0"
   },
   "scripts": {
     "test": "jest",
