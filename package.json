@@ -65,7 +65,8 @@
   "scripts": {
     "test": "jest",
     "test:w": "jest --watch",
-    "cover": "jest --coverage",
+    "coveralls": "yarn test | coveralls",
+    "prepare": "yarn build && yarn make && yarn coveralls",
     "lint": "tslint --project .",
     "build": "tsc",
     "build:watch": "yarn run build -w",
