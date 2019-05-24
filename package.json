@@ -17,35 +17,29 @@
     }
   },
   "todos": {
-    "features": [
-      "option to install additional packages",
-      "object-literal-sort-keys for tslint",
-      {
-        "description": "add 'moduleDirectories: [\"node_modules\", \"source\"]' to config",
-        "reason": "allows interop with typescript's 'baseurl' option.",
-        "for": "jest"
-      },
-      {
-        "for": "React",
-        "description": "ask if user also wants to install React-Bootstrap"
-      },
-      {
-        "for": "Webpack",
-        "description": "Ask if user wants to move dependencies to devDependencies"
-      },
-      {
-        "for": "Webpack",
-        "description": "Option to add css/style loaders"
-      },
-      {
-        "for": "Typescript",
-        "description": "enable 'Type Acquisition'. If enabled, don't ask to install @types."
-      },
-      {
-        "for": "React",
-        "description": "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)"
-      }
-    ]
+    "features": {
+      "App": [
+        "option to install additional packages"
+      ],
+      "Jest": [
+        {
+          "description": "add 'moduleDirectories: [\"node_modules\", \"source\"]' to config",
+          "reason": "allows interop with typescript's 'baseurl' option."
+        }
+      ],
+      "React": [
+        "ask if user also wants to install React-Bootstrap",
+        "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)"
+      ],
+      "Typescript": [
+        "object-literal-sort-keys for tslint",
+        "enable 'Type Acquisition'. If enabled, don't ask to install @types."
+      ],
+      "Webpack": [
+        "Ask if user wants to move dependencies to devDependencies",
+        "Option to add css/style loaders"
+      ]
+    }
   },
   "keywords": [
     "yeoman-generator"
