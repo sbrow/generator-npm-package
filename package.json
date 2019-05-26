@@ -33,7 +33,8 @@
       ],
       "Typescript": [
         "object-literal-sort-keys for tslint",
-        "enable 'Type Acquisition'. If enabled, don't ask to install @types."
+        "enable 'Type Acquisition'. If enabled, don't ask to install @types.",
+        "Convert '.js' files to '.ts'."
       ],
       "Webpack": [
         "Ask if user wants to move dependencies to devDependencies",
