@@ -6,6 +6,7 @@
     "name": "Spencer Brower",
     "email": "brower.spencer@gmail.com"
   },
+  "main": "generators/app/index.js",
   "directories": {
     "lib": "generators",
     "test": "__tests__"
