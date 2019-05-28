@@ -73,8 +73,8 @@ export class Jest extends BaseGenerator {
         this.fs.extendJSON(this.destinationPath("package.json"), { scripts });
         this.fs.write(this.destinationPath("jest.config.js"),
             `const moduleFileExtensions = ${JSON.stringify(this.props.moduleFileExtensions)};
-${this.transforms()}
 module.exports = {
+    ${this.transforms()}
     collectCoverageFrom: [\`src/**/*.\${moduleFileExtensions}\`]
 };
 `);
@@ -86,7 +86,7 @@ module.exports = {
 
     private transforms(): string {
         if (this.hasDevDependency("typescript")) {
-            return `\r\ntransform: {\r\n"\.tsx?": "ts-jest",\r\n},\r\n`;
+            return `\r\ntransform: {\r\t"\.tsx?": "ts-jest",\r\n},\r\n`;
         }
         return "";
     }
