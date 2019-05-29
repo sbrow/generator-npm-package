@@ -6,51 +6,42 @@
     "name": "Spencer Brower",
     "email": "brower.spencer@gmail.com"
   },
+  "main": "generators/app/index.js",
   "directories": {
     "lib": "generators",
     "test": "__tests__"
   },
   "license": "GPL-3.0",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "todos": {
-    "features": [
-      "option to install additional packages",
-      "object-literal-sort-keys for tslint",
-      {
-        "description": "add 'moduleDirectories: [\"node_modules\", \"source\"]' to config",
-        "reason": "allows interop with typescript's 'baseurl' option.",
-        "for": "jest"
-      },
-      {
-        "for": "React",
-        "description": "ask if user also wants to install React-Bootstrap"
-      },
-      {
-        "for": "Webpack",
-        "description": "Ask if user wants to move dependencies to devDependencies"
-      },
-      {
-        "for": "Webpack",
-        "description": "Option to add css/style loaders"
-      },
-      {
-        "for": "Typescript",
-        "description": "enable 'Type Acquisition'. If enabled, don't ask to install @types."
-      },
-      {
-        "for": "App",
-        "description": "Add 'prepare' script",
-        "contents": "npm lint --fix && npm build"
-      },
-      {
-        "for": "React",
-        "description": "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)"
-      },
-      {
-        "for": "Typescript",
-        "if": "React installed",
-        "description": "enable 'jsx': 'react'"
-      }
-    ]
+    "features": {
+      "App": [
+        "option to install additional packages"
+      ],
+      "Jest": [
+        {
+          "description": "add 'moduleDirectories: [\"node_modules\", \"source\"]' to config",
+          "reason": "allows interop with typescript's 'baseurl' option."
+        }
+      ],
+      "React": [
+        "ask if user also wants to install React-Bootstrap",
+        "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)"
+      ],
+      "Typescript": [
+        "object-literal-sort-keys for tslint",
+        "enable 'Type Acquisition'. If enabled, don't ask to install @types.",
+        "Convert '.js' files to '.ts'."
+      ],
+      "Webpack": [
+        "Ask if user wants to move dependencies to devDependencies",
+        "Option to add css/style loaders"
+      ]
+    }
   },
   "keywords": [
     "yeoman-generator"
@@ -58,7 +49,6 @@
   "files": [
     "generators"
   ],
-  "main": "generators/app/index.js",
   "engines": {
     "npm": ">= 8.11.0"
   },
@@ -66,7 +56,7 @@
     "test": "jest",
     "test:w": "jest --watch",
     "coveralls": "yarn test --coverageReporters=text-lcov | coveralls",
-    "prepare": "yarn build && yarn make && yarn coveralls",
+    "prepare": "yarn build && yarn make",
     "lint": "tslint --project .",
     "build": "tsc",
     "build:watch": "yarn run build -w",
@@ -76,6 +66,7 @@
     "make": "node bin/make.js",
     "webpack": "webpack",
     "start": "node $npm_package_main",
+    "preversion": "git checkout master && git merge develop --no-ff",
     "version": "standard-version"
   },
   "devDependencies": {
@@ -86,6 +77,7 @@
     "@types/yeoman-generator": "^3.1.2",
     "@types/yeoman-test": "^2.0.2",
     "coveralls": "^3.0.3",
+    "cz-conventional-changelog": "2.1.0",
     "eslint": "^5.9.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-config-xo": "^0.25.0",
