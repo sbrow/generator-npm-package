@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.10.1](https://github.com/sbrow/generator-npm-package/compare/v0.10.0...v0.10.1) (2019-05-29)
+
+
+### Bug Fixes
+
+* **Jest:** `transforms` now appears in the config, instead of at the top level. ([bbf185b](https://github.com/sbrow/generator-npm-package/commit/bbf185b))
+
+
+### Build System
+
+* **package.json:** Added "preversion" script. ([1423137](https://github.com/sbrow/generator-npm-package/commit/1423137))
+* **package.json:** Added commitizen config. ([a30af83](https://github.com/sbrow/generator-npm-package/commit/a30af83))
+* **prepare:** Removed `coveralls` step. ([91d3874](https://github.com/sbrow/generator-npm-package/commit/91d3874))
+
+
+
 ## [0.10.0](https://github.com/sbrow/generator-npm-package/compare/v0.9.0...v0.10.0) (2019-05-24)
 
 
