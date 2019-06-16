@@ -55,6 +55,10 @@ export class BaseGenerator extends Generator {
         }
     }
 
+    public useYarn(): boolean {
+        return this.options.useYarn;
+    }
+
     protected addDependencies(deps: Dependencies, dev: boolean = false) {
         switch (typeof deps) {
             case "undefined":
@@ -127,10 +131,6 @@ export class BaseGenerator extends Generator {
 
     protected setDevDependencies(set: Set<string>) {
         this.setDependencies(set, true);
-    }
-
-    public useYarn(): boolean {
-        return this.options.useYarn;
     }
 }
 

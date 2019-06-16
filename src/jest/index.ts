@@ -1,8 +1,8 @@
 import Generator from "yeoman-generator";
 
 import { BaseGenerator } from "../BaseGenerator";
-import packagesJson from "../installer/packages.json"
 import { Package } from "../installer/Package";
+import packagesJson from "../installer/packages.json";
 
 export class Jest extends BaseGenerator {
     public static readonly scripts = {

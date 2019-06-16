@@ -46,7 +46,6 @@ describe("generator-app", () => {
             expect(contents).toHaveLength(3);
         });
     });
-
     describe('With prompt "stop"', () => {
         it.skip("Doesn't create any files", async () => {
             const tmpDir = await run(app, opts)

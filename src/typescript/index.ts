@@ -3,9 +3,9 @@ import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
 import { BaseGenerator } from "../BaseGenerator";
+import { Package } from "../installer/Package";
 import packagesJson from "../installer/packages.json";
 import blacklistJson from "../typescript/blacklist.json";
-import { Package } from "../installer/Package";
 
 export class Typescript extends BaseGenerator {
     public static readonly devDependencies = packagesJson.Typescript;
