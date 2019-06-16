@@ -20,7 +20,9 @@
   "todos": {
     "features": {
       "App": [
-        "option to install additional packages"
+        "option to install additional packages",
+        "electron: *-{builder,updater,log,devtools-installer}",
+        "commitizen/standard version"
       ],
       "Jest": [
         {
@@ -30,7 +32,8 @@
       ],
       "React": [
         "ask if user also wants to install React-Bootstrap",
-        "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)"
+        "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)",
+        "ask to install: router, router-dom"
       ],
       "Typescript": [
         "object-literal-sort-keys for tslint",
@@ -39,7 +42,8 @@
       ],
       "Webpack": [
         "Ask if user wants to move dependencies to devDependencies",
-        "Option to add css/style loaders"
+        "Option to add loaders: css/style, file",
+        "AST edit"
       ]
     }
   },
