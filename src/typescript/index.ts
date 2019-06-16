@@ -5,6 +5,7 @@ import Generator from "yeoman-generator";
 import { BaseGenerator } from "../BaseGenerator";
 import packagesJson from "../installer/packages.json";
 import blacklistJson from "../typescript/blacklist.json";
+import { Package } from "../installer/Package";
 
 export class Typescript extends BaseGenerator {
     public static readonly devDependencies = packagesJson.Typescript;
@@ -45,7 +46,10 @@ export class Typescript extends BaseGenerator {
     }
 
     public configuring() {
-        this.addDevDependencies(Typescript.devDependencies);
+        const packages = packagesJson.Typescript;
+        for (const pkg of packages) {
+            this.addPackage(new Package(pkg));
+        }
         if (this.props.typeDefs) {
             this.addDevDependencies(this.props.typeDefs);
         }

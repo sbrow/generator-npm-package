@@ -1,6 +1,8 @@
 import Generator from "yeoman-generator";
 
 import { BaseGenerator } from "../BaseGenerator";
+import packagesJson from "../installer/packages.json"
+import { Package } from "../installer/Package";
 
 export class Jest extends BaseGenerator {
     public static readonly scripts = {
@@ -42,7 +44,7 @@ export class Jest extends BaseGenerator {
     }
 
     public configuring() {
-        this.addDevDependencies("jest");
+        this.addPackage(new Package(packagesJson.Jest));
         if (this.hasAnyDependency("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
             const tsconfig = this.config.get("tsconfig");

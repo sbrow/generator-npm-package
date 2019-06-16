@@ -1,4 +1,5 @@
 import Generator from "yeoman-generator";
+import { Package } from "./installer/Package";
 
 type Dependencies = string | string[] | Set<string> | { [name: string]: string } | undefined;
 
@@ -24,6 +25,10 @@ export class BaseGenerator extends Generator {
             this.addDependencies(packageJson.dependencies);
             this.addDevDependencies(packageJson.devDependencies);
         }
+    }
+
+    public addPackage(pack: Package) {
+        this.addDependencies(pack.name, pack.isDev);
     }
 
     public scheduleInstall() {
