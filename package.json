@@ -61,7 +61,7 @@
     "test:w": "jest --watch",
     "coveralls": "yarn test --coverageReporters=text-lcov | coveralls",
     "prepare": "yarn build && yarn make",
-    "lint": "tslint --project .",
+    "lint": "prettier --tab-width 2 --write **/*.{ts,tsx,json} && tslint --project .",
     "build": "tsc",
     "build:watch": "yarn run build -w",
     "watch": "yarn run build:watch",

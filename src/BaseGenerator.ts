@@ -1,7 +1,12 @@
 import Generator from "yeoman-generator";
 import { Package } from "./installer/Package";
 
-type Dependencies = string | string[] | Set<string> | { [name: string]: string } | undefined;
+type Dependencies =
+    | string
+    | string[]
+    | Set<string>
+    | { [name: string]: string }
+    | undefined;
 
 interface BaseGeneratorOptions {
     dependencies?: Dependencies;
@@ -20,7 +25,9 @@ export class BaseGenerator extends Generator {
         if ("dependencies" in opts) {
             this.addDependencies(opts.dependencies);
         }
-        const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
+        const packageJson = this.fs.readJSON(
+            this.destinationPath("package.json"),
+        );
         if (typeof packageJson !== "undefined") {
             this.addDependencies(packageJson.dependencies);
             this.addDevDependencies(packageJson.devDependencies);
@@ -87,7 +94,7 @@ export class BaseGenerator extends Generator {
     }
 
     protected getDependencies(dev: boolean = false): Set<string> {
-        const t = (dev) ? "devDependencies" : "dependencies";
+        const t = dev ? "devDependencies" : "dependencies";
         const deps = this.config.get(t);
         if (deps instanceof Array) {
             return new Set<string>(deps);
@@ -100,7 +107,10 @@ export class BaseGenerator extends Generator {
      * @param dev Whether or not to match devDependencies.
      * @returns true if all items are included in the dependencies.
      */
-    protected hasDependency(items: string | string[], dev: boolean = false): boolean {
+    protected hasDependency(
+        items: string | string[],
+        dev: boolean = false,
+    ): boolean {
         const deps = this.getDependencies(dev);
         if (typeof items === "string") {
             items = [items];
@@ -121,7 +131,7 @@ export class BaseGenerator extends Generator {
     }
 
     protected setDependencies(set: Set<string>, dev: boolean = false) {
-        const t = (dev) ? "devDependencies" : "dependencies";
+        const t = dev ? "devDependencies" : "dependencies";
         this.config.set(t, Array.from(set));
     }
 

@@ -12,10 +12,10 @@ export class Jest extends BaseGenerator {
     };
 
     public props: {
-        moduleFileExtensions: string[]
-        resolveJsonModule: boolean,
-        enableCoveralls: boolean,
-        scripts: { [key: string]: string },
+        moduleFileExtensions: string[];
+        resolveJsonModule: boolean;
+        enableCoveralls: boolean;
+        scripts: { [key: string]: string };
     };
 
     constructor(args, opts) {
@@ -30,15 +30,17 @@ export class Jest extends BaseGenerator {
     }
 
     public prompting() {
-        const prompts: Generator.Questions = [{
-            type: "confirm",
-            name: "enableCoveralls",
-            message: "Enable coveralls integration?",
-            default: false,
-            // store: true,
-        }];
+        const prompts: Generator.Questions = [
+            {
+                type: "confirm",
+                name: "enableCoveralls",
+                message: "Enable coveralls integration?",
+                default: false,
+                // store: true,
+            },
+        ];
 
-        return this.prompt(prompts).then((props) => {
+        return this.prompt(prompts).then(props => {
             this.props.enableCoveralls = props.enableCoveralls;
         });
     }
@@ -48,7 +50,10 @@ export class Jest extends BaseGenerator {
         if (this.hasAnyDependency("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
             const tsconfig = this.config.get("tsconfig");
-            if (tsconfig !== undefined && tsconfig.hasOwnProperty("resolveJsonModule")) {
+            if (
+                tsconfig !== undefined &&
+                tsconfig.hasOwnProperty("resolveJsonModule")
+            ) {
                 this.props.resolveJsonModule = tsconfig.resolveJsonModule;
             }
         }
@@ -73,13 +78,17 @@ export class Jest extends BaseGenerator {
         }
         const { scripts } = this.props;
         this.fs.extendJSON(this.destinationPath("package.json"), { scripts });
-        this.fs.write(this.destinationPath("jest.config.js"),
-            `const moduleFileExtensions = ${JSON.stringify(this.props.moduleFileExtensions)};
+        this.fs.write(
+            this.destinationPath("jest.config.js"),
+            `const moduleFileExtensions = ${JSON.stringify(
+                this.props.moduleFileExtensions,
+            )};
 module.exports = {
     ${this.transforms()}
     collectCoverageFrom: [\`src/**/*.\${moduleFileExtensions}\`]
 };
-`);
+`,
+        );
     }
 
     public default() {

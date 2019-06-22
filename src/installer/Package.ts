@@ -3,7 +3,9 @@ export class Package {
     public devOnly: boolean;
     public isDev: boolean;
 
-    constructor(props: string | { name: string, devOnly?: boolean, isDev?: boolean }) {
+    constructor(
+        props: string | { name: string; devOnly?: boolean; isDev?: boolean },
+    ) {
         this.devOnly = false;
         this.isDev = false;
 

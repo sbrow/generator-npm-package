@@ -1,14 +1,11 @@
 {
-    "extends": [
-        "tslint:recommended",
-        "tslint-microsoft-contrib/recommended"
-    ],
-    "rules": {
-        "object-literal-sort-keys": [
-            true,
-            "locale-compare",
-            "match-declaration-order",
-            "shorthand-first"
-        ]
-    }
+  "extends": ["tslint:recommended", "tslint-microsoft-contrib/recommended"],
+  "rules": {
+    "object-literal-sort-keys": [
+      true,
+      "locale-compare",
+      "match-declaration-order",
+      "shorthand-first"
+    ]
+  }
 }

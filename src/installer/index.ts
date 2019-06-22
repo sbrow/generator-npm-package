@@ -15,7 +15,9 @@ export class Installer extends BaseGenerator {
 
     public prompting() {
         let choices: Array<string | Package> = [];
-        const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
+        const packageJson = this.fs.readJSON(
+            this.destinationPath("package.json"),
+        );
 
         const inject = (obj: any, prop: string): any[] => {
             if (typeof obj === "object") {
@@ -116,7 +118,9 @@ export class Installer extends BaseGenerator {
     }
 
     public writing() {
-        this.fs.extendJSON(this.destinationPath("package.json"), { scripts: { start: "node $npm_package_main" } });
+        this.fs.extendJSON(this.destinationPath("package.json"), {
+            scripts: { start: "node $npm_package_main" },
+        });
     }
     public default() {
         const dependencies = this.getDependencies();
