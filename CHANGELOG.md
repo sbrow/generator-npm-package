@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/sbrow/generator-npm-package/compare/v0.10.1...v0.11.0) (2019-06-23)
+
+
+### Bug Fixes
+
+* Merge problems. ([e2b5ab1](https://github.com/sbrow/generator-npm-package/commit/e2b5ab1))
+* **BaseGenerator:** No longer re-installs packages that have already been installed. ([d5aedaf](https://github.com/sbrow/generator-npm-package/commit/d5aedaf))
+
+
+### Build System
+
+* **scripts/lint:** Added `prettier`. ([002bc69](https://github.com/sbrow/generator-npm-package/commit/002bc69))
+* Added "prettier". ([c574151](https://github.com/sbrow/generator-npm-package/commit/c574151))
+* added `prettier`. ([29a46c9](https://github.com/sbrow/generator-npm-package/commit/29a46c9))
+
+
+### Features
+
+* Created `prettier` generator. ([8201e80](https://github.com/sbrow/generator-npm-package/commit/8201e80))
+* **BaseGenerator:** Now infers useYarn from target directory. ([69b24f3](https://github.com/sbrow/generator-npm-package/commit/69b24f3))
+* Packages are now saveable as objects. ([464cb36](https://github.com/sbrow/generator-npm-package/commit/464cb36))
+
+
+### Tests
+
+* Created tests for `installer` sub-generator. ([da80fa8](https://github.com/sbrow/generator-npm-package/commit/da80fa8))
+
+
+
 ### [0.10.1](https://github.com/sbrow/generator-npm-package/compare/v0.10.0...v0.10.1) (2019-05-29)
 
 
