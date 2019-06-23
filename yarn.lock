@@ -310,6 +310,11 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@sbrow/prettier-config@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@sbrow/prettier-config/-/prettier-config-1.0.2.tgz#b55a9e918100c4affa0d144df26b2cf39eca01f1"
+  integrity sha512-GN0U6LWTZ2118oLBCiVN0v8WV15yuPBw4yvY0wouzaXCUSyHQ9Y607cWM1HYd1hiIFOs+t/FICpmOUF9ce3rEA==
+
 "@sinonjs/commons@^1", "@sinonjs/commons@^1.0.2":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.4.0.tgz#7b3ec2d96af481d7a0321252e7b1c94724ec5a78"
