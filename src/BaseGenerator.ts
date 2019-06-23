@@ -14,6 +14,8 @@ export interface BaseGeneratorOptions {
 }
 
 export class BaseGenerator extends Generator {
+    public options: BaseGeneratorOptions;
+
     constructor(args: string | any[], opts: BaseGeneratorOptions) {
         super(args, opts);
 
@@ -34,8 +36,23 @@ export class BaseGenerator extends Generator {
         }
     }
 
-    public addPackage(pack: Package) {
-        this.addDependencies(pack.name, pack.isDev);
+    public prompting() {
+        if (this.options.useYarn === undefined) {
+            const prompts: Generator.Questions = [
+                {
+                    type: "confirm",
+                    name: "useYarn",
+                    message:
+                        "Would you like to use Yarn as your package manager?",
+                    default: this.useYarn(),
+                    store: true,
+                },
+            ];
+            return this.prompt(prompts).then((answers) => {
+                this.options.useYarn = answers.useYarn;
+                this.config.set("useYarn", this.options.useYarn);
+            });
+        }
     }
 
     public scheduleInstall() {
@@ -44,10 +61,7 @@ export class BaseGenerator extends Generator {
             if (this.useYarn()) {
                 return { ...opts, dev: t };
             }
-            return {
-                ...opts,
-                "save-dev": t,
-            };
+            return { ...opts, "save-dev": t };
         };
         const args = [
             { pkgs: this.getDependencies(), opts: dev(false) },
@@ -80,7 +94,15 @@ export class BaseGenerator extends Generator {
     }
 
     public useYarn(): boolean {
-        return this.options.useYarn;
+        return this.options.useYarn || false;
+    }
+    public shouldUseYarn(): boolean | undefined {
+        if (this.fs.exists(this.destinationPath("yarn.lock"))) {
+            return true;
+        }
+        if (this.fs.exists(this.destinationPath("package.lock"))) {
+            return false;
+        }
     }
 
     protected addDependencies(deps: Dependencies, dev: boolean = false) {
@@ -159,40 +181,6 @@ export class BaseGenerator extends Generator {
     protected setDevDependencies(set: Set<string>) {
         this.setDependencies(set, true);
     }
-<<<<<<< refs/remotes/origin/develop
-=======
-
-    public useYarn(): boolean {
-        return this.options.useYarn || false;
-    }
-    public shouldUseYarn(): boolean | undefined {
-        if (this.fs.exists(this.destinationPath("yarn.lock"))) {
-            return true;
-        }
-        if (this.fs.exists(this.destinationPath("package.lock"))) {
-            return false;
-        }
-    }
-
-    public prompting() {
-        if (this.options.useYarn === undefined) {
-            const prompts: Generator.Questions = [
-                {
-                    type: "confirm",
-                    name: "useYarn",
-                    message:
-                        "Would you like to use Yarn as your package manager?",
-                    default: this.useYarn(),
-                    store: true,
-                },
-            ];
-            return this.prompt(prompts).then(answers => {
-                this.options.useYarn = answers.useYarn;
-                this.config.set("useYarn", this.options.useYarn);
-            });
-        }
-    }
->>>>>>> feat(BaseGenerator): Now infers useYarn from target directory.
 }
 
 export default BaseGenerator;

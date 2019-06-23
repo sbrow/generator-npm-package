@@ -14,7 +14,7 @@ export class Installer extends BaseGenerator {
     }
 
     public prompting() {
-        let choices: Array<string | Package> = [];
+        let choices = [];
         const packageJson = this.fs.readJSON(
             this.destinationPath("package.json"),
         );
@@ -58,11 +58,7 @@ export class Installer extends BaseGenerator {
                 choices.push(choice);
             } else {
                 for (const simpleChoice of packagesJson[choice]) {
-                    if (typeof simpleChoice === "string") {
-                        choices.push(simpleChoice);
-                    } else {
-                        choices.push(simpleChoice.name);
-                    }
+                    choices.push(simpleChoice);
                 }
             }
         }
