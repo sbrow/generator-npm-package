@@ -1,5 +1,5 @@
+import { Package } from "src/installer/Package";
 import Generator from "yeoman-generator";
-import { Package } from "./installer/Package";
 
 export type Dependencies =
     | string
@@ -48,11 +48,15 @@ export class BaseGenerator extends Generator {
                     store: true,
                 },
             ];
-            return this.prompt(prompts).then((answers) => {
+            return this.prompt(prompts).then(answers => {
                 this.options.useYarn = answers.useYarn;
                 this.config.set("useYarn", this.options.useYarn);
             });
         }
+    }
+
+    public addPackage(pack: Package) {
+        this.addDependencies(pack.name, pack.isDev);
     }
 
     public scheduleInstall() {

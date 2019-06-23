@@ -1,10 +1,7 @@
-import { writeFileSync } from "fs";
 import { join } from "path";
-import { ls } from "shelljs";
-import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { load, loadJSON } from "../__setup__/fs";
+import { loadJSON } from "../__setup__/fs";
 
 const appName = "prettier";
 

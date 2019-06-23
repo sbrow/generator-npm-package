@@ -8,12 +8,12 @@ let opts;
 let srcDir;
 
 beforeAll(() => {
-  opts = {
-    tmpdir: true,
-    resolved: require.resolve("../src/typescript/index"),
-    namespace: "npm-package:typescript",
-  };
-  srcDir = join(__dirname, "../src");
+    opts = {
+        tmpdir: true,
+        resolved: require.resolve("../src/typescript/index"),
+        namespace: "npm-package:typescript",
+    };
+    srcDir = join(__dirname, "../src");
 });
 describe("generator-typescript", () => {
     describe("With default options", () => {
@@ -38,5 +38,4 @@ describe("generator-typescript", () => {
             expect(got).toMatchObject(want);
         });
     });
-  });
 });

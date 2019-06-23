@@ -1,7 +1,42 @@
 {
-  "Jest": "jest",
+  "Jest": {
+    "name": "jest",
+    "devOnly": true
+  },
   "React": ["react", "react-dom"],
-  "Typescript": ["typescript", "@types/node", "tslint"],
-  "Webpack": ["webpack", "webpack-cli"],
-  "Other": ["react-bootstrap"]
+  "Typescript": [
+    {
+      "name": "typescript",
+      "devOnly": true
+    },
+    {
+      "name": "@types/node",
+      "devOnly": true
+    },
+    {
+      "name": "tslint",
+      "devOnly": true
+    }
+  ],
+  "Webpack": [
+    {
+      "name": "webpack",
+      "devOnly": true
+    },
+    {
+      "name": "webpack-cli",
+      "devOnly": true
+    },
+    {
+      "name": "webpack-dev-server",
+      "devOnly": true
+    }
+  ],
+  "Other": [
+    "react-bootstrap",
+    {
+      "name": "html-webpack-plugin",
+      "devOnly": true
+    }
+  ]
 }

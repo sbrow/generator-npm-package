@@ -1,8 +1,8 @@
 import Generator from "yeoman-generator";
 
-import { Package } from "src/installer/Package";
+import { Package } from "./Package";
 import { BaseGenerator } from "../BaseGenerator";
-import packagesJson from "../installer/packages.json";
+import packagesJson from "./packages.json";
 
 export class Installer extends BaseGenerator {
     public props: { packages: string[] };

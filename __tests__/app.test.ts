@@ -11,22 +11,23 @@ let srcDir: string;
 let app: string;
 
 beforeAll(() => {
-  opts = {
-    tmpdir: true,
-  };
-  srcDir = join(__dirname, "../src");
-  app = join(srcDir, "app");
+    opts = {
+        tmpdir: true,
+    };
+    srcDir = join(__dirname, "../src");
+    app = join(srcDir, "app");
 });
 
 describe("generator-app", () => {
-  describe("default", () => {
-    const file = ".gitignore";
-    it(`Creates "${file}"`, async () => {
-      const tmpDir = await run(app, opts);
-      assert.file(file);
-      const got = load(tmpDir, file);
-      const want = load(join(app, "templates"), ".template.gitignore");
-      expect(got).toMatch(want);
+    describe("default", () => {
+        const file = ".gitignore";
+        it(`Creates "${file}"`, async () => {
+            const tmpDir = await run(app, opts);
+            assert.file(file);
+            const got = load(tmpDir, file);
+            const want = load(join(app, "templates"), ".template.gitignore");
+            expect(got).toMatch(want);
+        });
     });
     describe('With prompt "delete"', () => {
         it("Removes all files from target.", async () => {
@@ -44,9 +45,6 @@ describe("generator-app", () => {
             const contents = ls("-A");
             expect(contents).toHaveLength(3);
         });
-      const tmpDir = await context;
-      const contents = ls("-A");
-      expect(contents).toHaveLength(3);
     });
 
     describe('With prompt "stop"', () => {
@@ -61,7 +59,5 @@ describe("generator-app", () => {
                 });
             expect(ls("-A", tmpDir)).toHaveLength(0);
         });
-      expect(ls("-A", tmpDir)).toHaveLength(0);
     });
-  });
 });
