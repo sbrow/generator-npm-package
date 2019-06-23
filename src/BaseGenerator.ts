@@ -1,14 +1,14 @@
 import Generator from "yeoman-generator";
 import { Package } from "./installer/Package";
 
-type Dependencies =
+export type Dependencies =
     | string
     | string[]
     | Set<string>
     | { [name: string]: string }
     | undefined;
 
-interface BaseGeneratorOptions {
+export interface BaseGeneratorOptions {
     dependencies?: Dependencies;
     useYarn?: boolean;
 }
