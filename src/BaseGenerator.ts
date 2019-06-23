@@ -25,13 +25,6 @@ export class BaseGenerator extends Generator {
         if ("dependencies" in opts) {
             this.addDependencies(opts.dependencies);
         }
-        const packageJson = this.fs.readJSON(
-            this.destinationPath("package.json"),
-        );
-        if (typeof packageJson !== "undefined") {
-            this.addDependencies(packageJson.dependencies);
-            this.addDevDependencies(packageJson.devDependencies);
-        }
     }
 
     public addPackage(pack: Package) {
@@ -53,11 +46,28 @@ export class BaseGenerator extends Generator {
             { pkgs: this.getDependencies(), opts: dev(false) },
             { pkgs: this.getDevDependencies(), opts: dev(true) },
         ];
+        const installedPackages = [];
+        const packageJson = this.fs.readJSON(
+            this.destinationPath("package.json"),
+        );
+        if (packageJson !== undefined) {
+            const depTypes = ["dependencies", "devDependencies"];
+            for (const depType of depTypes) {
+                if (depType in packageJson) {
+                    installedPackages.push(
+                        ...Object.keys(packageJson[depType]),
+                    );
+                }
+            }
+        }
+
         for (const arg of args) {
-            if (this.useYarn()) {
-                this.yarnInstall(Array.from(arg.pkgs), arg.opts);
-            } else {
-                this.npmInstall(Array.from(arg.pkgs), arg.opts);
+            if (!installedPackages.includes(arg)) {
+                if (this.useYarn()) {
+                    this.yarnInstall(Array.from(arg.pkgs), arg.opts);
+                } else {
+                    this.npmInstall(Array.from(arg.pkgs), arg.opts);
+                }
             }
         }
     }
