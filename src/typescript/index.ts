@@ -3,6 +3,7 @@ import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
 import { BaseGenerator } from "../BaseGenerator";
+import { Package } from "../installer/Package";
 import packagesJson from "../installer/packages.json";
 import blacklistJson from "../typescript/blacklist.json";
 
@@ -15,19 +16,21 @@ export class Typescript extends BaseGenerator {
     public props: any;
 
     public prompting() {
-
         const prompts: Generator.Questions = [
             ...this.installDefs(),
             {
                 type: "input",
                 name: "outDir",
-                message: `Select ${chalk.yellow("outDir")}. (Where to put transpiled files)`,
+                message: `Select ${chalk.yellow(
+                    "outDir",
+                )}. (Where to put transpiled files)`,
                 default: "dist",
             },
             {
                 type: "confirm",
                 name: "esModuleInterop",
-                message: chalk`Allow default imports in ES module style? (e.g. {magenta import} {blueBright foo}` +
+                message:
+                    chalk`Allow default imports in ES module style? (e.g. {magenta import} {blueBright foo}` +
                     chalk` {magenta from} {yellow "bar"});`,
                 default: true,
             },
@@ -39,13 +42,16 @@ export class Typescript extends BaseGenerator {
             },
         ];
 
-        return this.prompt(prompts).then((props) => {
+        return this.prompt(prompts).then(props => {
             this.props = props;
         });
     }
 
     public configuring() {
-        this.addDevDependencies(Typescript.devDependencies);
+        const packages = packagesJson.Typescript;
+        for (const pkg of packages) {
+            this.addPackage(new Package(pkg));
+        }
         if (this.props.typeDefs) {
             this.addDevDependencies(this.props.typeDefs);
         }
@@ -63,28 +69,24 @@ export class Typescript extends BaseGenerator {
         const deps = "dependencies";
         const dependencies = this.getDependencies();
 
-        const jsx = (this.hasAnyDependency("react"))
-            ? "react"
-            : undefined;
+        const jsx = this.hasAnyDependency("react") ? "react" : undefined;
         const { esModuleInterop, outDir, resolveJsonModule } = this.props;
-        this.fs.extendJSON(this.destinationPath("tsconfig.json"),
-            {
-                compilerOptions: {
-                    esModuleInterop,
-                    jsx,
-                    outDir,
-                    resolveJsonModule,
-                },
-            });
+        this.fs.extendJSON(this.destinationPath("tsconfig.json"), {
+            compilerOptions: {
+                esModuleInterop,
+                jsx,
+                outDir,
+                resolveJsonModule,
+            },
+        });
         this.fs.extendJSON(this.destinationPath("tslint.json"), this.tslint);
-        this.fs.extendJSON(this.destinationPath("package.json"),
-            {
-                directories: { lib: this.props.outDir },
-                scripts: {
-                    build: "tsc",
-                    lint: "tslint",
-                },
-            });
+        this.fs.extendJSON(this.destinationPath("package.json"), {
+            directories: { lib: this.props.outDir },
+            scripts: {
+                build: "tsc",
+                lint: "tslint",
+            },
+        });
     }
 
     public default() {
@@ -94,10 +96,17 @@ export class Typescript extends BaseGenerator {
     private installDefs(): Generator.Question[] {
         const dependencies = this.getDependencies();
         const devDependencies = this.getDevDependencies();
-        const deps: string[] = [...Array.from(dependencies), ...Array.from(devDependencies)];
+        const deps: string[] = [
+            ...Array.from(dependencies),
+            ...Array.from(devDependencies),
+        ];
         const choices = new Set<string>();
         for (const pkg of deps) {
-            if (pkg !== null && !blacklistJson.includes(pkg) && !pkg.match(/^@types/)) {
+            if (
+                pkg !== null &&
+                !blacklistJson.includes(pkg) &&
+                !pkg.match(/^@types/)
+            ) {
                 const name = `@types/${pkg}`;
                 if (!choices.has(name)) {
                     choices.add(name);
@@ -105,12 +114,14 @@ export class Typescript extends BaseGenerator {
             }
         }
         if (choices.size > 0) {
-            return [{
-                type: "checkbox",
-                name: "typeDefs",
-                message: "Select Type definitions (.d.ts files) to install",
-                choices: Array.from(choices),
-            }];
+            return [
+                {
+                    type: "checkbox",
+                    name: "typeDefs",
+                    message: "Select Type definitions (.d.ts files) to install",
+                    choices: Array.from(choices),
+                },
+            ];
         }
         return [];
     }

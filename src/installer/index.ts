@@ -1,7 +1,8 @@
 import Generator from "yeoman-generator";
 
+import { Package } from "./Package";
 import { BaseGenerator } from "../BaseGenerator";
-import packagesJson from "../installer/packages.json";
+import packagesJson from "./packages.json";
 
 export class Installer extends BaseGenerator {
     public props: { packages: string[] };
@@ -14,7 +15,9 @@ export class Installer extends BaseGenerator {
 
     public prompting() {
         let choices = [];
-        const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
+        const packageJson = this.fs.readJSON(
+            this.destinationPath("package.json"),
+        );
 
         const inject = (obj: any, prop: string): any[] => {
             if (typeof obj === "object") {
@@ -35,7 +38,11 @@ export class Installer extends BaseGenerator {
 
         const filter = (value: string): boolean => {
             if (value in packagesJson) {
-                const packages = packagesJson[value];
+                let packages = packagesJson[value];
+                this.log(`packages: '${JSON.stringify(packages)}'`);
+                if (!(packages instanceof Array)) {
+                    packages = [packages];
+                }
                 for (const pkg of packages) {
                     if (!installed.includes(pkg)) {
                         return true;
@@ -51,7 +58,7 @@ export class Installer extends BaseGenerator {
                 choices.push(choice);
             } else {
                 for (const simpleChoice of packagesJson[choice]) {
-                    choices.push((simpleChoice));
+                    choices.push(simpleChoice);
                 }
             }
         }
@@ -89,14 +96,27 @@ export class Installer extends BaseGenerator {
 
         for (const choice of Object.keys(packagesJson)) {
             if (this.props.packages.includes(choice)) {
-                const packages: string | string[] = packagesJson[choice];
-                this.addDevDependencies(packages);
+                let packages: Package | Package[] = packagesJson[choice];
+                if (!(packages instanceof Array)) {
+                    packages = [packages];
+                }
+                for (const packageName of packages) {
+                    this.addPackage(new Package(packageName));
+                }
+            }
+        }
+        for (const pkg of packagesJson.Other) {
+            const pack = new Package(pkg);
+            if (this.props.packages.includes(pack.name)) {
+                this.addPackage(pack);
             }
         }
     }
 
     public writing() {
-        this.fs.extendJSON(this.destinationPath("package.json"), { scripts: { start: "node $npm_package_main" } });
+        this.fs.extendJSON(this.destinationPath("package.json"), {
+            scripts: { start: "node $npm_package_main" },
+        });
     }
     public default() {
         const dependencies = this.getDependencies();

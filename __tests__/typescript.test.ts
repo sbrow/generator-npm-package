@@ -18,14 +18,16 @@ beforeAll(() => {
 describe("generator-typescript", () => {
     describe("With default options", () => {
         it.skip(`Shows proper types`, async () => {
-            const context = run(Typescript, opts)
-                .withLocalConfig({ dependencies: ["react"] });
+            const context = run(Typescript, opts).withLocalConfig({
+                dependencies: ["react"],
+            });
         });
     });
     describe("When installed with React", () => {
         it('sets "jsx" to "react"', async () => {
-            const context = run(Typescript, opts)
-                .withLocalConfig({ dependencies: ["react"] });
+            const context = run(Typescript, opts).withLocalConfig({
+                dependencies: ["react"],
+            });
             const tmpDir = await context;
             const want = {
                 compilerOptions: {

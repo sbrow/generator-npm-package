@@ -32,7 +32,7 @@ describe("generator-app", () => {
     describe('With prompt "delete"', () => {
         it("Removes all files from target.", async () => {
             const context = run(app, opts)
-                .inTmpDir((dir) => {
+                .inTmpDir(dir => {
                     writeFileSync(join(dir, "testfile.json"), "{}");
                     writeFileSync(join(dir, ".testfile.json"), "{}");
                     expect(ls("-A", dir)).toHaveLength(2);
@@ -53,7 +53,8 @@ describe("generator-app", () => {
                 .withPrompts({
                     action: "n",
                     useYarn: false,
-                }).inTmpDir((dir: string) => {
+                })
+                .inTmpDir((dir: string) => {
                     expect(ls("-A", dir)).toHaveLength(0);
                 });
             expect(ls("-A", tmpDir)).toHaveLength(0);

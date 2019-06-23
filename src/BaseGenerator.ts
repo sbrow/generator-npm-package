@@ -1,29 +1,62 @@
+import { Package } from "src/installer/Package";
 import Generator from "yeoman-generator";
 
-type Dependencies = string | string[] | Set<string> | { [name: string]: string } | undefined;
+export type Dependencies =
+    | string
+    | string[]
+    | Set<string>
+    | { [name: string]: string }
+    | undefined;
 
-interface BaseGeneratorOptions {
+export interface BaseGeneratorOptions {
     dependencies?: Dependencies;
     useYarn?: boolean;
 }
 
 export class BaseGenerator extends Generator {
+    public options: BaseGeneratorOptions;
+
     constructor(args: string | any[], opts: BaseGeneratorOptions) {
         super(args, opts);
 
         this.option("useYarn", {
-            default: false,
+            default: this.shouldUseYarn(),
             description: "Whether or not to use Yarn as the package manager.",
             type: Boolean,
         });
         if ("dependencies" in opts) {
             this.addDependencies(opts.dependencies);
         }
-        const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
-        if (typeof packageJson !== "undefined") {
-            this.addDependencies(packageJson.dependencies);
-            this.addDevDependencies(packageJson.devDependencies);
+        const useYarn: boolean | undefined =
+            this.config.get("useYarn") || opts.useYarn || this.options.useYarn;
+
+        if (useYarn !== undefined) {
+            this.options.useYarn = useYarn;
+            this.config.set("useYarn", this.options.useYarn);
         }
+    }
+
+    public prompting() {
+        if (this.options.useYarn === undefined) {
+            const prompts: Generator.Questions = [
+                {
+                    type: "confirm",
+                    name: "useYarn",
+                    message:
+                        "Would you like to use Yarn as your package manager?",
+                    default: this.useYarn(),
+                    store: true,
+                },
+            ];
+            return this.prompt(prompts).then(answers => {
+                this.options.useYarn = answers.useYarn;
+                this.config.set("useYarn", this.options.useYarn);
+            });
+        }
+    }
+
+    public addPackage(pack: Package) {
+        this.addDependencies(pack.name, pack.isDev);
     }
 
     public scheduleInstall() {
@@ -32,21 +65,47 @@ export class BaseGenerator extends Generator {
             if (this.useYarn()) {
                 return { ...opts, dev: t };
             }
-            return {
-                ...opts,
-                "save-dev": t,
-            };
+            return { ...opts, "save-dev": t };
         };
         const args = [
             { pkgs: this.getDependencies(), opts: dev(false) },
             { pkgs: this.getDevDependencies(), opts: dev(true) },
         ];
-        for (const arg of args) {
-            if (this.useYarn()) {
-                this.yarnInstall(Array.from(arg.pkgs), arg.opts);
-            } else {
-                this.npmInstall(Array.from(arg.pkgs), arg.opts);
+        const installedPackages = [];
+        const packageJson = this.fs.readJSON(
+            this.destinationPath("package.json"),
+        );
+        if (packageJson !== undefined) {
+            const depTypes = ["dependencies", "devDependencies"];
+            for (const depType of depTypes) {
+                if (depType in packageJson) {
+                    installedPackages.push(
+                        ...Object.keys(packageJson[depType]),
+                    );
+                }
             }
+        }
+
+        for (const arg of args) {
+            if (!installedPackages.includes(arg)) {
+                if (this.useYarn()) {
+                    this.yarnInstall(Array.from(arg.pkgs), arg.opts);
+                } else {
+                    this.npmInstall(Array.from(arg.pkgs), arg.opts);
+                }
+            }
+        }
+    }
+
+    public useYarn(): boolean {
+        return this.options.useYarn || false;
+    }
+    public shouldUseYarn(): boolean | undefined {
+        if (this.fs.exists(this.destinationPath("yarn.lock"))) {
+            return true;
+        }
+        if (this.fs.exists(this.destinationPath("package.lock"))) {
+            return false;
         }
     }
 
@@ -78,7 +137,7 @@ export class BaseGenerator extends Generator {
     }
 
     protected getDependencies(dev: boolean = false): Set<string> {
-        const t = (dev) ? "devDependencies" : "dependencies";
+        const t = dev ? "devDependencies" : "dependencies";
         const deps = this.config.get(t);
         if (deps instanceof Array) {
             return new Set<string>(deps);
@@ -91,7 +150,10 @@ export class BaseGenerator extends Generator {
      * @param dev Whether or not to match devDependencies.
      * @returns true if all items are included in the dependencies.
      */
-    protected hasDependency(items: string | string[], dev: boolean = false): boolean {
+    protected hasDependency(
+        items: string | string[],
+        dev: boolean = false,
+    ): boolean {
         const deps = this.getDependencies(dev);
         if (typeof items === "string") {
             items = [items];
@@ -112,7 +174,7 @@ export class BaseGenerator extends Generator {
     }
 
     protected setDependencies(set: Set<string>, dev: boolean = false) {
-        const t = (dev) ? "devDependencies" : "dependencies";
+        const t = dev ? "devDependencies" : "dependencies";
         this.config.set(t, Array.from(set));
     }
 
@@ -122,10 +184,6 @@ export class BaseGenerator extends Generator {
 
     protected setDevDependencies(set: Set<string>) {
         this.setDependencies(set, true);
-    }
-
-    public useYarn(): boolean {
-        return this.options.useYarn;
     }
 }
 

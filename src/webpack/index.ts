@@ -24,15 +24,19 @@ export class Webpack extends BaseGenerator {
         if (!this.hasDevDependency("typescript")) {
             return "";
         }
-        return `\r\n\tmodule: ${JSON.stringify({
-            rules: [
-                {
-                    exclude: [/node_modules/, /build/, /dist/],
-                    test: /\.tsx?$/,
-                    use: "ts-loader",
-                },
-            ],
-        }, null, 2)},`;
+        return `\r\n\tmodule: ${JSON.stringify(
+            {
+                rules: [
+                    {
+                        exclude: [/node_modules/, /build/, /dist/],
+                        test: /\.tsx?$/,
+                        use: "ts-loader",
+                    },
+                ],
+            },
+            null,
+            2,
+        )},`;
     }
 
     public configuring() {
@@ -42,9 +46,12 @@ export class Webpack extends BaseGenerator {
     }
 
     public writing() {
-        this.fs.extendJSON(this.destinationPath("package.json"), { scripts: { webpack: "webpack" } });
+        this.fs.extendJSON(this.destinationPath("package.json"), {
+            scripts: { webpack: "webpack" },
+        });
 
-        this.fs.write(this.destinationPath("webpack.config.js"),
+        this.fs.write(
+            this.destinationPath("webpack.config.js"),
             [
                 'const path = require("path");',
                 "",
@@ -66,7 +73,8 @@ export class Webpack extends BaseGenerator {
                 "module.exports = [",
                 "\tbaseConfig,",
                 "]",
-            ].join("\r\n"));
+            ].join("\r\n"),
+        );
     }
 
     public default() {

@@ -33,14 +33,23 @@ export class App extends Generator {
         };
 
         const user = getUser();
-        const packageName = packageJson.name.replace(/(generator)?\-/g, " ").trim();
-        const author = (typeof packageJson.author === "object") ? packageJson.author.name : packageJson.author;
+        const packageName = packageJson.name
+            .replace(/(generator)?\-/g, " ")
+            .trim();
+        const author =
+            typeof packageJson.author === "object"
+                ? packageJson.author.name
+                : packageJson.author;
 
         // Have Yeoman greet the user.
-        this.log(yosay(`'Allo, ${user}!
+        this.log(
+            yosay(`'Allo, ${user}!
         Welcome to the ${chalk.red(packageName)} generator.
-        Brought to you by ${chalk.yellow(author)}.`));
-        this.log("You will be guided through the scaffolding of a new npm package.");
+        Brought to you by ${chalk.yellow(author)}.`),
+        );
+        this.log(
+            "You will be guided through the scaffolding of a new npm package.",
+        );
     }
 
     public prompting() {
@@ -51,42 +60,48 @@ export class App extends Generator {
                 return [];
             }
 
-            return [{
-                type: "expand",
-                name: "action",
-                message: `"${this.destinationRoot()}" is not clean, proceed?`,
-                default: [1],
-                choices: [{
-                    key: choices.Yes,
-                    name: `Yes, continue installing in a dirty directory`,
-                    value: choices.Yes,
-                },
+            return [
                 {
-                    key: choices.No,
-                    name: `No, exit immediately.`,
-                    value: choices.No,
+                    type: "expand",
+                    name: "action",
+                    message: `"${this.destinationRoot()}" is not clean, proceed?`,
+                    default: [1],
+                    choices: [
+                        {
+                            key: choices.Yes,
+                            name: `Yes, continue installing in a dirty directory`,
+                            value: choices.Yes,
+                        },
+                        {
+                            key: choices.No,
+                            name: `No, exit immediately.`,
+                            value: choices.No,
+                        },
+                        {
+                            key: choices.Create,
+                            name: `Create the project in a subdirectory.`,
+                            value: choices.Create,
+                        },
+                        {
+                            key: choices.Delete,
+                            name: `Delete the contents of "${this.destinationRoot()}" before proceeding.`,
+                            value: choices.Delete,
+                        },
+                    ],
                 },
-                {
-                    key: choices.Create,
-                    name: `Create the project in a subdirectory.`,
-                    value: choices.Create,
-                },
-                {
-                    key: choices.Delete,
-                    name: `Delete the contents of "${this.destinationRoot()}" before proceeding.`,
-                    value: choices.Delete,
-                },
-                ],
-            }];
+            ];
         };
 
-        const prompts: Generator.Questions = [...checkDirClean(), {
-            type: "confirm",
-            name: "useYarn",
-            message: "Would you like to use yarn as your package manager?",
-            default: false,
-            store: true,
-        }];
+        const prompts: Generator.Questions = [
+            ...checkDirClean(),
+            {
+                type: "confirm",
+                name: "useYarn",
+                message: "Would you like to use yarn as your package manager?",
+                default: false,
+                store: true,
+            },
+        ];
 
         return this.prompt(prompts).then((props: any) => {
             switch (props.action) {
@@ -95,16 +110,20 @@ export class App extends Generator {
                     process.exit(0);
                     break;
                 case choices.Create:
-                    return this.prompt([{
-                        name: "dirName",
-                        message: "What directory should be created?",
-                    }]).then((props2: any) => {
+                    return this.prompt([
+                        {
+                            name: "dirName",
+                            message: "What directory should be created?",
+                        },
+                    ]).then((props2: any) => {
                         if (props2.dirName === "") {
                             this.log("No name was entered");
                             return this.prompting();
                         }
                         mkdir(props2.dirName);
-                        this.destinationRoot(this.destinationPath(props2.dirName));
+                        this.destinationRoot(
+                            this.destinationPath(props2.dirName),
+                        );
                     });
                 case choices.Delete:
                     const prevDir = pwd();
@@ -129,13 +148,22 @@ export class App extends Generator {
     }
 
     public writing() {
-        this.fs.copy(this.templatePath(".template.gitignore"), this.destinationPath(".gitignore"));
+        this.fs.copy(
+            this.templatePath(".template.gitignore"),
+            this.destinationPath(".gitignore"),
+        );
     }
 
     public end() {
-        const projectName = require(this.destinationPath("package.json")).name || "your project";
+        const projectName =
+            require(this.destinationPath("package.json")).name ||
+            "your project";
         // shelljs.rm(this.destinationPath(".yo-rc.json"));
-        this.log(yosay(`You're all set.\nGood luck with ${chalk.blue(projectName)}!`));
+        this.log(
+            yosay(
+                `You're all set.\nGood luck with ${chalk.blue(projectName)}!`,
+            ),
+        );
     }
 }
 
