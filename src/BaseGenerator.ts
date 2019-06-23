@@ -18,12 +18,19 @@ export class BaseGenerator extends Generator {
         super(args, opts);
 
         this.option("useYarn", {
-            default: false,
+            default: this.shouldUseYarn(),
             description: "Whether or not to use Yarn as the package manager.",
             type: Boolean,
         });
         if ("dependencies" in opts) {
             this.addDependencies(opts.dependencies);
+        }
+        const useYarn: boolean | undefined =
+            this.config.get("useYarn") || opts.useYarn || this.options.useYarn;
+
+        if (useYarn !== undefined) {
+            this.options.useYarn = useYarn;
+            this.config.set("useYarn", this.options.useYarn);
         }
     }
 
@@ -152,6 +159,40 @@ export class BaseGenerator extends Generator {
     protected setDevDependencies(set: Set<string>) {
         this.setDependencies(set, true);
     }
+<<<<<<< refs/remotes/origin/develop
+=======
+
+    public useYarn(): boolean {
+        return this.options.useYarn || false;
+    }
+    public shouldUseYarn(): boolean | undefined {
+        if (this.fs.exists(this.destinationPath("yarn.lock"))) {
+            return true;
+        }
+        if (this.fs.exists(this.destinationPath("package.lock"))) {
+            return false;
+        }
+    }
+
+    public prompting() {
+        if (this.options.useYarn === undefined) {
+            const prompts: Generator.Questions = [
+                {
+                    type: "confirm",
+                    name: "useYarn",
+                    message:
+                        "Would you like to use Yarn as your package manager?",
+                    default: this.useYarn(),
+                    store: true,
+                },
+            ];
+            return this.prompt(prompts).then(answers => {
+                this.options.useYarn = answers.useYarn;
+                this.config.set("useYarn", this.options.useYarn);
+            });
+        }
+    }
+>>>>>>> feat(BaseGenerator): Now infers useYarn from target directory.
 }
 
 export default BaseGenerator;
