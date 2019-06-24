@@ -1,15 +1,15 @@
 import Generator from "yeoman-generator";
 
-import { BaseGenerator, BaseGeneratorOptions } from "../BaseGenerator";
+import { PackageGenerator, PackageGeneratorOptions } from "../PackageGenerator";
 
-export interface PrettierOptions extends BaseGeneratorOptions {
+export interface PrettierOptions extends PackageGeneratorOptions {
     prettier?: string;
 }
 
 /**
  * Installs and configures {@link prettier}.
  */
-export class PrettierGenerator extends BaseGenerator {
+export class PrettierGenerator extends PackageGenerator {
     public options: PrettierOptions;
 
     constructor(args: string | any[], opts: PrettierOptions) {

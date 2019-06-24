@@ -8,15 +8,18 @@ export type Dependencies =
     | { [name: string]: string }
     | undefined;
 
-export interface BaseGeneratorOptions {
+export interface PackageGeneratorOptions {
     dependencies?: Dependencies;
     useYarn?: boolean;
 }
 
-export class BaseGenerator extends Generator {
-    public options: BaseGeneratorOptions;
+/**
+ * A generator that configures and installs npm packages.
+ */
+export class PackageGenerator extends Generator {
+    public options: PackageGeneratorOptions;
 
-    constructor(args: string | any[], opts: BaseGeneratorOptions) {
+    constructor(args: string | any[], opts: PackageGeneratorOptions) {
         super(args, opts);
 
         this.option("useYarn", {
@@ -187,4 +190,4 @@ export class BaseGenerator extends Generator {
     }
 }
 
-export default BaseGenerator;
+export default PackageGenerator;

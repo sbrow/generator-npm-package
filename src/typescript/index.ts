@@ -2,12 +2,12 @@ import chalk from "chalk";
 import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
-import { BaseGenerator } from "../BaseGenerator";
+import { PackageGenerator } from "../PackageGenerator";
 import { Package } from "../installer/Package";
 import packagesJson from "../installer/packages.json";
 import blacklistJson from "../typescript/blacklist.json";
 
-export class Typescript extends BaseGenerator {
+export class Typescript extends PackageGenerator {
     public static readonly devDependencies = packagesJson.Typescript;
     public tslint = {
         extends: "tslint:recommended",
@@ -42,7 +42,7 @@ export class Typescript extends BaseGenerator {
             },
         ];
 
-        return this.prompt(prompts).then(props => {
+        return this.prompt(prompts).then((props) => {
             this.props = props;
         });
     }

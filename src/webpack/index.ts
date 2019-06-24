@@ -1,6 +1,6 @@
-import { BaseGenerator } from "../BaseGenerator";
+import { PackageGenerator } from "../PackageGenerator";
 
-export class Webpack extends BaseGenerator {
+export class Webpack extends PackageGenerator {
     public static dependencies = ["webpack", "webpack-cli"];
     public props: {
         config: { [key: string]: any };

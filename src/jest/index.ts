@@ -1,10 +1,10 @@
 import Generator from "yeoman-generator";
 
-import { BaseGenerator } from "../BaseGenerator";
+import { PackageGenerator } from "../PackageGenerator";
 import { Package } from "../installer/Package";
 import packagesJson from "../installer/packages.json";
 
-export class Jest extends BaseGenerator {
+export class Jest extends PackageGenerator {
     public static readonly scripts = {
         cover: "jest --coverage",
         coveralls: "jest --coverage --coverageReporters=text-lcov | coveralls",
@@ -40,7 +40,7 @@ export class Jest extends BaseGenerator {
             },
         ];
 
-        return this.prompt(prompts).then(props => {
+        return this.prompt(prompts).then((props) => {
             this.props.enableCoveralls = props.enableCoveralls;
         });
     }
