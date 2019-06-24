@@ -11,9 +11,9 @@ import { join } from "path";
  * @returns {*}
  */
 export function loadJSON(dir: string, file: string): any {
-  return JSON.parse(load(dir, file));
+    return JSON.parse(load(dir, file));
 }
 
 export function load(dir: string, file: string): string {
-  return readFileSync(join(dir, file)).toString();
+    return readFileSync(join(dir, file)).toString();
 }
