@@ -15,6 +15,16 @@ export interface PackageGeneratorOptions {
 
 /**
  * A generator that configures and installs npm packages.
+ *
+ * In order to make a successful package generator,
+ * you must do the following:
+ * 1. Call {@link PackageGenerator.required | required}
+ * with any packages that must be installed.
+ * 2. Call {@link PackageGenerator.optional | optional}
+ * with any packages to prompt the user for.
+ * 3. Call {@link PackageGenerator.scheduleInstall | scheduleInstall}
+ * when you've finished configuring dependencies.
+ * Do this before the  step.
  */
 export class PackageGenerator extends Generator {
     public options: PackageGeneratorOptions;
@@ -47,6 +57,11 @@ export class PackageGenerator extends Generator {
         });
     }
 
+    /**
+     * Used to define packages that are required by this generator.
+     *
+     * **Must** be called in the constructor.
+     */
     public required(...packages: Array<Package | SerializedPackage>) {
         this.packages.required = [];
         for (const pkg of packages) {
