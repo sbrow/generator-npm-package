@@ -10,6 +10,7 @@ export type Dependencies =
 
 export interface PackageGeneratorOptions {
     dependencies?: Dependencies;
+    testing?: boolean;
     useYarn?: boolean;
 }
 
@@ -39,6 +40,11 @@ export class PackageGenerator extends Generator {
         this.option("useYarn", {
             default: this.shouldUseYarn(),
             description: "Whether or not to use Yarn as the package manager.",
+            type: Boolean,
+        });
+        this.option("testing", {
+            default: false,
+            description: "Toggled on in testing mode.",
             type: Boolean,
         });
         if ("dependencies" in opts) {
