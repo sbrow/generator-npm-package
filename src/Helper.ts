@@ -37,34 +37,50 @@ export class Helper extends Generator {
                 throw new Error(`No required packages were defined. \
 Did you forget to call "this.required()" in your  constructor?`);
             }
-            for (const pkg of packages.required) {
-                this.main.addPackage(pkg);
-            }
+            this.main.addPackage(...packages.required);
         }
     }
 
     /**
      * Prompts the user for which optional packages to install.
      */
-    public prompting() {
+    public prompting(): void {
+        const prompts: Generator.Questions = [];
+        if (this.main.options.useYarn === undefined) {
+            prompts.push({
+                type: "confirm",
+                name: "useYarn",
+                message: "Would you like to use Yarn as your package manager?",
+                default: this.main.useYarn(),
+                store: true,
+            });
+        }
         if (this.main !== undefined) {
             const { optional } = this.main.packages;
 
             if (optional) {
-                const prompt: Question = {
+                prompts.push({
                     type: "checkbox",
                     name: "optional",
                     message: "Select optional packages to install",
                     choices: optional,
-                };
-
-                return this.prompt([prompt]).then((answers: Answers) => {
-                    for (const pkg of answers.optional) {
-                        this.main.addPackage(pkg);
-                    }
                 });
             }
         }
+        return this.prompt(prompts).then(answers => {
+            // Install optional packages
+            if (answers.optional) {
+                for (const pkg of answers.optional) {
+                    this.main.addPackage(pkg);
+                }
+            }
+
+            // set `useYarn`.
+            if (answers.useYarn) {
+                this.options.useYarn = answers.useYarn;
+                this.config.set("useYarn", this.options.useYarn);
+            }
+        });
     }
 
     /**
