@@ -5,6 +5,7 @@ import { PackageGenerator } from "../PackageGenerator";
 import packagesJson from "./packages.json";
 
 export class Installer extends PackageGenerator {
+    // @todo is this necessary?
     public props: { packages: string[] };
     constructor(args, opts) {
         super(args, opts);
