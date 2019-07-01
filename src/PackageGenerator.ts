@@ -1,5 +1,5 @@
-import { Package } from "src/installer/Package";
 import Generator from "yeoman-generator";
+import { Package, SerializedPackage } from "./installer/Package";
 
 export type Dependencies =
     | string
@@ -18,6 +18,10 @@ export interface PackageGeneratorOptions {
  */
 export class PackageGenerator extends Generator {
     public options: PackageGeneratorOptions;
+    public packages: {
+        required: Package[];
+        optional: Package[] | undefined;
+    };
 
     constructor(args: string | any[], opts: PackageGeneratorOptions) {
         super(args, opts);
@@ -36,6 +40,21 @@ export class PackageGenerator extends Generator {
         if (useYarn !== undefined) {
             this.options.useYarn = useYarn;
             this.config.set("useYarn", this.options.useYarn);
+        }
+        this.packages = { required: undefined, optional: undefined };
+        this.composeWith(require.resolve("./Helper"), {
+            main: this,
+        });
+    }
+
+    public required(...packages: Array<Package | SerializedPackage>) {
+        this.packages.required = [];
+        for (const pkg of packages) {
+            if (pkg instanceof Package) {
+                this.packages.required.push(pkg);
+            } else {
+                this.packages.required.push(new Package(pkg));
+            }
         }
     }
 

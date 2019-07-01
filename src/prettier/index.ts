@@ -42,7 +42,6 @@ export class PrettierGenerator extends PackageGenerator {
             this.options.prettier = answers.configPackage;
         }
         this.addDevDependencies(this.options.prettier);
-        this.scheduleInstall();
     }
 
     public writing() {
@@ -53,4 +52,3 @@ export class PrettierGenerator extends PackageGenerator {
 }
 
 module.exports = PrettierGenerator;
-export default PrettierGenerator;

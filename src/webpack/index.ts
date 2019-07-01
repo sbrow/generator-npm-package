@@ -1,7 +1,12 @@
 import { PackageGenerator } from "../PackageGenerator";
+import { Package } from "../installer/Package";
+
+const packages: Package[] = [
+    new Package({ name: "webpack", devOnly: true }),
+    new Package({ name: "webpack-cli", devOnly: true }),
+];
 
 export class Webpack extends PackageGenerator {
-    public static dependencies = ["webpack", "webpack-cli"];
     public props: {
         config: { [key: string]: any };
     };
@@ -11,10 +16,7 @@ export class Webpack extends PackageGenerator {
         this.props = {
             config: {},
         };
-    }
-
-    public initializing() {
-        this.addDependencies(Webpack.dependencies);
+        this.required(...packages);
     }
 
     /**

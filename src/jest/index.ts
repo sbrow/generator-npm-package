@@ -27,6 +27,7 @@ export class Jest extends PackageGenerator {
             enableCoveralls: false,
             scripts: { test },
         };
+        this.required(new Package({ name: "jest", devOnly: true }));
     }
 
     public prompting() {

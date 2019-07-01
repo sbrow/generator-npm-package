@@ -11,6 +11,7 @@ export class Installer extends PackageGenerator {
         this.props = {
             packages: [],
         };
+        this.required();
     }
 
     public prompting() {

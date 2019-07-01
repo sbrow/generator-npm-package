@@ -1,11 +1,12 @@
+export type SerializedPackage =
+    | string
+    | { name: string; devOnly?: boolean; isDev?: boolean };
 export class Package {
     public name: string;
     public devOnly: boolean;
     public isDev: boolean;
 
-    constructor(
-        props: string | { name: string; devOnly?: boolean; isDev?: boolean },
-    ) {
+    constructor(props: SerializedPackage) {
         this.devOnly = false;
         this.isDev = false;
 

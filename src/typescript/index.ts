@@ -8,12 +8,16 @@ import packagesJson from "../installer/packages.json";
 import blacklistJson from "../typescript/blacklist.json";
 
 export class Typescript extends PackageGenerator {
-    public static readonly devDependencies = packagesJson.Typescript;
     public tslint = {
         extends: "tslint:recommended",
         rules: {},
     };
     public props: any;
+
+    constructor(args: string | any[], opts: {}) {
+        super(args, opts);
+        this.required(...packagesJson.Typescript);
+    }
 
     public prompting() {
         const prompts: Generator.Questions = [
