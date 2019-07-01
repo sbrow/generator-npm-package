@@ -79,27 +79,10 @@ export class PackageGenerator extends Generator {
         }
     }
 
-    public prompting() {
-        if (this.options.useYarn === undefined) {
-            const prompts: Generator.Questions = [
-                {
-                    type: "confirm",
-                    name: "useYarn",
-                    message:
-                        "Would you like to use Yarn as your package manager?",
-                    default: this.useYarn(),
-                    store: true,
-                },
-            ];
-            return this.prompt(prompts).then(answers => {
-                this.options.useYarn = answers.useYarn;
-                this.config.set("useYarn", this.options.useYarn);
-            });
+    public addPackage(...packages: Package[]) {
+        for (const pkg of packages) {
+            this.addDependencies(pkg.name, pkg.isDev);
         }
-    }
-
-    public addPackage(pack: Package) {
-        this.addDependencies(pack.name, pack.isDev);
     }
 
     public scheduleInstall() {
