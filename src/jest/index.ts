@@ -41,7 +41,7 @@ export class Jest extends PackageGenerator {
             },
         ];
 
-        return this.prompt(prompts).then((props) => {
+        return this.prompt(prompts).then(props => {
             this.props.enableCoveralls = props.enableCoveralls;
         });
     }
