@@ -1,5 +1,6 @@
 import Generator from "yeoman-generator";
 
+import { Package } from "../installer/Package";
 import { PackageGenerator, PackageGeneratorOptions } from "../PackageGenerator";
 
 export interface PrettierOptions extends PackageGeneratorOptions {
@@ -14,8 +15,8 @@ export class PrettierGenerator extends PackageGenerator {
 
     constructor(args: string | any[], opts: PrettierOptions) {
         super(args, opts);
-        this.addDevDependencies("prettier");
         this.argument("prettier", { type: String, required: false });
+        this.required(new Package({ name: "prettier", devOnly: true }));
     }
 
     public async prompting() {
