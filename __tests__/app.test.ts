@@ -27,7 +27,7 @@ describe("generator-app", () => {
             const got = load(tmpDir, file);
             const want = load(join(app, "templates"), ".template.gitignore");
             expect(got).toMatch(want);
-        });
+        }, 10000);
     });
     describe('With prompt "delete"', () => {
         it("Removes all files from target.", async () => {
