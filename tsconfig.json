@@ -9,8 +9,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "generators",
-    "rootDir": "src",
-    "baseUrl": "."
+    "rootDir": "src"
   },
   "exclude": ["coverage", "__setup__", "__tests__", "generators"],
   "typeAcquisition": {
