@@ -44,7 +44,7 @@ Did you forget to call "this.required()" in your  constructor?`);
     /**
      * Prompts the user for which optional packages to install.
      */
-    public prompting(): void {
+    public prompting(): Promise<void> {
         const prompts: Generator.Questions = [];
         if (this.main.options.useYarn === undefined) {
             prompts.push({
@@ -69,14 +69,14 @@ Did you forget to call "this.required()" in your  constructor?`);
         }
         return this.prompt(prompts).then(answers => {
             // Install optional packages
-            if (answers.optional) {
+            if (answers.optional !== undefined) {
                 for (const pkg of answers.optional) {
                     this.main.addPackage(pkg);
                 }
             }
 
             // set `useYarn`.
-            if (answers.useYarn) {
+            if (answers.useYarn !== undefined) {
                 this.options.useYarn = answers.useYarn;
                 this.config.set("useYarn", this.options.useYarn);
             }
