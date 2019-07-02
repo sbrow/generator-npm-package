@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import { Package } from "../installer/Package";
+import { Package } from "../../generators/installer/Package";
 import {
     PackageGenerator,
     PackageGeneratorOptions,
