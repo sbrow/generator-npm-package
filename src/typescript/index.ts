@@ -3,7 +3,6 @@ import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
 import { PackageGenerator } from "../PackageGenerator";
-import { Package } from "../installer/Package";
 import packagesJson from "../installer/packages.json";
 import blacklistJson from "../typescript/blacklist.json";
 
@@ -21,7 +20,7 @@ export class Typescript extends PackageGenerator {
         });
     }
 
-    public prompting() {
+    public async prompting() {
         const prompts: Generator.Questions = [
             ...this.installDefs(),
             {
@@ -48,16 +47,10 @@ export class Typescript extends PackageGenerator {
             },
         ];
 
-        return this.prompt(prompts).then(props => {
-            this.props = props;
-        });
+        this.props = await this.prompt(prompts);
     }
 
     public configuring() {
-        const packages = packagesJson.Typescript;
-        for (const pkg of packages) {
-            this.addPackage(new Package(pkg));
-        }
         if (this.props.typeDefs) {
             this.addDevDependencies(this.props.typeDefs);
         }
@@ -71,7 +64,6 @@ export class Typescript extends PackageGenerator {
         shelljs.mkdir(this.destinationPath("src"));
         shelljs.mkdir(this.destinationPath(this.props.outDir));
 
-        // const dependencies = new Set(this.config.get("dependencies"));
         const deps = "dependencies";
         const dependencies = this.getDependencies();
 
@@ -93,10 +85,6 @@ export class Typescript extends PackageGenerator {
                 lint: "tslint",
             },
         });
-    }
-
-    public default() {
-        this.scheduleInstall();
     }
 
     private installDefs(): Generator.Question[] {
@@ -134,4 +122,3 @@ export class Typescript extends PackageGenerator {
 }
 
 module.exports = Typescript;
-export default Typescript;
