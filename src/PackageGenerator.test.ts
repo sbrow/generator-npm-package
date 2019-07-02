@@ -17,6 +17,19 @@ beforeAll(() => {
 });
 
 describe("PackageGenerator", () => {
+    it("parses opts.required", async () => {
+        const tmpDir = await run(app, opts)
+            .withOptions({
+                required: JSON.stringify(["webpack"]),
+            })
+            .inTmpDir((dir: string) => {});
+        const got = loadJSON(tmpDir, ".yo-rc.json");
+        expect(got).toMatchObject({
+            "generator-npm-package": {
+                dependencies: expect.arrayContaining(["webpack"]),
+            },
+        });
+    });
     describe("useYarn", () => {
         // tslint:disable-next-line: mocha-no-side-effect-code
         it.each([
