@@ -7,7 +7,7 @@
     "email": "brower.spencer@gmail.com"
   },
   "private": true,
-  "main": "generators/app/index.js",
+  "main": "app/index.js",
   "directories": {
     "lib": "generators",
     "test": "__tests__"

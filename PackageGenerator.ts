@@ -117,6 +117,7 @@ export class PackageGenerator extends Generator {
                 deps = [deps];
                 break;
             case "object":
+            default:
                 if (deps instanceof Set) {
                     deps = Array.from(deps);
                 }
@@ -153,8 +154,15 @@ export class PackageGenerator extends Generator {
         dev: boolean = false,
     ): boolean {
         const deps = this.getDependencies(dev);
-        if (typeof items === "string") {
-            items = [items];
+        switch (typeof items) {
+            case "string":
+                items = [items];
+            case "object":
+                break;
+            default:
+                const err = new Error(`typeof items === ${typeof items}`);
+                // throw err;
+                return false;
         }
         for (const item of items) {
             if (!deps.has(item)) {
@@ -173,7 +181,9 @@ export class PackageGenerator extends Generator {
 
     protected setDependencies(set: Set<string>, dev: boolean = false) {
         const t = dev ? "devDependencies" : "dependencies";
-        this.config.set(t, Array.from(set));
+        if (set !== undefined) {
+            this.config.set(t, Array.from(set));
+        }
     }
 
     protected getDevDependencies(): Set<string> {

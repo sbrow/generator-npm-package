@@ -4,16 +4,14 @@ import { run, RunContextSettings } from "yeoman-test";
 
 import { loadJSON } from "./fs";
 
-let opts: RunContextSettings;
-let srcDir: string;
 let app: string;
+let opts: RunContextSettings;
 
 beforeAll(() => {
+    app = join(__dirname, "PackageGenerator");
     opts = {
         tmpdir: true,
     };
-    srcDir = join(__dirname, "..", "src");
-    app = join(srcDir, "PackageGenerator");
 });
 
 describe("PackageGenerator", () => {

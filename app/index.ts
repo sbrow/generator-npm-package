@@ -4,7 +4,7 @@ import { cd, ls, mkdir, pwd, rm } from "shelljs";
 import Generator from "yeoman-generator";
 import yosay from "yosay";
 
-const packageJson = require("../../package.json");
+import packageJson from "../package.json";
 
 export enum choices {
     Yes = "y",

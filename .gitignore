@@ -1,7 +1,10 @@
 coverage
-generators
 node_modules
 .vscode
+!bin
 
-yarn-error.log
+**/*.js
 **/.DS_Store
+yarn-error.log
+
+!jest.config.js

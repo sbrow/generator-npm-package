@@ -1,7 +1,7 @@
 import { join } from "path";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { loadJSON } from "../../src/fs";
+import { loadJSON } from "../../fs";
 
 const appName = "prettier";
 
@@ -17,7 +17,7 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-    prettier = "@sbrow/prettier-config";
+    prettier = "@<username>/prettier-config";
 });
 
 describe(`generator-${appName}`, () => {

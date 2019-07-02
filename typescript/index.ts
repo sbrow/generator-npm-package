@@ -4,7 +4,7 @@ import Generator from "yeoman-generator";
 
 import { PackageGenerator } from "../PackageGenerator";
 import packagesJson from "../installer/packages.json";
-import blacklistJson from "../typescript/blacklist.json";
+import blacklistJson from "./blacklist.json";
 
 export class Typescript extends PackageGenerator {
     public tslint = {

@@ -6,14 +6,14 @@ import { run, RunContextSettings } from "yeoman-test";
 
 import { load } from "../fs";
 
-let opts: RunContextSettings;
 let app: string;
+let opts: RunContextSettings;
 
 beforeAll(() => {
+    app = join(__dirname, "index");
     opts = {
         tmpdir: true,
     };
-    app = join(__dirname, "index");
 });
 
 describe("generator-app", () => {
