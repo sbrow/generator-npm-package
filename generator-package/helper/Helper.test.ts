@@ -1,14 +1,13 @@
-import { join } from "path";
 import { ls } from "shelljs";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { loadJSON } from "./fs";
+import { loadJSON } from "../../fs";
 
 let app: string;
 let opts: RunContextSettings;
 
 beforeAll(() => {
-    app = join(__dirname, "Helper");
+    app = require.resolve(__dirname);
     opts = {
         tmpdir: true,
     };
@@ -49,7 +48,7 @@ describe("Helper", () => {
         const tmpDir = await context;
         const got = loadJSON(tmpDir, ".yo-rc.json");
         expect(got).toMatchObject({
-            "generator-npm-package": {
+            "generator-package": {
                 useYarn: want,
             },
         });

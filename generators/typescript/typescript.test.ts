@@ -1,7 +1,7 @@
 import { join } from "path";
 import { run } from "yeoman-test";
 
-import { loadJSON } from "../fs";
+import { loadJSON } from "../../fs";
 
 let app: string;
 let opts;

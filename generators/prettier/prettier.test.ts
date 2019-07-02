@@ -21,6 +21,12 @@ beforeEach(() => {
 });
 
 describe(`generator-${appName}`, () => {
+    it("Configures prettier", async () => {
+        const tmpDir = await run(app, opts);
+        const want = { prettier };
+        const got = loadJSON(tmpDir, "package.json");
+        expect(got).toMatchObject(want);
+    });
     describe("Without input", () => {
         it("Configures package.json:prettier = default", async () => {
             const tmpDir = await run(app, opts).withPrompts({
@@ -28,7 +34,7 @@ describe(`generator-${appName}`, () => {
             });
             const packageJson = loadJSON(tmpDir, "package.json");
             expect(packageJson).toMatchObject({ prettier });
-        });
+        }, 6000);
         describe("Installer", () => {
             let tmpDir: string;
             let got: {};

@@ -1,7 +1,7 @@
 import Generator from "yeoman-generator";
 
-import PackageGenerator from "./PackageGenerator";
-import { Package } from "./installer/Package";
+import PackageGenerator from "../app";
+import { Package } from "../../generators/installer/Package";
 
 export interface HelperOptions {
     main: PackageGenerator | undefined;

@@ -1,0 +1,9 @@
+{
+  "name": "generator-package",
+  "version": "1.0.0",
+  "description": "BaseGenerator for all others.",
+  "main": "app/index.js",
+  "author": "Spencer Brower",
+  "license": "GPL-3.0+",
+  "private": false
+}

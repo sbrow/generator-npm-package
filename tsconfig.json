@@ -9,7 +9,7 @@
     "module": "commonjs",
     "moduleResolution": "node"
   },
-  "exclude": ["coverage", "__setup__", "__tests__", "generators"],
+  "exclude": ["coverage", "__setup__", "__tests__"],
   "typeAcquisition": {
     "enable": true
   }

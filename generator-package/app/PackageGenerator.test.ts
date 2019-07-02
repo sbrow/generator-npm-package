@@ -1,14 +1,14 @@
 import { join } from "path";
-import { ls, touch } from "shelljs";
+import { touch } from "shelljs";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { loadJSON } from "./fs";
+import { loadJSON } from "../../fs";
 
 let app: string;
 let opts: RunContextSettings;
 
 beforeAll(() => {
-    app = join(__dirname, "PackageGenerator");
+    app = require.resolve(__dirname);
     opts = {
         tmpdir: true,
     };
@@ -23,7 +23,7 @@ describe("PackageGenerator", () => {
             .inTmpDir((dir: string) => {});
         const got = loadJSON(tmpDir, ".yo-rc.json");
         expect(got).toMatchObject({
-            "generator-npm-package": {
+            "generator-package": {
                 dependencies: expect.arrayContaining(["webpack"]),
             },
         });
@@ -46,7 +46,7 @@ describe("PackageGenerator", () => {
                     });
                 const got = loadJSON(tmpDir, ".yo-rc.json");
                 expect(got).toMatchObject({
-                    "generator-npm-package": {
+                    "generator-package": {
                         useYarn: want,
                     },
                 });

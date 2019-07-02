@@ -4,7 +4,7 @@ import { ls } from "shelljs";
 import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { load } from "../fs";
+import { load } from "../../fs";
 
 let app: string;
 let opts: RunContextSettings;

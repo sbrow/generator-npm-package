@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import { Package } from "./installer/Package";
+import { Package } from "../../generators/installer/Package";
 
 export type Dependencies =
     | string
@@ -56,7 +56,7 @@ export class PackageGenerator extends Generator {
             this.options.useYarn = useYarn;
             this.config.set("useYarn", this.options.useYarn);
         }
-        this.composeWith(require.resolve("./Helper"), {
+        this.composeWith(require.resolve("../helper"), {
             main: this,
         });
         if (this.options.required !== undefined) {

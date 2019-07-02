@@ -1,4 +1,4 @@
-import { PackageGenerator } from "../PackageGenerator";
+import { PackageGenerator } from "../../generator-package/app";
 import { Package } from "../installer/Package";
 
 const packages: Package[] = [
