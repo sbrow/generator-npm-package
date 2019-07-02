@@ -27,6 +27,19 @@ describe(`generator-${appName}`, () => {
         const got = loadJSON(tmpDir, "package.json");
         expect(got).toMatchObject(want);
     });
+    it("installs packages", async () => {
+        const tmpDir = await run(app, opts).withOptions({
+            "skip-install": false,
+        });
+        const got = loadJSON(tmpDir, ".yo-rc.json");
+        const want = { devDependencies: { prettier: expect.any(String) } };
+        want.devDependencies[prettier] = expect.any(String);
+        expect(got).toMatchObject({
+            "generator-prettier": {
+                devDependencies: expect.arrayContaining(["prettier", prettier]),
+            },
+        });
+    });
     describe("Without input", () => {
         it("Configures package.json:prettier = default", async () => {
             const tmpDir = await run(app, opts).withPrompts({
@@ -35,35 +48,6 @@ describe(`generator-${appName}`, () => {
             const packageJson = loadJSON(tmpDir, "package.json");
             expect(packageJson).toMatchObject({ prettier });
         }, 6000);
-        describe("Installer", () => {
-            let tmpDir: string;
-            let got: {};
-            let yoRc: {};
-
-            beforeAll(async () => {
-                tmpDir = await run(app, opts).withOptions({
-                    "skip-install": false,
-                });
-                yoRc = loadJSON(tmpDir, ".yo-rc.json");
-                got = loadJSON(tmpDir, "package.json");
-            }, 20000);
-            // tslint:disable-next-line: mocha-no-side-effect-code
-            it.each(["prettier", "@sbrow/prettier-config"])(
-                "installs %p",
-                (packageName: string) => {
-                    const want = { devDependencies: {} };
-                    want.devDependencies[packageName] = expect.any(String);
-                    expect(got).toMatchObject(want);
-                    expect(yoRc).toMatchObject({
-                        "generator-prettier": {
-                            devDependencies: expect.arrayContaining([
-                                packageName,
-                            ]),
-                        },
-                    });
-                },
-            );
-        });
     });
     describe("With input", () => {
         beforeEach(() => {
