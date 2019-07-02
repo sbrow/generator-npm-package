@@ -1,10 +1,12 @@
 const extensions = ["ts", "tsx", "js", "jsx", "json"];
 
 module.exports = {
-    // collectCoverage: true,
-    // collectCoverageFrom: [
-    // `src/**/*\.{${extensions.filter(x => x !== "json").join(",")}}`,
-    // ],
+    collectCoverage: true,
+    collectCoverageFrom: [
+        `generator{s,-package}/**/*\.{${extensions
+            .filter(x => x !== "json")
+            .join(",")}}`,
+    ],
     moduleDirectories: ["node_modules", "generators", "generator-package"],
     moduleFileExtensions: extensions,
     testPathIgnorePatterns: ["node_modules"],
