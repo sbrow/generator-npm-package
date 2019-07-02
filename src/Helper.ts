@@ -55,7 +55,7 @@ Did you forget to call "this.required()" in your  constructor?`);
                 type: "confirm",
                 name: "useYarn",
                 message: "Would you like to use Yarn as your package manager?",
-                default: this.main.useYarn(),
+                default: false,
                 store: true,
             });
         }

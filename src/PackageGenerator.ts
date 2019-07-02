@@ -27,10 +27,6 @@ export interface PackageGeneratorOptions {
  */
 export class PackageGenerator extends Generator {
     public options: PackageGeneratorOptions;
-    public packages: {
-        required: Package[];
-        optional: Package[] | undefined;
-    };
 
     constructor(args: string | any[], opts: PackageGeneratorOptions) {
         super(args, opts);
@@ -40,26 +36,26 @@ export class PackageGenerator extends Generator {
             description: "Whether or not to use Yarn as the package manager.",
             type: Boolean,
         });
-        this.option("testing", {
-            default: false,
-            description: "Toggled on in testing mode.",
-            type: Boolean,
-            hide: true,
-        });
         this.option("required", {
             default: undefined,
             description: "Packages that are required by this Generator",
             type: String,
             hide: true,
         });
+        this.option("testing", {
+            default: false,
+            description: "Toggled on in testing mode.",
+            type: Boolean,
+            hide: true,
+        });
+
         const useYarn: boolean | undefined =
-            this.config.get("useYarn") || opts.useYarn || this.options.useYarn;
+            this.config.get("useYarn") || this.options.useYarn;
 
         if (useYarn !== undefined) {
             this.options.useYarn = useYarn;
             this.config.set("useYarn", this.options.useYarn);
         }
-        this.packages = { required: undefined, optional: undefined };
         this.composeWith(require.resolve("./Helper"), {
             main: this,
         });
@@ -77,7 +73,7 @@ export class PackageGenerator extends Generator {
     public scheduleInstall() {
         const dev = (t: boolean) => {
             const opts = { silent: true };
-            if (this.useYarn()) {
+            if (this.options.useYarn === true) {
                 return { ...opts, dev: t };
             }
             return { ...opts, "save-dev": t };
@@ -103,25 +99,12 @@ export class PackageGenerator extends Generator {
 
         for (const arg of args) {
             if (!installedPackages.includes(arg)) {
-                if (this.useYarn()) {
+                if (this.options.useYarn === true) {
                     this.yarnInstall(Array.from(arg.pkgs), arg.opts);
                 } else {
                     this.npmInstall(Array.from(arg.pkgs), arg.opts);
                 }
             }
-        }
-    }
-
-    public useYarn(): boolean {
-        return this.options.useYarn || false;
-    }
-
-    public shouldUseYarn(): boolean | undefined {
-        if (this.fs.exists(this.destinationPath("yarn.lock"))) {
-            return true;
-        }
-        if (this.fs.exists(this.destinationPath("package.lock"))) {
-            return false;
         }
     }
 
@@ -197,14 +180,9 @@ export class PackageGenerator extends Generator {
         return this.getDependencies(true);
     }
 
-    protected setDevDependencies(set: Set<string>) {
-        this.setDependencies(set, true);
-    }
-
     /**
-     * Used to define packages that are required by this generator.
-     *
-     * **Must** be called in the constructor.
+     * Converts {@link PackageGenerator.options.required | required}
+     * to a {@link Package} array.
      */
     private required() {
         if (typeof this.options.required === "string") {
@@ -220,6 +198,15 @@ export class PackageGenerator extends Generator {
                 }
             }
             this.options.required = [...temp];
+        }
+    }
+
+    private shouldUseYarn(): boolean | undefined {
+        if (this.fs.exists(this.destinationPath("yarn.lock"))) {
+            return true;
+        }
+        if (this.fs.exists(this.destinationPath("package.lock"))) {
+            return false;
         }
     }
 }

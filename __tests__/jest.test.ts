@@ -69,6 +69,7 @@ describe("generator-jest", () => {
         it("installs jest", async () => {
             const context = run(Jest, opts).withOptions({
                 "skip-install": false,
+                useYarn: true,
             });
             const tmpDir = await context;
             const got = loadJSON(tmpDir, "package.json");

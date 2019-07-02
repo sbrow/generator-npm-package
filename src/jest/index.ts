@@ -96,10 +96,6 @@ module.exports = {
         );
     }
 
-    public default() {
-        this.scheduleInstall();
-    }
-
     private transforms(): string {
         if (this.hasDevDependency("typescript")) {
             return `\r\ntransform: {\r\t"\.tsx?": "ts-jest",\r\n},\r\n`;
