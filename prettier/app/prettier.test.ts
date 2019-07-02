@@ -31,12 +31,14 @@ describe(`generator-${appName}`, () => {
         });
         describe("Installer", () => {
             let tmpDir: string;
-            let got: string;
+            let got: {};
+            let yoRc: {};
 
             beforeAll(async () => {
                 tmpDir = await run(app, opts).withOptions({
                     "skip-install": false,
                 });
+                yoRc = loadJSON(tmpDir, ".yo-rc.json");
                 got = loadJSON(tmpDir, "package.json");
             }, 20000);
             // tslint:disable-next-line: mocha-no-side-effect-code
@@ -46,6 +48,13 @@ describe(`generator-${appName}`, () => {
                     const want = { devDependencies: {} };
                     want.devDependencies[packageName] = expect.any(String);
                     expect(got).toMatchObject(want);
+                    expect(yoRc).toMatchObject({
+                        "generator-prettier": {
+                            devDependencies: expect.arrayContaining([
+                                packageName,
+                            ]),
+                        },
+                    });
                 },
             );
         });
