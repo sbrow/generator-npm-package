@@ -1,4 +1,4 @@
-import { Package } from "../src/installer/Package";
+import { Package } from "./Package";
 
 describe("Package", () => {
     it.each([

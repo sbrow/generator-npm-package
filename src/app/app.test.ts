@@ -4,18 +4,16 @@ import { ls } from "shelljs";
 import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { load } from "../src/fs";
+import { load } from "../fs";
 
 let opts: RunContextSettings;
-let srcDir: string;
 let app: string;
 
 beforeAll(() => {
     opts = {
         tmpdir: true,
     };
-    srcDir = join(__dirname, "../src");
-    app = join(srcDir, "app");
+    app = join(__dirname, "index");
 });
 
 describe("generator-app", () => {
@@ -25,7 +23,10 @@ describe("generator-app", () => {
             const tmpDir = await run(app, opts);
             assert.file(file);
             const got = load(tmpDir, file);
-            const want = load(join(app, "templates"), ".template.gitignore");
+            const want = load(
+                join(__dirname, "templates"),
+                ".template.gitignore",
+            );
             expect(got).toMatch(want);
         }, 10000);
     });

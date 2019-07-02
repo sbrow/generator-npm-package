@@ -3,16 +3,15 @@ import { join } from "path";
 import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { load, loadJSON } from "../src/fs";
-import Webpack from "../src/webpack";
+import { load, loadJSON } from "../fs";
 
-const generator = "webpack";
+let app: string;
 let opts: RunContextSettings;
+
 beforeEach(() => {
+    app = join(__dirname, "index");
     opts = {
         tmpdir: true,
-        resolved: require.resolve(`../src/${generator}/index`),
-        namespace: `npm-package:${generator}`,
     };
 });
 
@@ -21,11 +20,11 @@ describe("generator-webpack", () => {
 
     describe("Default", () => {
         it(`Creates "${file}"`, async () => {
-            const tmpDir = await run(Webpack, opts);
+            const tmpDir = await run(app, opts);
             assert.file(file);
         });
         it(`Sets $NODE_ENV`, async () => {
-            const tmpDir = await run(Webpack, opts);
+            const tmpDir = await run(app, opts);
             const want = [
                 'process.env.NODE_ENV = process.env.NODE_ENV || "development";',
                 "const mode = process.env.NODE_ENV;",
@@ -34,7 +33,7 @@ describe("generator-webpack", () => {
             expect(got).toMatch(want);
         });
         it("Populates config", async () => {
-            const tmpDir = await run(Webpack, opts);
+            const tmpDir = await run(app, opts);
             let want = ["module.exports = [", "\tbaseConfig,", "]"].join(
                 "\r\n",
             );
@@ -53,20 +52,20 @@ describe("generator-webpack", () => {
             expect(got).toMatch(want);
         });
         it("Adds 'webpack' script", async () => {
-            const tmpDir = await run(Webpack, opts);
+            const tmpDir = await run(app, opts);
             const got = loadJSON(tmpDir, "package.json");
             const want = { scripts: { webpack: "webpack" } };
             expect(got).toMatchObject(want);
         });
         it("Does not add 'modules'", async () => {
-            const tmpDir = await run(Webpack, opts);
+            const tmpDir = await run(app, opts);
             const got = load(tmpDir, "webpack.config.js");
             const want = /^\tmodule: {.*$/;
             expect(got).not.toMatch(want);
         });
     });
     it(`Sets $NODE_ENV`, async () => {
-        const tmpDir = await run(Webpack, opts);
+        const tmpDir = await run(app, opts);
         const want = [
             'process.env.NODE_ENV = process.env.NODE_ENV || "development";',
             "const mode = process.env.NODE_ENV;",
@@ -75,7 +74,7 @@ describe("generator-webpack", () => {
         expect(got).toMatch(want);
     });
     it("Populates config", async () => {
-        const tmpDir = await run(Webpack, opts);
+        const tmpDir = await run(app, opts);
         let want = ["module.exports = [", "\tbaseConfig,", "]"].join("\r\n");
         const got = readFileSync(join(tmpDir, file)).toString();
         expect(got).toMatch(want);
@@ -92,13 +91,13 @@ describe("generator-webpack", () => {
         expect(got).toMatch(want);
     });
     it("Adds 'webpack' script", async () => {
-        const tmpDir = await run(Webpack, opts);
+        const tmpDir = await run(app, opts);
         const got = loadJSON(tmpDir, "package.json");
         const want = { scripts: { webpack: "webpack" } };
         expect(got).toMatchObject(want);
     });
     it("Does not add 'modules'", async () => {
-        const tmpDir = await run(Webpack, opts);
+        const tmpDir = await run(app, opts);
         const got = load(tmpDir, "webpack.config.js");
         const want = /^\tmodule: {.*$/;
         expect(got).not.toMatch(want);
@@ -106,7 +105,7 @@ describe("generator-webpack", () => {
 
     describe("When installed beside 'Typescript'", () => {
         it("Adds 'ts-loader' to config.modules.", async () => {
-            const tmpDir = await run(Webpack, opts).withLocalConfig({
+            const tmpDir = await run(app, opts).withLocalConfig({
                 devDependencies: ["typescript"],
             });
             const got = require(require.resolve(
@@ -125,7 +124,7 @@ describe("generator-webpack", () => {
             expect(got).toMatchObject(want);
         });
         it("Adds ts-loader as a DevDependency", async () => {
-            const tmpDir = await run(Webpack, opts).withLocalConfig({
+            const tmpDir = await run(app, opts).withLocalConfig({
                 devDependencies: ["typescript"],
             });
             const got = loadJSON(tmpDir, ".yo-rc.json")["generator-npm-package"]
@@ -135,7 +134,7 @@ describe("generator-webpack", () => {
         });
     });
     it("Adds ts-loader as a DevDependency", async () => {
-        const tmpDir = await run(Webpack, opts).withLocalConfig({
+        const tmpDir = await run(app, opts).withLocalConfig({
             devDependencies: ["typescript"],
         });
         const got = loadJSON(tmpDir, ".yo-rc.json")["generator-npm-package"]

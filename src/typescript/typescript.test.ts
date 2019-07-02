@@ -1,20 +1,16 @@
 import { join } from "path";
 import { run } from "yeoman-test";
 
-import { loadJSON } from "../src/fs";
+import { loadJSON } from "../fs";
 
 let app: string;
 let opts;
-let srcDir: string;
 
 beforeAll(() => {
+    app = join(__dirname, "index");
     opts = {
         tmpdir: true,
-        resolved: require.resolve("../src/typescript/index"),
-        namespace: "npm-package:typescript",
     };
-    srcDir = join(__dirname, "../src");
-    app = join(srcDir, "typescript");
 });
 
 describe("generator-typescript", () => {
