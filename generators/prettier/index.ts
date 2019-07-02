@@ -8,6 +8,7 @@ import {
 
 export interface PrettierOptions extends PackageGeneratorOptions {
     prettier?: string;
+    username?: string;
 }
 
 /**
@@ -24,23 +25,30 @@ export class PrettierGenerator extends PackageGenerator {
             ]),
         });
         this.argument("prettier", { type: String, required: false });
+        const name = async () => {
+            try {
+                const user = await this.user.github.username();
+                return user;
+            } catch (err) {
+                this.log(err, "error");
+            }
+            return "<username>";
+        };
+        this.option("username", {
+            description: "name of the user to find the config for",
+            default: name(),
+            type: String,
+        });
     }
 
     public async prompting() {
         const prompts: Generator.Questions = [];
-        let username = "<username>";
-        try {
-            const name = await this.user.github.username();
-            username = name;
-        } catch (err) {
-            this.log(err, "error");
-        }
         if (this.options.prettier === undefined) {
             prompts.push({
                 type: "input",
                 name: "configPackage",
                 message: "Enter your package name:",
-                default: `@${username}/prettier-config`,
+                default: `@${this.options.username}/prettier-config`,
                 store: true,
             });
         }

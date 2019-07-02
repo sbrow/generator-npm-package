@@ -4,32 +4,33 @@ import { run, RunContextSettings } from "yeoman-test";
 import { loadJSON } from "../../fs";
 
 const appName = "prettier";
+const username = "mario";
 
-let opts: RunContextSettings;
 let app: string;
+let opts: RunContextSettings;
 let prettier: string;
 
 beforeAll(() => {
+    app = join(__dirname, "index");
     opts = {
         tmpdir: true,
     };
-    app = join(__dirname, "index");
 });
 
 beforeEach(() => {
-    prettier = "@<username>/prettier-config";
+    prettier = `@${username}/prettier-config`;
 });
 
 describe(`generator-${appName}`, () => {
     it("Configures prettier", async () => {
-        const tmpDir = await run(app, opts);
+        const tmpDir = await run(app, opts).withOptions({ username });
         const want = { prettier };
         const got = loadJSON(tmpDir, "package.json");
         expect(got).toMatchObject(want);
     });
     it("installs packages", async () => {
         const tmpDir = await run(app, opts).withOptions({
-            "skip-install": false,
+            username,
         });
         const got = loadJSON(tmpDir, ".yo-rc.json");
         const want = { devDependencies: { prettier: expect.any(String) } };
