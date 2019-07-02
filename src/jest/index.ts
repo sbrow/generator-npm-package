@@ -19,7 +19,12 @@ export class Jest extends PackageGenerator {
     };
 
     constructor(args, opts) {
-        super(args, opts);
+        super(args, {
+            ...opts,
+            required: JSON.stringify([
+                new Package({ name: "jest", devOnly: true }),
+            ]),
+        });
         const { test } = Jest.scripts;
         this.props = {
             moduleFileExtensions: ["js"],
@@ -27,7 +32,6 @@ export class Jest extends PackageGenerator {
             enableCoveralls: false,
             scripts: { test },
         };
-        this.required(new Package({ name: "jest", devOnly: true }));
     }
 
     public prompting() {

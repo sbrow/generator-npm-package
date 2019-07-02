@@ -1,6 +1,7 @@
-import Generator, { Answers, Question } from "yeoman-generator";
+import Generator from "yeoman-generator";
 
 import PackageGenerator from "./PackageGenerator";
+import { Package } from "./installer/Package";
 
 export interface HelperOptions {
     main: PackageGenerator | undefined;
@@ -32,12 +33,15 @@ export class Helper extends Generator {
      */
     public initializing() {
         if (this.main !== undefined) {
-            const { packages } = this.main;
-            if (!packages.required) {
+            let { required } = this.main.options;
+            if (required === undefined) {
                 throw new Error(`No required packages were defined. \
 Did you forget to call "this.required()" in your  constructor?`);
             }
-            this.main.addPackage(...packages.required);
+            if (typeof required === "string") {
+                required = JSON.parse(required) as Package[];
+            }
+            this.main.addPackage(...required);
         }
     }
 
@@ -56,15 +60,18 @@ Did you forget to call "this.required()" in your  constructor?`);
             });
         }
         if (this.main !== undefined) {
-            const { optional } = this.main.packages;
+            let { optional } = this.main.options;
 
-            if (optional) {
-                prompts.push({
-                    type: "checkbox",
-                    name: "optional",
-                    message: "Select optional packages to install",
-                    choices: optional,
-                });
+            if (typeof optional === "string") {
+                optional = JSON.parse(optional);
+            }
+            if (optional !== undefined) {
+                // prompts.push({
+                //     type: "checkbox",
+                //     name: "optional",
+                //     message: "Select optional packages to install",
+                //     choices: optional,
+                // });
             }
         }
         return this.prompt(prompts).then(answers => {
@@ -93,5 +100,4 @@ Did you forget to call "this.required()" in your  constructor?`);
     }
 }
 
-// export default Helper;
 module.exports = Helper;

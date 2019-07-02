@@ -20,8 +20,7 @@ describe("Helper", () => {
     it("calls main.scheduleInstall()", async () => {
         const main = {
             addPackage: jest.fn(),
-            options: { useYarn: undefined },
-            packages: { required: [] },
+            options: { useYarn: undefined, required: [] },
             scheduleInstall: jest.fn(),
             useYarn: () => false,
         };
@@ -40,8 +39,7 @@ describe("Helper", () => {
             .withOptions({
                 main: {
                     addPackage: jest.fn(),
-                    options: { useYarn: undefined },
-                    packages: { required: [] },
+                    options: { required: "[]", useYarn: undefined },
                     scheduleInstall: jest.fn(),
                     useYarn: () => false,
                 },

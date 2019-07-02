@@ -1,5 +1,6 @@
 import Generator from "yeoman-generator";
-import { Package, SerializedPackage } from "./installer/Package";
+
+import { Package } from "./installer/Package";
 
 export type Dependencies =
     | string
@@ -9,8 +10,8 @@ export type Dependencies =
     | undefined;
 
 export interface PackageGeneratorOptions {
-    dependencies?: Dependencies;
-    testing?: boolean;
+    optional?: string | Package[];
+    required?: string | Package[];
     useYarn?: boolean;
 }
 
@@ -23,9 +24,6 @@ export interface PackageGeneratorOptions {
  * with any packages that must be installed.
  * 2. Call {@link PackageGenerator.optional | optional}
  * with any packages to prompt the user for.
- * 3. Call {@link PackageGenerator.scheduleInstall | scheduleInstall}
- * when you've finished configuring dependencies.
- * Do this before the  step.
  */
 export class PackageGenerator extends Generator {
     public options: PackageGeneratorOptions;
@@ -46,10 +44,14 @@ export class PackageGenerator extends Generator {
             default: false,
             description: "Toggled on in testing mode.",
             type: Boolean,
+            hide: true,
         });
-        if ("dependencies" in opts) {
-            this.addDependencies(opts.dependencies);
-        }
+        this.option("required", {
+            default: undefined,
+            description: "Packages that are required by this Generator",
+            type: String,
+            hide: true,
+        });
         const useYarn: boolean | undefined =
             this.config.get("useYarn") || opts.useYarn || this.options.useYarn;
 
@@ -61,21 +63,8 @@ export class PackageGenerator extends Generator {
         this.composeWith(require.resolve("./Helper"), {
             main: this,
         });
-    }
-
-    /**
-     * Used to define packages that are required by this generator.
-     *
-     * **Must** be called in the constructor.
-     */
-    public required(...packages: Array<Package | SerializedPackage>) {
-        this.packages.required = [];
-        for (const pkg of packages) {
-            if (pkg instanceof Package) {
-                this.packages.required.push(pkg);
-            } else {
-                this.packages.required.push(new Package(pkg));
-            }
+        if (this.options.required !== undefined) {
+            this.required();
         }
     }
 
@@ -126,6 +115,7 @@ export class PackageGenerator extends Generator {
     public useYarn(): boolean {
         return this.options.useYarn || false;
     }
+
     public shouldUseYarn(): boolean | undefined {
         if (this.fs.exists(this.destinationPath("yarn.lock"))) {
             return true;
@@ -170,7 +160,6 @@ export class PackageGenerator extends Generator {
         }
         return new Set();
     }
-
     /**
      * @param items The packages to search for.
      * @param dev Whether or not to match devDependencies.
@@ -210,6 +199,28 @@ export class PackageGenerator extends Generator {
 
     protected setDevDependencies(set: Set<string>) {
         this.setDependencies(set, true);
+    }
+
+    /**
+     * Used to define packages that are required by this generator.
+     *
+     * **Must** be called in the constructor.
+     */
+    private required() {
+        if (typeof this.options.required === "string") {
+            this.options.required = JSON.parse(this.options.required);
+        }
+        if (this.options.required !== undefined) {
+            const temp = [];
+            for (const pkg of this.options.required) {
+                if (pkg instanceof Package) {
+                    temp.push(pkg);
+                } else {
+                    temp.push(new Package(pkg));
+                }
+            }
+            this.options.required = [...temp];
+        }
     }
 }
 

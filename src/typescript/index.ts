@@ -15,8 +15,10 @@ export class Typescript extends PackageGenerator {
     public props: any;
 
     constructor(args: string | any[], opts: {}) {
-        super(args, opts);
-        this.required(...packagesJson.Typescript);
+        super(args, {
+            ...opts,
+            required: JSON.stringify(packagesJson.Typescript),
+        });
     }
 
     public prompting() {

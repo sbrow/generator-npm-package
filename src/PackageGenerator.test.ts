@@ -18,31 +18,29 @@ beforeAll(() => {
 
 describe("PackageGenerator", () => {
     describe("useYarn", () => {
-        describe("Without prompt", () => {
-            // tslint:disable-next-line: mocha-no-side-effect-code
-            it.each([
-                ["package.lock", false],
-                [undefined, false],
-                ["yarn.lock", true],
-            ])(
-                "detects file %j",
-                async (file: string, want: boolean | undefined) => {
-                    const tmpDir = await run(app, opts)
-                        .withOptions({ testing: true })
-                        .inTmpDir((dir: string) => {
-                            if (file) {
-                                touch(join(dir, file));
-                            }
-                        });
-                    const got = loadJSON(tmpDir, ".yo-rc.json");
-                    expect(got).toMatchObject({
-                        "generator-npm-package": {
-                            useYarn: want,
-                        },
+        // tslint:disable-next-line: mocha-no-side-effect-code
+        it.each([
+            ["package.lock", false],
+            [undefined, false],
+            ["yarn.lock", true],
+        ])(
+            "detects file %j",
+            async (file: string, want: boolean | undefined) => {
+                const tmpDir = await run(app, opts)
+                    .withOptions({ required: "[]" })
+                    .inTmpDir((dir: string) => {
+                        if (file) {
+                            touch(join(dir, file));
+                        }
                     });
-                },
-                10000,
-            );
-        });
+                const got = loadJSON(tmpDir, ".yo-rc.json");
+                expect(got).toMatchObject({
+                    "generator-npm-package": {
+                        useYarn: want,
+                    },
+                });
+            },
+            10000,
+        );
     });
 });

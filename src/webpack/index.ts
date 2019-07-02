@@ -12,11 +12,10 @@ export class Webpack extends PackageGenerator {
     };
 
     constructor(args, opts) {
-        super(args, opts);
+        super(args, { ...opts, required: JSON.stringify(packages) });
         this.props = {
             config: {},
         };
-        this.required(...packages);
     }
 
     /**
