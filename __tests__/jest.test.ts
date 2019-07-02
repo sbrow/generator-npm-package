@@ -4,7 +4,7 @@ import { ls } from "shelljs";
 import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { loadJSON } from "../__setup__/fs";
+import { loadJSON } from "../src/fs";
 import Jest from "../src/jest";
 
 let opts: RunContextSettings;

@@ -2,7 +2,7 @@ import { join } from "path";
 import { ls } from "shelljs";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { loadJSON } from "../__setup__/fs";
+import { loadJSON } from "./fs";
 
 let opts: RunContextSettings;
 let srcDir: string;

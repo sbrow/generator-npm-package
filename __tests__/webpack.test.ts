@@ -3,7 +3,7 @@ import { join } from "path";
 import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { load, loadJSON } from "../__setup__/fs";
+import { load, loadJSON } from "../src/fs";
 import Webpack from "../src/webpack";
 
 const generator = "webpack";

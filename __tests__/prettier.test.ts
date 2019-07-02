@@ -1,7 +1,7 @@
 import { join } from "path";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { loadJSON } from "../__setup__/fs";
+import { loadJSON } from "../src/fs";
 
 const appName = "prettier";
 
