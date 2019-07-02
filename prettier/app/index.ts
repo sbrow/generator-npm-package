@@ -1,7 +1,10 @@
 import Generator from "yeoman-generator";
 
-import { Package } from "../installer/Package";
-import { PackageGenerator, PackageGeneratorOptions } from "../PackageGenerator";
+import { Package } from "../../src/installer/Package";
+import {
+    PackageGenerator,
+    PackageGeneratorOptions,
+} from "../../src/PackageGenerator";
 
 export interface PrettierOptions extends PackageGeneratorOptions {
     prettier?: string;

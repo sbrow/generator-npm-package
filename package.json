@@ -6,11 +6,15 @@
     "name": "Spencer Brower",
     "email": "brower.spencer@gmail.com"
   },
+  "private": true,
   "main": "generators/app/index.js",
   "directories": {
     "lib": "generators",
     "test": "__tests__"
   },
+  "workspaces": [
+    "prettier"
+  ],
   "license": "GPL-3.0",
   "config": {
     "commitizen": {

@@ -1,0 +1,12 @@
+{
+  "name": "generator-prettier",
+  "version": "1.0.0",
+  "description": "Installs and configures prettier.",
+  "author": "Spencer Brower",
+  "license": "GPL-3.0+",
+  "main": "app/index.js",
+  "private": false,
+  "files": [
+    "app/index.js"
+  ]
+}

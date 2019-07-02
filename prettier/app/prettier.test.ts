@@ -1,12 +1,11 @@
 import { join } from "path";
 import { run, RunContextSettings } from "yeoman-test";
 
-import { loadJSON } from "../src/fs";
+import { loadJSON } from "../../src/fs";
 
 const appName = "prettier";
 
 let opts: RunContextSettings;
-let srcDir: string;
 let app: string;
 let prettier: string;
 
@@ -14,8 +13,7 @@ beforeAll(() => {
     opts = {
         tmpdir: true,
     };
-    srcDir = join(__dirname, "../src");
-    app = join(srcDir, appName);
+    app = join(__dirname, "index");
 });
 
 beforeEach(() => {
@@ -24,7 +22,7 @@ beforeEach(() => {
 
 describe(`generator-${appName}`, () => {
     describe("Without input", () => {
-        it("should configure package.json:prettier = default", async () => {
+        it("Configures package.json:prettier = default", async () => {
             const tmpDir = await run(app, opts).withPrompts({
                 configPackage: prettier,
             });
@@ -40,13 +38,12 @@ describe(`generator-${appName}`, () => {
                     "skip-install": false,
                 });
                 got = loadJSON(tmpDir, "package.json");
-            }, 15000);
+            }, 20000);
+            // tslint:disable-next-line: mocha-no-side-effect-code
             it.each(["prettier", "@sbrow/prettier-config"])(
-                "should install %p",
+                "installs %p",
                 (packageName: string) => {
-                    const want = {
-                        devDependencies: {},
-                    };
+                    const want = { devDependencies: {} };
                     want.devDependencies[packageName] = expect.any(String);
                     expect(got).toMatchObject(want);
                 },
