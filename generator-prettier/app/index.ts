@@ -25,6 +25,15 @@ export class PrettierGenerator extends PackageGenerator {
             ]),
         });
         this.argument("prettier", { type: String, required: false });
+
+        this.option("username", {
+            description: "name of the user to find the config for",
+            default: undefined,
+            type: String,
+        });
+    }
+
+    public async initializing() {
         const name = async () => {
             try {
                 const user = await this.user.github.username();
@@ -34,11 +43,9 @@ export class PrettierGenerator extends PackageGenerator {
             }
             return "<username>";
         };
-        this.option("username", {
-            description: "name of the user to find the config for",
-            default: name(),
-            type: String,
-        });
+        if (this.options.username === undefined) {
+            this.options.username = await name();
+        }
     }
 
     public async prompting() {

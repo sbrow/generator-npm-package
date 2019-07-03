@@ -32,9 +32,9 @@ export class PackageGenerator extends Generator {
         super(args, opts);
 
         this.option("useYarn", {
-            default: this.shouldUseYarn(),
+            default: this.getPackageManager(),
             description: "Whether or not to use Yarn as the package manager.",
-            type: Boolean,
+            type: String,
         });
         this.option("required", {
             default: undefined,
@@ -49,12 +49,8 @@ export class PackageGenerator extends Generator {
             hide: true,
         });
 
-        const useYarn: boolean | undefined =
-            this.config.get("useYarn") || this.options.useYarn;
-
-        if (useYarn !== undefined) {
-            this.options.useYarn = useYarn;
-            this.config.set("useYarn", this.options.useYarn);
+        if (opts.useYarn !== undefined) {
+            this.config.set("useYarn", Boolean(this.options.useYarn));
         }
         this.composeWith(require.resolve("../helper"), {
             main: this,
@@ -211,7 +207,7 @@ export class PackageGenerator extends Generator {
         }
     }
 
-    private shouldUseYarn(): boolean | undefined {
+    private getPackageManager(): boolean | undefined {
         if (this.fs.exists(this.destinationPath("yarn.lock"))) {
             return true;
         }

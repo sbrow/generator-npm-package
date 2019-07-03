@@ -32,7 +32,7 @@ describe("PackageGenerator", () => {
         // tslint:disable-next-line: mocha-no-side-effect-code
         it.each([
             ["package.lock", false],
-            [undefined, false],
+            [undefined, undefined],
             ["yarn.lock", true],
         ])(
             "detects file %j",
@@ -45,11 +45,13 @@ describe("PackageGenerator", () => {
                         }
                     });
                 const got = loadJSON(tmpDir, ".yo-rc.json");
-                expect(got).toMatchObject({
-                    "generator-package": {
-                        useYarn: want,
-                    },
-                });
+                const wantObj = {
+                    "generator-package": {},
+                };
+                if (want !== undefined) {
+                    wantObj["generator-package"]["useYarn"] = want;
+                }
+                expect(got).toMatchObject(wantObj);
             },
             10000,
         );

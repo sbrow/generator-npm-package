@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import PackageGenerator from "../app";
+import { PackageGenerator } from "../app";
 import { Package } from "../../generators/installer/Package";
 
 export interface HelperOptions {
@@ -86,6 +86,7 @@ Did you forget to call "this.required()" in your  constructor?`);
             if (answers.useYarn !== undefined) {
                 this.options.useYarn = answers.useYarn;
                 this.config.set("useYarn", this.options.useYarn);
+                this.main.options.useYarn = answers.useYarn;
             }
         });
     }
