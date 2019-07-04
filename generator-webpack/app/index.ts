@@ -43,6 +43,9 @@ export class Webpack extends PackageGenerator {
     public configuring() {
         if (this.hasDevDependency("typescript")) {
             this.addDevDependencies("ts-loader");
+            this.log(
+                "Typescript has been detected: ts-loader will be installed.",
+            );
         }
     }
 
@@ -76,10 +79,6 @@ export class Webpack extends PackageGenerator {
                 "]",
             ].join("\r\n"),
         );
-    }
-
-    public default() {
-        this.scheduleInstall();
     }
 }
 

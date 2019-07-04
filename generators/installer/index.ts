@@ -40,7 +40,6 @@ export class Installer extends PackageGenerator {
         const filter = (value: string): boolean => {
             if (value in packagesJson) {
                 let packages = packagesJson[value];
-                this.log(`packages: '${JSON.stringify(packages)}'`);
                 if (!(packages instanceof Array)) {
                     packages = [packages];
                 }
