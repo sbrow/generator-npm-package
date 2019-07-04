@@ -57,9 +57,9 @@ export class PackageGenerator extends Generator {
             }
             this.config.set("useYarn", save);
         }
-        // this.composeWith(require.resolve("../helper"), {
-        // main: this,
-        // });
+        this.composeWith(require.resolve("../helper"), {
+            main: this,
+        });
         if (this.options.required !== undefined) {
             this.required();
         }
