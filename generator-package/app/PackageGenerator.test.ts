@@ -49,7 +49,7 @@ describe("PackageGenerator", () => {
                     "generator-package": {},
                 };
                 if (want !== undefined) {
-                    wantObj["generator-package"]["useYarn"] = want;
+                    wantObj["generator-package"] = { useYarn: want };
                 }
                 expect(got).toMatchObject(wantObj);
             },

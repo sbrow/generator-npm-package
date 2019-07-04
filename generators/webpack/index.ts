@@ -83,6 +83,4 @@ export class Webpack extends PackageGenerator {
     }
 }
 
-module.exports = Webpack;
-
 export default Webpack;

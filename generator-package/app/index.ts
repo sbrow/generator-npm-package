@@ -216,3 +216,5 @@ export class PackageGenerator extends Generator {
         }
     }
 }
+
+export default PackageGenerator;
