@@ -1,0 +1,15 @@
+{
+  "name": "generator-webpack",
+  "version": "1.0.0",
+  "description": "Installs and configures webpack.",
+  "author": "Spencer Brower",
+  "license": "GPL-3.0+",
+  "main": "app/index.js",
+  "private": false,
+  "files": [
+    "**/*.{js,d.ts}"
+  ],
+  "dependencies": {
+    "generator-package": "./generator-package"
+  }
+}

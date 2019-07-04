@@ -1,5 +1,5 @@
-import { PackageGenerator } from "../../generator-package/app";
-import { Package } from "../installer/Package";
+import { PackageGenerator } from "generator-package";
+import { Package } from "generator-package/Package";
 
 const packages: Package[] = [
     new Package({ name: "webpack", devOnly: true }),
