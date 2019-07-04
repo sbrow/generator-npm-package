@@ -2,11 +2,17 @@
   "name": "generator-package",
   "version": "1.0.0",
   "description": "BaseGenerator for all others.",
-  "main": "app/index.js",
+  "keywords": [
+    "yeoman-generator"
+  ],
   "author": "Spencer Brower",
+  "main": "app/index.js",
   "license": "GPL-3.0+",
   "private": false,
   "files": [
     "**/*.{js,d.ts}"
-  ]
+  ],
+  "dependencies": {
+    "yeoman-generator": "^4.0.1"
+  }
 }

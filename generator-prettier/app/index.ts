@@ -1,7 +1,6 @@
-import Generator from "yeoman-generator";
-
 import { PackageGenerator, PackageGeneratorOptions } from "generator-package";
 import { Package } from "generator-package/Package";
+import { Questions } from "yeoman-generator";
 
 export interface PrettierOptions extends PackageGeneratorOptions {
     prettier?: string;
@@ -46,7 +45,7 @@ export class PrettierGenerator extends PackageGenerator {
     }
 
     public async prompting() {
-        const prompts: Generator.Questions = [];
+        const prompts: Questions = [];
         if (this.options.prettier === undefined) {
             prompts.push({
                 type: "input",

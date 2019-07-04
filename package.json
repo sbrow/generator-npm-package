@@ -13,7 +13,9 @@
     "test": "__tests__"
   },
   "workspaces": [
-    "generator-prettier"
+    "generator-package",
+    "generator-prettier",
+    "generator-webpack"
   ],
   "license": "GPL-3.0",
   "config": {

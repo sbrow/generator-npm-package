@@ -2,6 +2,9 @@
   "name": "generator-prettier",
   "version": "1.0.0",
   "description": "Installs and configures prettier.",
+  "keywords": [
+    "yeoman-generator"
+  ],
   "author": "Spencer Brower",
   "license": "GPL-3.0+",
   "main": "app/index.js",
@@ -9,6 +12,9 @@
   "files": [
     "**/*.{js,d.ts}"
   ],
+  "devDependencies": {
+    "yeoman-generator": "^4.0.1"
+  },
   "dependencies": {
     "generator-package": "./generator-package"
   }
