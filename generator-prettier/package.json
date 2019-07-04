@@ -8,5 +8,8 @@
   "private": false,
   "files": [
     "app/index.js"
-  ]
+  ],
+  "dependencies": {
+    "generator-package": "./generator-package"
+  }
 }

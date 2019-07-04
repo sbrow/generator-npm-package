@@ -5,5 +5,9 @@
   "main": "app/index.js",
   "author": "Spencer Brower",
   "license": "GPL-3.0+",
-  "private": false
+  "private": false,
+  "files": [
+    "app/*.js",
+    "app/*.d.ts"
+  ]
 }
