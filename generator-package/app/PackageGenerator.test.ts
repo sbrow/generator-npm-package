@@ -1,5 +1,5 @@
 import { join } from "path";
-import { touch } from "shelljs";
+import { ls, touch } from "shelljs";
 import { run, RunContextSettings } from "yeoman-test";
 
 import { loadJSON } from "../../fs";
@@ -27,7 +27,7 @@ describe("PackageGenerator", () => {
                 dependencies: expect.arrayContaining(["webpack"]),
             },
         });
-    });
+    }, 7000);
     describe("useYarn", () => {
         // tslint:disable-next-line: mocha-no-side-effect-code
         it.each([
@@ -50,6 +50,9 @@ describe("PackageGenerator", () => {
                 };
                 if (want !== undefined) {
                     wantObj["generator-package"] = { useYarn: want };
+                }
+                if (file !== undefined) {
+                    expect(ls(tmpDir)).toContain(file);
                 }
                 expect(got).toMatchObject(wantObj);
             },

@@ -50,11 +50,16 @@ export class PackageGenerator extends Generator {
         });
 
         if (opts.useYarn !== undefined) {
-            this.config.set("useYarn", Boolean(this.options.useYarn));
+            let save = Boolean(this.options.useYarn);
+            // @ts-ignore
+            if (this.options.useYarn === "false") {
+                save = false;
+            }
+            this.config.set("useYarn", save);
         }
-        this.composeWith(require.resolve("../helper"), {
-            main: this,
-        });
+        // this.composeWith(require.resolve("../helper"), {
+        // main: this,
+        // });
         if (this.options.required !== undefined) {
             this.required();
         }
@@ -208,11 +213,12 @@ export class PackageGenerator extends Generator {
     }
 
     private getPackageManager(): boolean | undefined {
-        if (this.fs.exists(this.destinationPath("yarn.lock"))) {
-            return true;
-        }
-        if (this.fs.exists(this.destinationPath("package.lock"))) {
-            return false;
+        const yarnLock = this.fs.exists(this.destinationPath("yarn.lock"));
+        const packageLock = this.fs.exists(
+            this.destinationPath("package.lock"),
+        );
+        if (yarnLock !== packageLock) {
+            return yarnLock;
         }
     }
 }
