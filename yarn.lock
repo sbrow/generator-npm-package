@@ -2233,6 +2233,9 @@ generator-npm-init@^1.5.0:
     lodash "^4.17.11"
     yeoman-generator "^3.1.1"
 
+generator-package@./generator-package:
+  version "1.0.0"
+
 get-caller-file@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.3.tgz#f978fa4c90d1dfe7ff2d6beda2a515e713bdcf4a"

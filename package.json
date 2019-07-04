@@ -13,7 +13,7 @@
     "test": "__tests__"
   },
   "workspaces": [
-    "prettier"
+    "generator-prettier"
   ],
   "license": "GPL-3.0",
   "config": {
