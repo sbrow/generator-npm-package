@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import { Package } from "../../generators/installer/Package";
+import { Package } from "../Package";
 
 export type Dependencies =
     | string
@@ -216,5 +216,3 @@ export class PackageGenerator extends Generator {
         }
     }
 }
-
-export default PackageGenerator;

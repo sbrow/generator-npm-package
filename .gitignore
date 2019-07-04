@@ -3,6 +3,9 @@ node_modules
 .vscode
 !bin
 
+generators/**/*.d.ts
+generator-package/**/*.d.ts
+generator-prettier/**/*.d.ts
 **/*.js
 **/.DS_Store
 yarn-error.log
