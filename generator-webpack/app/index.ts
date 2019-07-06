@@ -1,5 +1,8 @@
 import { PackageGenerator } from "generator-package";
 import { Package } from "generator-package/Package";
+import * as ts from "typescript";
+
+import { getIdentifier, getProperty, updateFile } from "./ast";
 
 const packages: Package[] = [
     new Package({ name: "webpack", devOnly: true }),
@@ -18,26 +21,19 @@ export class Webpack extends PackageGenerator {
         };
     }
 
-    /**
-     * @todo install typescript loader.
-     */
     public modules(): string {
         if (!this.hasDevDependency("typescript")) {
             return "";
         }
-        return `\r\n\tmodule: ${JSON.stringify(
-            {
-                rules: [
-                    {
-                        exclude: [/node_modules/, /build/, /dist/],
-                        test: /\.tsx?$/,
-                        use: "ts-loader",
-                    },
-                ],
-            },
-            null,
-            2,
-        )},`;
+        return `{
+    rules: [
+        {
+            exclude: [/node_modules/, /build/, /dist/],
+            test: /\.tsx?$/,
+            use: "ts-loader",
+        },
+    ],
+}`;
     }
 
     public configuring() {
@@ -50,35 +46,33 @@ export class Webpack extends PackageGenerator {
     }
 
     public writing() {
+        const filename = "webpack.config.js";
+        const config = this.destinationPath(filename);
         this.fs.extendJSON(this.destinationPath("package.json"), {
             scripts: { webpack: "webpack" },
         });
 
-        this.fs.write(
-            this.destinationPath("webpack.config.js"),
-            [
-                'const path = require("path");',
-                "",
-                'const packageJson = require("./package.json")',
-                "",
-                'process.env.NODE_ENV = process.env.NODE_ENV || "development";',
-                "const mode = process.env.NODE_ENV;",
-                'const outDir = path.resolve(__dirname, "dist");',
-                "",
-                "const baseConfig = {",
-                "\tentry: packageJson.main,",
-                `\tmode,${this.modules()}`,
-                "\toutput: {",
-                '\t\tfilename: "main.js",',
-                "\t\tpath: outDir,",
-                "\t},",
-                "}",
-                "",
-                "module.exports = [",
-                "\tbaseConfig,",
-                "]",
-            ].join("\r\n"),
-        );
+        if (!this.fs.exists(filename)) {
+            this.fs.copy(this.templatePath(filename), config);
+        }
+
+        const modules = this.modules();
+        if (modules !== "") {
+            const configFile = ts.createSourceFile(
+                filename,
+                this.fs.read(config),
+                ts.ScriptTarget.Latest,
+                false,
+                ts.ScriptKind.JS,
+            );
+            const baseConfig = getIdentifier(configFile, "baseConfig");
+            // @ts-ignore
+            const mod = getProperty(configFile, baseConfig, "module");
+            const { pos, end } = mod;
+
+            const f = updateFile(configFile, modules, pos, end);
+            this.fs.write(config, f.getFullText(f));
+        }
     }
 }
 
