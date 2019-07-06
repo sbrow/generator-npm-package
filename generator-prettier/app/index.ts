@@ -1,5 +1,5 @@
-import { PackageGenerator, PackageGeneratorOptions } from "generator-package";
-import { Package } from "generator-package/Package";
+import { PackageGenerator, PackageGeneratorOptions } from "generator-package-installer";
+import { Package } from "generator-package-installer/Package";
 import { Questions } from "yeoman-generator";
 
 export interface PrettierOptions extends PackageGeneratorOptions {

@@ -2,10 +2,14 @@ import chalk from "chalk";
 import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
-import { PackageGenerator } from "../../generator-package-installer/app";
+import {
+    PackageGenerator,
+    PackageGeneratorOptions,
+} from "../../generator-package-installer/app";
 import packagesJson from "../installer/packages.json";
 import blacklistJson from "./blacklist.json";
 
+// tslint:disable-next-line: export-name
 export class Typescript extends PackageGenerator {
     public tslint = {
         extends: "tslint:recommended",
@@ -13,7 +17,7 @@ export class Typescript extends PackageGenerator {
     };
     public props: any;
 
-    constructor(args: string | any[], opts: {}) {
+    constructor(args: string | any[], opts: PackageGeneratorOptions) {
         super(args, {
             ...opts,
             required: JSON.stringify(packagesJson.Typescript),

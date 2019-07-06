@@ -1,5 +1,5 @@
-import { PackageGenerator } from "generator-package";
-import { Package } from "generator-package/Package";
+import { PackageGenerator } from "generator-package-installer";
+import { Package } from "generator-package-installer/Package";
 import * as ts from "typescript";
 
 import { getIdentifier, getProperty, updateFile } from "./ast";
