@@ -14,26 +14,9 @@ beforeAll(() => {
 });
 
 describe("generator-typescript", () => {
-    describe("With default options", () => {
-        it.skip(`Shows proper types`, async () => {
-            const context = run(app, opts).withLocalConfig({
-                dependencies: ["react"],
-            });
-        });
-    });
-    describe("When installed with React", () => {
-        it('sets "jsx" to "react"', async () => {
-            const context = run(app, opts).withLocalConfig({
-                dependencies: ["react"],
-            });
-            const tmpDir = await context;
-            const want = {
-                compilerOptions: {
-                    jsx: "react",
-                },
-            };
-            const got = loadJSON(tmpDir, "tsconfig.json");
-            expect(got).toMatchObject(want);
+    it.skip(`Shows proper types`, async () => {
+        const context = run(app, opts).withLocalConfig({
+            dependencies: ["react"],
         });
     });
 
@@ -49,5 +32,20 @@ describe("generator-typescript", () => {
                 ]),
             },
         });
+    }, 5500);
+    describe("When installed with React", () => {
+        it('sets "jsx" to "react"', async () => {
+            const context = run(app, opts).withLocalConfig({
+                dependencies: ["react"],
+            });
+            const tmpDir = await context;
+            const want = {
+                compilerOptions: {
+                    jsx: "react",
+                },
+            };
+            const got = loadJSON(tmpDir, "tsconfig.json");
+            expect(got).toMatchObject(want);
+        }, 5500);
     });
 });

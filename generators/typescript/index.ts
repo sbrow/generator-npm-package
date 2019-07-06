@@ -1,26 +1,50 @@
 import chalk from "chalk";
-import shelljs from "shelljs";
-import Generator from "yeoman-generator";
-
 import {
     PackageGenerator,
     PackageGeneratorOptions,
-} from "../../generator-package-installer/app";
-import packagesJson from "../installer/packages.json";
+} from "generator-package-installer";
+import { Package } from "generator-package-installer/Package";
+import shelljs from "shelljs";
+import Generator from "yeoman-generator";
+
 import blacklistJson from "./blacklist.json";
+
+export interface TypescriptOptions extends PackageGeneratorOptions {
+    outDir?: string;
+    esModuleInterop?: boolean;
+    resolveJsonModule?: boolean;
+}
 
 // tslint:disable-next-line: export-name
 export class Typescript extends PackageGenerator {
+    public options: TypescriptOptions;
+
+    /**
+     * Will be replaced with optional packages.
+     */
+    public typeDefs: any;
     public tslint = {
         extends: "tslint:recommended",
         rules: {},
     };
-    public props: any;
 
-    constructor(args: string | any[], opts: PackageGeneratorOptions) {
+    constructor(args: string | any[], opts: TypescriptOptions) {
         super(args, {
             ...opts,
-            required: JSON.stringify(packagesJson.Typescript),
+            required: JSON.stringify([
+                new Package({ name: "@types/node", devOnly: true }),
+                new Package({ name: "tslint", devOnly: true }),
+                new Package({ name: "typescript", devOnly: true }),
+            ]),
+        });
+        this.option("outDir", {
+            type: String,
+        });
+        this.option("esModuleInterop", {
+            type: Boolean,
+        });
+        this.option("resolveJsonModule", {
+            type: Boolean,
         });
     }
 
@@ -51,28 +75,27 @@ export class Typescript extends PackageGenerator {
             },
         ];
 
-        this.props = await this.prompt(prompts);
+        this.options = await this.prompt(prompts);
     }
 
     public configuring() {
-        if (this.props.typeDefs) {
-            this.addDevDependencies(this.props.typeDefs);
+        if (this.typeDefs) {
+            this.addDevDependencies(this.typeDefs);
         }
-        const tsconfig = { ...this.props };
-        delete tsconfig.typeDefs;
+        const tsconfig = { ...this.options };
         this.config.set("tsconfig", tsconfig);
     }
 
     public writing() {
         // Setup directories
         shelljs.mkdir(this.destinationPath("src"));
-        shelljs.mkdir(this.destinationPath(this.props.outDir));
+        shelljs.mkdir(this.destinationPath(this.options.outDir));
 
         const deps = "dependencies";
         const dependencies = this.getDependencies();
 
         const jsx = this.hasAnyDependency("react") ? "react" : undefined;
-        const { esModuleInterop, outDir, resolveJsonModule } = this.props;
+        const { esModuleInterop, outDir, resolveJsonModule } = this.options;
         this.fs.extendJSON(this.destinationPath("tsconfig.json"), {
             compilerOptions: {
                 esModuleInterop,
@@ -83,7 +106,7 @@ export class Typescript extends PackageGenerator {
         });
         this.fs.extendJSON(this.destinationPath("tslint.json"), this.tslint);
         this.fs.extendJSON(this.destinationPath("package.json"), {
-            directories: { lib: this.props.outDir },
+            directories: { lib: this.options.outDir },
             scripts: {
                 build: "tsc",
                 lint: "tslint",
@@ -125,4 +148,4 @@ export class Typescript extends PackageGenerator {
     }
 }
 
-module.exports = Typescript;
+export default Typescript;
