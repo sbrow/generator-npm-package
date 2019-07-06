@@ -9,7 +9,13 @@
   "files": [
     "**/*.{js,d.ts}"
   ],
+  "keywords": [
+    "yeoman",
+    "yeoman-generator",
+    "webpack",
+    "automation"
+  ],
   "dependencies": {
-    "generator-package": "./generator-package"
+    "generator-package-installer": "^1.0.0"
   }
 }

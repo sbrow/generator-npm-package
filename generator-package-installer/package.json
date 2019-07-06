@@ -1,9 +1,12 @@
 {
-  "name": "generator-package",
+  "name": "generator-package-installer",
   "version": "1.0.0",
-  "description": "BaseGenerator for all others.",
+  "description": "Installs required packages into your project.json file",
   "keywords": [
-    "yeoman-generator"
+    "yeoman",
+    "yeoman-generator",
+    "automation",
+    "instaer"
   ],
   "author": "Spencer Brower",
   "main": "app/index.js",
