@@ -79,7 +79,7 @@ describe("generator-jest", () => {
                 devDependencies: { jest: expect.any(String) },
             };
             expect(got).toMatchObject(want);
-        }, 35000);
+        }, 40000);
         itReadsFileExtensions(['"js"'], {});
     });
     describe("When installed with coveralls", () => {
