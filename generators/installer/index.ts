@@ -1,7 +1,7 @@
 import Generator from "yeoman-generator";
 
 import { Package } from "./Package";
-import { PackageGenerator } from "../../generator-package/app";
+import { PackageGenerator } from "../../generator-package-installer/app";
 import packagesJson from "./packages.json";
 
 export class Installer extends PackageGenerator {

@@ -2,7 +2,7 @@ import chalk from "chalk";
 import shelljs from "shelljs";
 import Generator from "yeoman-generator";
 
-import { PackageGenerator } from "../../generator-package/app";
+import { PackageGenerator } from "../../generator-package-installer/app";
 import packagesJson from "../installer/packages.json";
 import blacklistJson from "./blacklist.json";
 

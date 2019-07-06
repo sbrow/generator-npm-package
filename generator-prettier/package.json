@@ -16,6 +16,6 @@
     "yeoman-generator": "^4.0.1"
   },
   "dependencies": {
-    "generator-package": "./generator-package"
+    "generator-package-installer": "./generator-package-installer"
   }
 }
