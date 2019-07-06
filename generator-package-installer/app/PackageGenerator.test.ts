@@ -3,6 +3,7 @@ import { ls, touch } from "shelljs";
 import { run, RunContextSettings } from "yeoman-test";
 
 import { loadJSON } from "../../fs";
+import packageJson from "../package.json";
 
 let app: string;
 let opts: RunContextSettings;
@@ -22,11 +23,11 @@ describe("PackageGenerator", () => {
             })
             .inTmpDir((dir: string) => {});
         const got = loadJSON(tmpDir, ".yo-rc.json");
-        expect(got).toMatchObject({
-            "generator-package": {
-                dependencies: expect.arrayContaining(["webpack"]),
-            },
-        });
+        const want = {};
+        want[packageJson.name] = {
+            dependencies: expect.arrayContaining(["webpack"]),
+        };
+        expect(got).toMatchObject(want);
     }, 7000);
     describe("useYarn", () => {
         // tslint:disable-next-line: mocha-no-side-effect-code
@@ -45,11 +46,10 @@ describe("PackageGenerator", () => {
                         }
                     });
                 const got = loadJSON(tmpDir, ".yo-rc.json");
-                const wantObj = {
-                    "generator-package": {},
-                };
+                const wantObj = {};
+                wantObj[packageJson.name] = {};
                 if (want !== undefined) {
-                    wantObj["generator-package"] = { useYarn: want };
+                    wantObj[packageJson.name] = { useYarn: want };
                 }
                 if (file !== undefined) {
                     expect(ls(tmpDir)).toContain(file);

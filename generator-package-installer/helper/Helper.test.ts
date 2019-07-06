@@ -2,6 +2,7 @@ import { ls } from "shelljs";
 import { run, RunContextSettings } from "yeoman-test";
 
 import { loadJSON } from "../../fs";
+import packageJson from "../package.json";
 
 let app: string;
 let opts: RunContextSettings;
@@ -47,10 +48,8 @@ describe("Helper", () => {
             .withPrompts({ useYarn: want });
         const tmpDir = await context;
         const got = loadJSON(tmpDir, ".yo-rc.json");
-        expect(got).toMatchObject({
-            "generator-package": {
-                useYarn: want,
-            },
-        });
+        const wantObj = {};
+        wantObj[packageJson.name] = { useYarn: want };
+        expect(got).toMatchObject(wantObj);
     });
 });

@@ -1,8 +1,10 @@
 import Generator from "yeoman-generator";
 
-import { PackageGenerator } from "../../generator-package-installer/app";
+import {
+    PackageGenerator,
+    PackageGeneratorOptions,
+} from "../../generator-package-installer/app";
 import { Package } from "../installer/Package";
-import packagesJson from "../installer/packages.json";
 
 export class Jest extends PackageGenerator {
     public static readonly scripts = {
@@ -18,7 +20,7 @@ export class Jest extends PackageGenerator {
         scripts: { [key: string]: string };
     };
 
-    constructor(args, opts) {
+    constructor(args, opts: PackageGeneratorOptions) {
         super(args, {
             ...opts,
             required: JSON.stringify([
@@ -34,7 +36,7 @@ export class Jest extends PackageGenerator {
         };
     }
 
-    public prompting() {
+    public async prompting() {
         const prompts: Generator.Questions = [
             {
                 type: "confirm",
@@ -45,13 +47,11 @@ export class Jest extends PackageGenerator {
             },
         ];
 
-        return this.prompt(prompts).then(props => {
-            this.props.enableCoveralls = props.enableCoveralls;
-        });
+        const props = await this.prompt(prompts);
+        this.props.enableCoveralls = props.enableCoveralls;
     }
 
     public configuring() {
-        this.addPackage(new Package(packagesJson.Jest));
         if (this.hasAnyDependency("typescript")) {
             this.props.moduleFileExtensions.unshift("ts");
             const tsconfig = this.config.get("tsconfig");
@@ -103,7 +103,5 @@ module.exports = {
         return "";
     }
 }
-
-module.exports = Jest;
 
 export default Jest;
