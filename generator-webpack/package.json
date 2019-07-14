@@ -17,5 +17,8 @@
   ],
   "dependencies": {
     "generator-package-installer": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/webpack": "^4.4.34"
   }
 }
