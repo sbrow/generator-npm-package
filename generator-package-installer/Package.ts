@@ -1,26 +1,14 @@
-export type SerializedPackage =
-    | string
-    | { name: string; devOnly?: boolean; isDev?: boolean };
-export class Package {
-    public name: string;
-    public devOnly: boolean;
-    public isDev: boolean;
+export type Package = string | DevablePackage | DevOnlyPackage | BasicPackage;
+export class BasicPackage {
+    public name: string = "";
+    public isDev?: boolean;
+}
 
-    constructor(props: SerializedPackage) {
-        this.devOnly = false;
-        this.isDev = false;
+interface DevablePackage extends BasicPackage {
+    devOnly: false;
+}
 
-        if (typeof props === "string") {
-            this.name = props;
-        } else {
-            const { name, isDev, devOnly } = props;
-            this.name = name;
-            this.devOnly = devOnly || false;
-            if (devOnly) {
-                this.isDev = true;
-            } else {
-                this.isDev = isDev || false;
-            }
-        }
-    }
+export interface DevOnlyPackage extends BasicPackage {
+    isDev?: true;
+    devOnly: true;
 }

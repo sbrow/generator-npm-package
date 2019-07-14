@@ -67,7 +67,9 @@ export class PackageGenerator extends Generator {
 
     public addPackage(...packages: Package[]) {
         for (const pkg of packages) {
-            this.addDependencies(pkg.name, pkg.isDev);
+            const { name, isDev } =
+                typeof pkg === "string" ? { name: pkg, isDev: false } : pkg;
+            this.addDependencies(name, isDev);
         }
     }
 
@@ -198,17 +200,6 @@ export class PackageGenerator extends Generator {
     private required() {
         if (typeof this.options.required === "string") {
             this.options.required = JSON.parse(this.options.required);
-        }
-        if (this.options.required !== undefined) {
-            const temp = [];
-            for (const pkg of this.options.required) {
-                if (pkg instanceof Package) {
-                    temp.push(pkg);
-                } else {
-                    temp.push(new Package(pkg));
-                }
-            }
-            this.options.required = [...temp];
         }
     }
 
