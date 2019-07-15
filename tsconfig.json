@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": false,
+    "jsx": "react",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "inlineSourceMap": true,

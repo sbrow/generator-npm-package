@@ -32,9 +32,9 @@ export class Typescript extends PackageGenerator {
         super(args, {
             ...opts,
             required: JSON.stringify([
-                new Package({ name: "@types/node", devOnly: true }),
-                new Package({ name: "tslint", devOnly: true }),
-                new Package({ name: "typescript", devOnly: true }),
+                { name: "@types/node", devOnly: true },
+                { name: "tslint", devOnly: true },
+                { name: "typescript", devOnly: true },
             ]),
         });
         this.option("outDir", {

@@ -1,6 +1,6 @@
-import { Package } from "./Package";
+import { BasicPackage, Package } from "./Package";
 
-describe(Package.name, () => {
+describe("Package", () => {
     it("Should compile", () => {
         let a: Package;
         // string
@@ -18,8 +18,9 @@ describe(Package.name, () => {
         a = { name: "yarn", devOnly: false, isDev: true };
         // Should fail.
         const b: Package = { name: "yarn", devOnly: true, isDev: false };
-        const c: PackageInterface = {
+        const c: BasicPackage = {
             name: "yarn",
+            // @ts-ignore
             devOnly: true,
             isDev: false,
         };

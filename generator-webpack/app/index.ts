@@ -5,8 +5,8 @@ import * as ts from "typescript";
 import { getIdentifier, getProperty, updateFile } from "./ast";
 
 const packages: Package[] = [
-    new Package({ name: "webpack", devOnly: true }),
-    new Package({ name: "webpack-cli", devOnly: true }),
+    { name: "webpack", devOnly: true },
+    { name: "webpack-cli", devOnly: true },
 ];
 
 export class Webpack extends PackageGenerator {

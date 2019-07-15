@@ -17,7 +17,7 @@ export class PrettierGenerator extends PackageGenerator {
         super(args, {
             ...opts,
             required: JSON.stringify([
-                new Package({ name: "prettier", devOnly: true }),
+                { name: "prettier", devOnly: true },
             ]),
         });
         this.argument("prettier", { type: String, required: false });
