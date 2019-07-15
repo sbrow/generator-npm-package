@@ -1,6 +1,6 @@
 {
   "name": "generator-prettier",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Installs and configures prettier.",
   "keywords": [
     "yeoman",

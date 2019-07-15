@@ -1,6 +1,6 @@
 {
   "name": "generator-webpack",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Installs and configures webpack.",
   "author": "Spencer Brower",
   "license": "GPL-3.0+",
@@ -16,7 +16,7 @@
     "automation"
   ],
   "dependencies": {
-    "generator-package-installer": "^1.0.0"
+    "generator-package-installer": "^2.0.0"
   },
   "devDependencies": {
     "@types/webpack": "^4.4.34"
