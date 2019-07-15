@@ -100,13 +100,13 @@ export class Installer extends PackageGenerator {
                 if (!(packages instanceof Array)) {
                     packages = [packages];
                 }
+                this.addPackage(...packages);
                 for (const packageName of packages) {
-                    this.addPackage(new Package(packageName));
+                    this.addPackage(packageName);
                 }
             }
         }
         for (const pkg of packagesJson.Other) {
-            const pack = new Package(pkg);
             if (this.props.packages.includes(pack.name)) {
                 this.addPackage(pack);
             }
