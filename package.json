@@ -24,6 +24,7 @@
   "prettier": "@sbrow/prettier-config",
   "todos": {
     "features": {
+      "generator-tsconfig": "create",
       "App": [
         "option to install additional packages",
         "electron: *-{builder,updater,log,devtools-installer}",
@@ -36,9 +37,14 @@
         }
       ],
       "React": [
-        "ask if user also wants to install React-Bootstrap",
-        "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)",
-        "ask to install: router, router-dom"
+        {
+          "optionalPackages": [
+            "react-bootstrap",
+            "react-router",
+            "react-router-dom"
+          ]
+        },
+        "generate boilerplate (index.jsx, App.jsx, AppStore, AppStoreContext, etc.)"
       ],
       "Typescript": [
         "object-literal-sort-keys for tslint",
@@ -47,8 +53,7 @@
       ],
       "Webpack": [
         "Ask if user wants to move dependencies to devDependencies",
-        "Option to add loaders: css/style, file",
-        "AST edit"
+        "Option to add loaders: css/style, file"
       ]
     }
   },
