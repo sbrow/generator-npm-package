@@ -1,0 +1,24 @@
+{
+  "name": "generator-webpack",
+  "version": "1.0.0",
+  "description": "Installs and configures webpack.",
+  "author": "Spencer Brower",
+  "license": "GPL-3.0+",
+  "main": "app/index.js",
+  "private": false,
+  "files": [
+    "**/*.{js,d.ts}"
+  ],
+  "keywords": [
+    "yeoman",
+    "yeoman-generator",
+    "webpack",
+    "automation"
+  ],
+  "dependencies": {
+    "generator-package-installer": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/webpack": "^4.4.34"
+  }
+}

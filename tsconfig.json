@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
     "allowJs": false,
+    "jsx": "react",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "inlineSourceMap": true,
     "target": "es6",
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "generators",
-    "rootDir": "src",
-    "baseUrl": "."
+    "moduleResolution": "node"
   },
-  "exclude": ["coverage", "__setup__", "__tests__", "generators"],
+  "exclude": ["coverage", "__setup__", "__tests__"],
   "typeAcquisition": {
     "enable": true
   }
