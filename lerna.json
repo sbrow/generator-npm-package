@@ -3,7 +3,7 @@
   "npmClient": "yarn",
   "version": "independent",
   "conventionalCommits": true,
-  "commands": {
+  "command": {
     "version": {
       "noPush": true
     }
