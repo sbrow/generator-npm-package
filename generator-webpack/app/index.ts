@@ -1,8 +1,14 @@
 import { PackageGenerator } from "generator-package-installer";
 import { Package } from "generator-package-installer/Package";
-import * as ts from "typescript";
+import {
+    createPrinter,
+    createSourceFile,
+    ScriptKind,
+    ScriptTarget,
+    SourceFile,
+} from "typescript";
 
-import { getIdentifier, getProperty, updateFile } from "./ast";
+import { addLoader } from "./addLoader";
 
 const packages: Package[] = [
     { name: "webpack", devOnly: true },
@@ -13,6 +19,7 @@ export class Webpack extends PackageGenerator {
     public props: {
         config: { [key: string]: any };
     };
+    private configFile: SourceFile;
 
     constructor(args, opts) {
         super(args, { ...opts, required: JSON.stringify(packages) });
@@ -21,58 +28,45 @@ export class Webpack extends PackageGenerator {
         };
     }
 
-    public modules(): string {
-        if (!this.hasDevDependency("typescript")) {
-            return "";
-        }
-        return `{
-    rules: [
-        {
-            exclude: [/node_modules/, /build/, /dist/],
-            test: /\.tsx?$/,
-            use: "ts-loader",
-        },
-    ],
-}`;
-    }
-
     public configuring() {
+        const filename = "webpack.config.ts";
+        const config = this.destinationPath(filename);
+        this.configFile = createSourceFile(
+            filename,
+            this.fs.read(
+                this.fs.exists(config) ? config : this.templatePath(filename),
+            ),
+            ScriptTarget.Latest,
+            false,
+            ScriptKind.JS,
+        );
         if (this.hasDevDependency("typescript")) {
-            this.addDevDependencies("ts-loader");
+            const loader = "ts-loader";
+            this.addDevDependencies(loader);
             this.log(
-                "Typescript has been detected: ts-loader will be installed.",
+                `Typescript has been detected: ${loader} will be installed.`,
+            );
+            this.configFile = addLoader(
+                {
+                    exclude: [/node_modules/, /build/, /dist/],
+                    test: /\.tsx?$/,
+                    use: loader,
+                },
+                this.configFile,
             );
         }
     }
 
     public writing() {
-        const filename = "webpack.config.js";
-        const config = this.destinationPath(filename);
         this.fs.extendJSON(this.destinationPath("package.json"), {
             scripts: { webpack: "webpack" },
         });
 
-        if (!this.fs.exists(filename)) {
-            this.fs.copy(this.templatePath(filename), config);
-        }
-
-        const modules = this.modules();
-        if (modules !== "") {
-            const configFile = ts.createSourceFile(
-                filename,
-                this.fs.read(config),
-                ts.ScriptTarget.Latest,
-                false,
-                ts.ScriptKind.JS,
-            );
-            const baseConfig = getIdentifier(configFile, "baseConfig");
-            // @ts-ignore
-            const mod = getProperty(configFile, baseConfig, "module");
-            const { pos, end } = mod;
-
-            const f = updateFile(configFile, modules, pos, end);
-            this.fs.write(config, f.getFullText(f));
-        }
+        const printer = createPrinter();
+        this.fs.write(
+            this.destinationPath(this.configFile.fileName),
+            printer.printFile(this.configFile),
+        );
     }
 }
 

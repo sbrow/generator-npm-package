@@ -1,0 +1,6 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`toAST typeof source = "object" parses array 1`] = `
+"const a = { arr: [/regexContents/] };
+"
+`;

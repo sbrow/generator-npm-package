@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`addLoader Updates rules 1`] = `
+"const baseConfig = {
+    module: {
+        rules: [
+            { foo: \\"bar\\" },
+            { use: \\"ts-loader\\" }
+        ],
+    },
+};
+module.exports = baseConfig;
+"
+`;
+
+exports[`loaderToAST Works 1`] = `"{ use: \\"ts-loader\\" }"`;
+
+exports[`loaderToAST Works 2`] = `"{ exclude: [/node_modules/], use: \\"ts-loader\\" }"`;

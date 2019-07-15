@@ -17,7 +17,7 @@ beforeEach(() => {
 });
 
 describe("generator-webpack", () => {
-    const file = "webpack.config.js";
+    const file = "webpack.config.ts";
 
     it(`Creates "${file}"`, async () => {
         const tmpDir = await run(app, opts);
@@ -39,9 +39,9 @@ describe("generator-webpack", () => {
         expect(got).toMatch(want);
         want = [
             "const baseConfig = {",
-            "\tentry: packageJson.main,",
+            "\tentry,",
             "\tmode,",
-            "\tmodule: {},",
+            "\tmodule: { rules: [] },",
             "\toutput: {",
             '\t\tfilename: "main.js",',
             "\t\tpath: outDir,",
@@ -60,7 +60,7 @@ describe("generator-webpack", () => {
     });
     it("Does not add 'modules'", async () => {
         const tmpDir = await run(app, opts);
-        const got = load(tmpDir, "webpack.config.js");
+        const got = load(tmpDir, "webpack.config.ts");
         const want = /^\tmodule: {.*$/;
         expect(got).not.toMatch(want);
     });
@@ -71,7 +71,7 @@ describe("generator-webpack", () => {
                 devDependencies: ["typescript"],
             });
             const got = require(require.resolve(
-                join(tmpDir, "webpack.config.js"),
+                join(tmpDir, "webpack.config.ts"),
             ));
             const want = {
                 module: {
