@@ -1,5 +1,7 @@
-import { PackageGenerator, PackageGeneratorOptions } from "generator-package-installer";
-import { Package } from "generator-package-installer/Package";
+import {
+    PackageGenerator,
+    PackageGeneratorOptions,
+} from "generator-package-installer";
 import { Questions } from "yeoman-generator";
 
 export interface PrettierOptions extends PackageGeneratorOptions {
@@ -16,9 +18,7 @@ export class PrettierGenerator extends PackageGenerator {
     constructor(args: string | any[], opts: PrettierOptions) {
         super(args, {
             ...opts,
-            required: JSON.stringify([
-                { name: "prettier", devOnly: true },
-            ]),
+            required: JSON.stringify([{ name: "prettier", devOnly: true }]),
         });
         this.argument("prettier", { type: String, required: false });
 

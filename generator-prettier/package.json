@@ -20,6 +20,6 @@
     "yeoman-generator": "^4.0.1"
   },
   "dependencies": {
-    "generator-package-installer": "^1.0.0"
+    "generator-package-installer": "^2.0.0"
   }
 }
