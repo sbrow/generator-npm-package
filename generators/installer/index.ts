@@ -109,7 +109,7 @@ export class Installer extends PackageGenerator {
         for (const pkg of packagesJson.Other) {
             const name = typeof pkg === "object" ? pkg.name : pkg;
             if (this.props.packages.includes(name)) {
-                this.addPackage(pkg);
+                this.addPackage(pkg as Package);
             }
         }
     }
