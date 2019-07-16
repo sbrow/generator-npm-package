@@ -1,0 +1,12 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "generator-package-installer/package.json",
+        "generator-prettier/package.json",
+        "generator-webpack/package.json",
+        "package.json"
+      ]
+    }
+  }
+}
