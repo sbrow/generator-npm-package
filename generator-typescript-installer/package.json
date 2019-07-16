@@ -1,0 +1,22 @@
+{
+  "name": "generator-typescript-installer",
+  "version": "0.1.0",
+  "description": "Installs and configures Typescript for you",
+  "author": "Spencer Brower",
+  "license": "GPL-3.0+",
+  "main": "app/index.js",
+  "private": false,
+  "files": [
+    "**/*.{js,d.ts}"
+  ],
+  "keywords": [
+    "yeoman",
+    "yeoman-generator",
+    "automation",
+    "installer",
+    "typescript"
+  ],
+  "dependencies": {
+    "generator-package-installer": "^2.0.2"
+  }
+}
