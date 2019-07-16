@@ -1,6 +1,6 @@
 {
   "name": "generator-jest",
-  "version": "1.1.2",
+  "version": "0.1.0",
   "description": "Sets up jest.",
   "author": "Spencer Brower",
   "license": "GPL-3.0+",
