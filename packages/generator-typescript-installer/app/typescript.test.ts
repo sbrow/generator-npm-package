@@ -26,10 +26,10 @@ describe(packageName, () => {
         const want = {};
         want[packageName] = {
             devDependencies: expect.arrayContaining([
-                    "typescript",
-                    "@types/node",
-                    "tslint",
-            ]);,
+                "typescript",
+                "@types/node",
+                "tslint",
+            ]),
         };
         expect(got).toMatchObject(want);
     });
