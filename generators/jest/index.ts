@@ -22,9 +22,7 @@ export class Jest extends PackageGenerator {
     constructor(args, opts: PackageGeneratorOptions) {
         super(args, {
             ...opts,
-            required: JSON.stringify([
-                new Package({ name: "jest", devOnly: true }),
-            ]),
+            required: JSON.stringify([{ name: "jest", devOnly: true }]),
         });
         const { test } = Jest.scripts;
         this.props = {
