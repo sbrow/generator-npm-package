@@ -6,7 +6,7 @@
     "yeoman",
     "yeoman-generator",
     "automation",
-    "instaer"
+    "installer"
   ],
   "author": "Spencer Brower",
   "main": "app/index.js",
