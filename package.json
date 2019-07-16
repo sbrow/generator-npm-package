@@ -7,13 +7,12 @@
     "email": "brower.spencer@gmail.com"
   },
   "private": true,
-  "main": "app/index.js",
   "directories": {
-    "lib": "generators",
+    "lib": "packages/*",
     "test": "__tests__"
   },
   "workspaces": [
-    "generator-*"
+    "packages/*"
   ],
   "license": "GPL-3.0",
   "config": {
@@ -60,27 +59,24 @@
   "keywords": [
     "yeoman-generator"
   ],
-  "files": [
-    "generators"
-  ],
   "engines": {
-    "npm": ">= 8.11.0"
+    "npm": ">= 10.13.0"
   },
   "scripts": {
     "test": "jest",
-    "test:w": "jest --watch",
+    "test:watch": "jest --watch",
     "coveralls": "yarn test --coverageReporters=text-lcov | coveralls",
     "prepare": "yarn build && yarn make",
     "lint": "prettier --write \"**/*.{ts,json}\" \"*.js\" && tslint --project .",
     "build": "tsc",
     "build:watch": "yarn run build -w",
     "watch": "yarn run build:watch",
-    "clean": "shx rm -rf generator{s,-*}/**.{js,d.ts}",
+    "clean": "shx rm -rf generator-*/**/*.{js,d.ts}",
     "clean-build": "yarn run clean && npm run build",
     "make": "node bin/make.js",
     "webpack": "webpack",
-    "start": "node $npm_package_main",
-    "preversion": "git checkout master && git merge develop --no-ff"
+    "start": "lerna run start --scope generator-package",
+    "preversion": "git checkout master && git merge develop --no-ff -m \"chore(merge): Merge branch 'develop'\""
   },
   "devDependencies": {
     "@sbrow/prettier-config": "^1.0.2",

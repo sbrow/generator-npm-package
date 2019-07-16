@@ -1,0 +1,26 @@
+{
+  "name": "generator-package",
+  "version": "0.1.0",
+  "description": "Sets up a new npm project for you.",
+  "author": "Spencer Brower",
+  "license": "GPL-3.0+",
+  "main": "app/index.js",
+  "private": false,
+  "files": [
+    "**/*.{js,d.ts}"
+  ],
+  "keywords": [
+    "yeoman",
+    "yeoman-generator",
+    "automation",
+    "installer"
+  ],
+  "scripts": {
+    "start": "yo package-installer",
+    "prestart": "yarn link",
+    "poststart": "yarn unlink"
+  },
+  "dependencies": {
+    "generator-package-installer": "^2.0.2"
+  }
+}

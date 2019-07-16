@@ -3,8 +3,7 @@ import Generator from "yeoman-generator";
 import {
     PackageGenerator,
     PackageGeneratorOptions,
-} from "../../generator-package-installer/app";
-import { Package } from "../installer/Package";
+} from "generator-package-installer";
 
 export class Jest extends PackageGenerator {
     public static readonly scripts = {
@@ -23,9 +22,7 @@ export class Jest extends PackageGenerator {
     constructor(args, opts: PackageGeneratorOptions) {
         super(args, {
             ...opts,
-            required: JSON.stringify([
-                new Package({ name: "jest", devOnly: true }),
-            ]),
+            required: JSON.stringify([{ name: "jest", devOnly: true }]),
         });
         const { test } = Jest.scripts;
         this.props = {

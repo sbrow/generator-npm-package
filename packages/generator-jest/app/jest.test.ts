@@ -4,6 +4,7 @@ import { ls } from "shelljs";
 import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
+import { name as packageName } from "../package.json";
 import { loadJSON } from "../../fs";
 import Jest from ".";
 
@@ -74,10 +75,9 @@ describe("generator-jest", () => {
         //  [".yo-rc.json", "jest.config.js", "package.json"]
         expect(ls("-A", tmpDir)).toHaveLength(3);
 
-        const want = {
-            "generator-npm-package": {
-                devDependencies: expect.arrayContaining(["jest"]),
-            },
+        const want = {};
+        want[packageName] = {
+            devDependencies: expect.arrayContaining(["jest"]),
         };
         expect(got).toMatchObject(want);
     });
@@ -87,10 +87,9 @@ describe("generator-jest", () => {
             const tmpDir = await run(app, opts).withPrompts({
                 enableCoveralls: true,
             });
-            const want = {
-                "generator-npm-package": {
-                    devDependencies: expect.arrayContaining(["coveralls"]),
-                },
+            const want = {};
+            want[packageName] = {
+                devDependencies: expect.arrayContaining(["coveralls"]),
             };
             const got = JSON.parse(
                 readFileSync(join(tmpDir, ".yo-rc.json")).toString(),

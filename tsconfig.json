@@ -10,7 +10,7 @@
     "module": "commonjs",
     "moduleResolution": "node"
   },
-  "exclude": ["coverage", "__setup__", "__tests__"],
+  "exclude": ["coverage", "__setup__", "__tests__", "**/templates/**/*"],
   "typeAcquisition": {
     "enable": true
   }

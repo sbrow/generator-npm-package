@@ -3,7 +3,7 @@ import { join } from "path";
 import assert from "yeoman-assert";
 import { run, RunContextSettings } from "yeoman-test";
 
-import packageJson from "../package.json";
+import { name as packageName } from "../package.json";
 import { load, loadJSON } from "../../fs";
 
 let app: string;
@@ -89,7 +89,7 @@ describe("generator-webpack", () => {
             const tmpDir = await run(app, opts).withLocalConfig({
                 devDependencies: ["typescript"],
             });
-            const got = loadJSON(tmpDir, ".yo-rc.json")[packageJson.name]
+            const got = loadJSON(tmpDir, ".yo-rc.json")[packageName]
                 .devDependencies;
             const want = "ts-loader";
             expect(got).toContain(want);
