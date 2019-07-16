@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/sbrow/generator-npm-package/compare/generator-package-installer@2.0.0...generator-package-installer@2.0.1) (2019-07-16)
+
+
+### Bug Fixes
+
+* **addPackages:** Now handles packages with `devOnly` correctly. ([ed22a6b](https://github.com/sbrow/generator-npm-package/commit/ed22a6b))
+
+
+
+
+
 # 2.0.0 (2019-07-15)
 
 
