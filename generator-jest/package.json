@@ -1,0 +1,22 @@
+{
+  "name": "generator-jest",
+  "version": "1.1.2",
+  "description": "Sets up jest.",
+  "author": "Spencer Brower",
+  "license": "GPL-3.0+",
+  "main": "app/index.js",
+  "private": false,
+  "files": [
+    "**/*.{js,d.ts}"
+  ],
+  "keywords": [
+    "yeoman",
+    "yeoman-generator",
+    "jest",
+    "testing",
+    "automation"
+  ],
+  "dependencies": {
+    "generator-package-installer": "^2.0.2"
+  }
+}
