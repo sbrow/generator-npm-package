@@ -67,9 +67,13 @@ export class PackageGenerator extends Generator {
 
     public addPackage(...packages: Package[]) {
         for (const pkg of packages) {
-            const { name, isDev } =
-                typeof pkg === "string" ? { name: pkg, isDev: false } : pkg;
-            this.addDependencies(name, isDev);
+            if (typeof pkg === "string") {
+                this.addDependencies(pkg, false);
+            } else {
+                const { name, isDev, devOnly } = pkg;
+                const dev = devOnly === true ? true : isDev || false;
+                this.addDependencies(name, dev);
+            }
         }
     }
 

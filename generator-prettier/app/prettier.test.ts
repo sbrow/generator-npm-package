@@ -35,11 +35,16 @@ describe(`generator-${appName}`, () => {
         const got = loadJSON(tmpDir, ".yo-rc.json");
         const want = { devDependencies: { prettier: expect.any(String) } };
         want.devDependencies[prettier] = expect.any(String);
-        expect(got).toMatchObject({
-            "generator-prettier": {
-                devDependencies: expect.arrayContaining(["prettier", prettier]),
-            },
-        });
+        expect(got).toMatchObject(
+            expect.objectContaining({
+                "generator-prettier": {
+                    devDependencies: expect.arrayContaining([
+                        "prettier",
+                        prettier,
+                    ]),
+                },
+            }),
+        );
     });
     describe("Without input", () => {
         it("Configures package.json:prettier = default", async () => {

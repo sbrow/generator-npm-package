@@ -29,6 +29,19 @@ describe("PackageGenerator", () => {
         };
         expect(got).toMatchObject(want);
     }, 7000);
+    describe("addPackage", () => {
+        it("adds as a devDependency", async () => {
+            const tmpDir = await run(app, opts).withOptions({
+                required: JSON.stringify([{ name: "jest", devOnly: true }]),
+            });
+            const got = loadJSON(tmpDir, ".yo-rc.json");
+            expect(got["generator-package-installer"]).toMatchObject(
+                expect.objectContaining({
+                    devDependencies: ["jest"],
+                }),
+            );
+        });
+    });
     describe("useYarn", () => {
         // tslint:disable-next-line: mocha-no-side-effect-code
         it.each([
