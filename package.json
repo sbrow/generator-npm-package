@@ -7,13 +7,12 @@
     "email": "brower.spencer@gmail.com"
   },
   "private": true,
-  "main": "app/index.js",
   "directories": {
     "lib": "generators",
     "test": "__tests__"
   },
   "workspaces": [
-    "generator-*"
+    "packages/*"
   ],
   "license": "GPL-3.0",
   "config": {
