@@ -1,7 +1,7 @@
 # generator-npm-package
 [![Build Status](https://travis-ci.org/sbrow/generator-npm-package.svg?branch=master)](https://travis-ci.org/sbrow/generator-npm-package)
 [![Dependency Status](https://david-dm.org/sbrow/generator-npm-package.svg)](https://david-dm.org/sbrow/generator-npm-package)
-[![Coverage Status](https://coveralls.io/repos/github/sbrow/generator-npm-package/badge.svg?branch=master)](https://coveralls.io/github/sbrow/generator-npm-package?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/sbrow/generator-npm-package/badge.svg?branch=master)](https://coveralls.io/github/sbrow/generator-npm-package?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/sbrow/generator-npm-package.svg)](https://greenkeeper.io/)
 
 ## Description
 Scaffolds npm projects so you don't have to!
