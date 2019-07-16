@@ -2,12 +2,13 @@ const extensions = ["ts", "tsx", "js", "jsx", "json"];
 
 module.exports = {
     collectCoverage: true,
-    collectCoverageFrom: [
-        "generator{s,-package,-prettier}/**/*.{ts,tsx}",
-        "!generator{s,-package,-prettier}/**/*.{d,test}*.ts",
-        "!**/templates/*",
-    ],
-    moduleDirectories: ["node_modules", "generators", "generator-package"],
+    collectCoverageFrom: ["packages/**/*.{ts,tsx}"],
+    globals: {
+        "ts-jest": {
+            diagnostics: { warnOnly: true },
+        },
+    },
+    moduleDirectories: ["node_modules", "packages"],
     moduleFileExtensions: extensions,
     testPathIgnorePatterns: ["node_modules"],
     testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",

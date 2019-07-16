@@ -5,7 +5,7 @@
   "conventionalCommits": true,
   "command": {
     "version": {
-      "message": "chore(release): Publish %s",
+      "message": "chore(release): Publish.",
       "noPush": true
     }
   }
