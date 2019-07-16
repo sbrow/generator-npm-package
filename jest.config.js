@@ -7,6 +7,11 @@ module.exports = {
         "!generator{s,-package,-prettier}/**/*.{d,test}*.ts",
         "!**/templates/*",
     ],
+    globals: {
+        "ts-jest": {
+            diagnostics: { warnOnly: true },
+        },
+    },
     moduleDirectories: ["node_modules", "generators", "generator-package"],
     moduleFileExtensions: extensions,
     testPathIgnorePatterns: ["node_modules"],
