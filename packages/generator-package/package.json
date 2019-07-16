@@ -15,6 +15,11 @@
     "automation",
     "installer"
   ],
+  "scripts": {
+    "start": "yo package-installer",
+    "prestart": "yarn link",
+    "poststart": "yarn unlink"
+  },
   "dependencies": {
     "generator-package-installer": "^2.0.2"
   }

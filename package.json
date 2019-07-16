@@ -75,8 +75,8 @@
     "clean-build": "yarn run clean && npm run build",
     "make": "node bin/make.js",
     "webpack": "webpack",
-    "start": "node $npm_package_main",
-    "preversion": "git checkout master && git merge develop --no-ff"
+    "start": "lerna run start --scope generator-package",
+    "preversion": "git checkout master && git merge develop --no-ff -m \"chore(merge): Merge branch 'develop'\""
   },
   "devDependencies": {
     "@sbrow/prettier-config": "^1.0.2",
