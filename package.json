@@ -74,8 +74,11 @@
     "clean-build": "yarn run clean && npm run build",
     "webpack": "webpack",
     "start": "lerna run start --scope generator-package",
+    "//": "make sure to use the full \"yarn run version\" for this",
+    "version": "lerna version",
     "prepare": "yarn build",
-    "preversion": "git checkout master && git merge develop --no-ff -m \"chore(merge): Merge branch 'develop'\""
+    "preversion": "git checkout master && git merge develop --no-ff -m \"chore(merge): Merge branch 'develop'\"",
+    "//": "echo \"This is not a real script.\""
   },
   "devDependencies": {
     "@sbrow/prettier-config": "^1.0.2",
