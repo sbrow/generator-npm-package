@@ -93,14 +93,14 @@
     "@types/yeoman-test": "^2.0.2",
     "coveralls": "^3.0.3",
     "cz-conventional-changelog": "2.1.0",
-    "eslint": "^5.9.0",
-    "eslint-config-prettier": "^3.3.0",
-    "eslint-config-xo": "^0.25.0",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-xo": "^0.26.0",
     "eslint-plugin-prettier": "^3.0.0",
-    "husky": "^1.2.0",
+    "husky": "^3.0.0",
     "jest": "^24.7.1",
     "lerna": "^3.15.0",
-    "lint-staged": "^8.1.0",
+    "lint-staged": "^9.2.0",
     "prettier": "^1.18.2",
     "react": "^16.8.6",
     "shx": "^0.3.2",
@@ -110,13 +110,13 @@
     "tslint-microsoft-contrib": "^6.1.1",
     "typescript": "^3.4.5",
     "yeoman-assert": "^3.1.0",
-    "yeoman-test": "^1.7.0"
+    "yeoman-test": "^2.0.0"
   },
   "dependencies": {
     "chalk": "^2.1.0",
     "generator-npm-init": "^1.5.0",
     "shelljs": "^0.8.3",
-    "yeoman-generator": "^2.0.1",
+    "yeoman-generator": "^4.0.1",
     "yosay": "^2.0.1"
   }
 }
