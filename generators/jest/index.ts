@@ -4,7 +4,6 @@ import {
     PackageGenerator,
     PackageGeneratorOptions,
 } from "generator-package-installer/app";
-import { Package } from "generator-package-installer/Package";
 
 export class Jest extends PackageGenerator {
     public static readonly scripts = {
