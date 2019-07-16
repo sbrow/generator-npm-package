@@ -74,11 +74,10 @@
     "clean-build": "yarn run clean && npm run build",
     "webpack": "webpack",
     "start": "lerna run start --scope generator-package",
-    "//": "make sure to use the full \"yarn run version\" for this",
+    "//": "echo \"This is not a real script.\"",
     "version": "lerna version",
     "prepare": "yarn build",
-    "preversion": "git checkout master && git merge develop --no-ff -m \"chore(merge): Merge branch 'develop'\"",
-    "//": "echo \"This is not a real script.\""
+    "preversion": "git checkout master && git merge develop --no-ff -m \"chore(merge): Merge branch 'develop'\""
   },
   "devDependencies": {
     "@sbrow/prettier-config": "^1.0.2",
@@ -117,5 +116,8 @@
     "shelljs": "^0.8.3",
     "yeoman-generator": "^4.0.1",
     "yosay": "^2.0.1"
+  },
+  "resolutions": {
+    "@types/inquirer": "6.0.2 || >= 6.0.4"
   }
 }
