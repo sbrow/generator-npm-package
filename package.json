@@ -66,16 +66,15 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "coveralls": "yarn test --coverageReporters=text-lcov | coveralls",
-    "prepare": "yarn build && yarn make",
     "lint": "prettier --write \"**/*.{ts,json}\" \"*.js\" && tslint --project .",
     "build": "tsc",
     "build:watch": "yarn run build -w",
     "watch": "yarn run build:watch",
     "clean": "shx rm -rf generator-*/**/*.{js,d.ts}",
     "clean-build": "yarn run clean && npm run build",
-    "make": "node bin/make.js",
     "webpack": "webpack",
     "start": "lerna run start --scope generator-package",
+    "prepare": "yarn build",
     "preversion": "git checkout master && git merge develop --no-ff -m \"chore(merge): Merge branch 'develop'\""
   },
   "devDependencies": {
