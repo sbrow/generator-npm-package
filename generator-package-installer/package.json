@@ -1,6 +1,6 @@
 {
   "name": "generator-package-installer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Installs required packages into your project.json file",
   "keywords": [
     "yeoman",
