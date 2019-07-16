@@ -75,7 +75,7 @@
     "build": "tsc",
     "build:watch": "yarn run build -w",
     "watch": "yarn run build:watch",
-    "clean": "shx rm -rf generator{s,-*}/**.{js,d.ts}",
+    "clean": "shx rm -rf generator-*/**/*.{js,d.ts}",
     "clean-build": "yarn run clean && npm run build",
     "make": "node bin/make.js",
     "webpack": "webpack",
