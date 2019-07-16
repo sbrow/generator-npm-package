@@ -3,7 +3,7 @@ import Generator from "yeoman-generator";
 import {
     PackageGenerator,
     PackageGeneratorOptions,
-} from "generator-package-installer/app";
+} from "generator-package-installer";
 
 export class Jest extends PackageGenerator {
     public static readonly scripts = {
