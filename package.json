@@ -8,7 +8,7 @@
   },
   "private": true,
   "directories": {
-    "lib": "generators",
+    "lib": "packages/*",
     "test": "__tests__"
   },
   "workspaces": [
