@@ -1,6 +1,6 @@
 {
   "name": "generator-typescript-installer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Installs and configures Typescript for you",
   "author": "Spencer Brower",
   "license": "GPL-3.0+",
@@ -17,6 +17,6 @@
     "typescript"
   ],
   "dependencies": {
-    "generator-package-installer": "^2.0.2"
+    "generator-package-installer": "^2.0.3"
   }
 }

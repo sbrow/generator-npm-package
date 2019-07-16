@@ -1,6 +1,6 @@
 {
   "name": "generator-prettier",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Installs and configures prettier.",
   "keywords": [
     "yeoman",
@@ -17,6 +17,6 @@
     "**/*.{js,d.ts}"
   ],
   "dependencies": {
-    "generator-package-installer": "^2.0.2"
+    "generator-package-installer": "^2.0.3"
   }
 }

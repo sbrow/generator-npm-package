@@ -1,6 +1,6 @@
 {
   "name": "generator-react-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generates a React App with complete with store and context using React hooks.",
   "author": "Spencer Brower",
   "license": "GPL-3.0+",
@@ -17,6 +17,6 @@
     "automation"
   ],
   "dependencies": {
-    "generator-package-installer": "^2.0.2"
+    "generator-package-installer": "^2.0.3"
   }
 }

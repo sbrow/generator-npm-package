@@ -1,6 +1,6 @@
 {
   "name": "generator-package",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Sets up a new npm project for you.",
   "author": "Spencer Brower",
   "license": "GPL-3.0+",
@@ -21,6 +21,6 @@
     "poststart": "yarn unlink"
   },
   "dependencies": {
-    "generator-package-installer": "^2.0.2"
+    "generator-package-installer": "^2.0.3"
   }
 }
