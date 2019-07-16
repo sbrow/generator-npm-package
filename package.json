@@ -68,7 +68,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test:w": "jest --watch",
+    "test:watch": "jest --watch",
     "coveralls": "yarn test --coverageReporters=text-lcov | coveralls",
     "prepare": "yarn build && yarn make",
     "lint": "prettier --write \"**/*.{ts,json}\" \"*.js\" && tslint --project .",
