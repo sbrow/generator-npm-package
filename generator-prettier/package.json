@@ -16,9 +16,6 @@
   "files": [
     "**/*.{js,d.ts}"
   ],
-  "devDependencies": {
-    "yeoman-generator": "^4.0.1"
-  },
   "dependencies": {
     "generator-package-installer": "^2.0.0"
   }
