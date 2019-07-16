@@ -1,6 +1,6 @@
 import Generator from "yeoman-generator";
 
-import { Package } from "./Package";
+import { Package } from "../../generator-package-installer/Package";
 import { PackageGenerator } from "../../generator-package-installer/app";
 import packagesJson from "./packages.json";
 
@@ -107,8 +107,9 @@ export class Installer extends PackageGenerator {
             }
         }
         for (const pkg of packagesJson.Other) {
-            if (this.props.packages.includes(pack.name)) {
-                this.addPackage(pack);
+            const name = typeof pkg === "object" ? pkg.name : pkg;
+            if (this.props.packages.includes(name)) {
+                this.addPackage(pkg);
             }
         }
     }
